@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>微前端模板模块</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript">
+    // GitHub Pages SPA 路由处理
+    // 将路径信息保存到 sessionStorage，然后重定向到根路径
+    (function(l) {
+      // 检查是否是 /mf-template 子路径
+      if (l.pathname.startsWith('/mf-template/') && l.pathname !== '/mf-template/') {
+        // 提取子路径
+        var subPath = l.pathname.replace('/mf-template/', '');
+
+        // 保存路径信息到 sessionStorage
+        sessionStorage.setItem('spa_redirect_path', '/' + subPath + l.search + l.hash);
+
+        // 重定向到根路径
+        window.location.replace('/mf-template/');
+      } else if (l.pathname === '/mf-template') {
+        // 如果访问的是 /mf-template (没有尾部斜杠)，重定向到带斜杠的版本
+        window.location.replace('/mf-template/');
+      }
+    }(window.location))
+  </script>
+</head>
+<body>
+  <div id="root">
+    <div style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background-color: #f5f5f5;
+    ">
+      <div style="text-align: center;">
+        <div style="
+          width: 40px;
+          height: 40px;
+          border: 4px solid #f3f3f3;
+          border-top: 4px solid #1890ff;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin: 0 auto 20px;
+        "></div>
+        <h2 style="color: #333; margin: 0;">正在重定向...</h2>
+        <p style="color: #666; margin: 10px 0 0;">请稍候，正在跳转到模板系统</p>
+      </div>
+    </div>
+  </div>
+  
+  <style>
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</body>
+</html>

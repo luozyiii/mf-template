@@ -1,0 +1,29 @@
+{
+  "name": "mf-template",
+  "private": true,
+  "version": "1.0.0",
+  "description": "微前端子系统模板项目",
+  "scripts": {
+    "dev": "rsbuild dev --open",
+    "build": "rsbuild build",
+    "build:gh-pages": "NODE_ENV=production rsbuild build",
+    "preview": "rsbuild preview",
+    "deploy": "npm run build:gh-pages"
+  },
+  "dependencies": {
+    "@ant-design/charts": "^2.6.1",
+    "@types/react-router-dom": "^5.3.3",
+    "antd": "^5.26.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.7.1"
+  },
+  "devDependencies": {
+    "@module-federation/rsbuild-plugin": "^0.17.1",
+    "@rsbuild/core": "^1.1.8",
+    "@rsbuild/plugin-react": "^1.1.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "typescript": "^5.6.3"
+  }
+}
