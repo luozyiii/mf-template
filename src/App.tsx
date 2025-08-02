@@ -63,10 +63,11 @@ const AppRoutes: React.FC = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Dashboard />} />
+      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/feature1" element={<Feature1 />} />
       <Route path="/feature2" element={<Feature2 />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/" element={<Dashboard />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

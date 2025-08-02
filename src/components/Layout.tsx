@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
-import { Layout as AntLayout, Menu, Button, Avatar, Dropdown, Space, Typography } from 'antd';
-import { 
-  MenuFoldOutlined, 
-  MenuUnfoldOutlined, 
-  UserOutlined, 
-  LogoutOutlined,
-  HomeOutlined,
-  AppstoreOutlined,
-  SettingOutlined,
-  ControlOutlined
-} from '@ant-design/icons';
+import React, { useState, useMemo } from 'react';
+import { Layout as AntLayout, Menu, Button, Avatar, Dropdown } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  DashboardOutlined,
+  UserOutlined,
+  LogoutOutlined,
+  SettingOutlined,
+  AppstoreOutlined,
+  ControlOutlined,
+  LeftOutlined
+} from '@ant-design/icons';
+import { templateRoutes } from '../routes';
 import { AuthUtils } from '../utils/authUtils';
+import styles from './Layout.module.css';
 
 const { Header, Sider, Content } = AntLayout;
-const { Title } = Typography;
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -25,105 +27,158 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const menuItems = [
-    {
-      key: '/',
-      icon: <HomeOutlined />,
-      label: '首页',
-    },
-    {
-      key: '/feature1',
-      icon: <AppstoreOutlined />,
-      label: '功能模块1',
-    },
-    {
-      key: '/feature2',
-      icon: <SettingOutlined />,
-      label: '功能模块2',
-    },
-    {
-      key: '/settings',
-      icon: <ControlOutlined />,
-      label: '系统设置',
-    },
-  ];
+  // 检测是否在微前端环境中（iframe中运行）
+  const isInMicroFrontend = window.parent !== window;
 
+  // 用户菜单项
   const userMenuItems = [
+    {
+      key: 'settings',
+      icon: <SettingOutlined />,
+      label: '设置'
+    },
+    {
+      type: 'divider' as const
+    },
     {
       key: 'logout',
       icon: <LogoutOutlined />,
       label: '退出登录',
-      onClick: () => AuthUtils.logout(),
-    },
+      onClick: () => {
+        // 使用AuthUtils处理退出登录
+        AuthUtils.logout();
+      }
+    }
   ];
+
+  // 构建菜单项
+  const menuItems = useMemo(() => {
+    return templateRoutes.routes.map(route => ({
+      key: route.path.replace('/template', ''),
+      icon: route.icon === 'DashboardOutlined' ? <DashboardOutlined /> :
+            route.icon === 'AppstoreOutlined' ? <AppstoreOutlined /> :
+            route.icon === 'SettingOutlined' ? <SettingOutlined /> :
+            route.icon === 'ControlOutlined' ? <ControlOutlined /> : <DashboardOutlined />,
+      label: route.name
+    }));
+  }, []);
 
   const handleMenuClick = ({ key }: { key: string }) => {
     navigate(key);
   };
 
+  // 获取当前页面信息
+  const getCurrentPageInfo = () => {
+    const pathname = location.pathname;
+    const route = templateRoutes.routes.find(r => r.path.replace('/template', '') === pathname);
+
+    if (route) {
+      return {
+        title: route.name,
+        showBack: route.showBack || false,
+        backPath: route.backPath?.replace('/template', '') || null
+      };
+    }
+
+    return {
+      title: '模板系统',
+      showBack: false,
+      backPath: null
+    };
+  };
+
+  const currentPageInfo = getCurrentPageInfo();
+
+  const handleBack = () => {
+    if (currentPageInfo.backPath) {
+      navigate(currentPageInfo.backPath);
+    } else {
+      navigate(-1);
+    }
+  };
+
   return (
-    <AntLayout style={{ minHeight: '100vh' }}>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div style={{ 
-          height: '64px', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          borderBottom: '1px solid #f0f0f0'
-        }}>
-          <Title level={4} style={{ 
-            color: 'white', 
-            margin: 0,
-            fontSize: collapsed ? '16px' : '18px'
-          }}>
+    <AntLayout className={styles.layout}>
+      {!isInMicroFrontend && (
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          className={styles.sider}
+          width={200}
+        >
+          <div className={`${styles.logo} ${collapsed ? styles.logoCollapsed : styles.logoExpanded}`}>
             {collapsed ? 'MT' : '模板系统'}
-          </Title>
-        </div>
-        <Menu
-          theme="dark"
-          mode="inline"
-          selectedKeys={[location.pathname]}
-          items={menuItems}
-          onClick={handleMenuClick}
-        />
-      </Sider>
-      <AntLayout>
-        <Header style={{ 
-          padding: '0 16px', 
-          background: '#fff',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          borderBottom: '1px solid #f0f0f0'
-        }}>
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64,
-            }}
-          />
-          <Space>
+          </div>
+
+          <div className={styles.menuContainer}>
+            <Menu
+              theme="dark"
+              mode="inline"
+              selectedKeys={[location.pathname]}
+              items={menuItems}
+              onClick={handleMenuClick}
+              className={styles.menu}
+            />
+          </div>
+
+          {/* 折叠按钮 */}
+          <div className={styles.collapseButtonContainer}>
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              className={styles.collapseButton}
+              title={collapsed ? '展开菜单' : '折叠菜单'}
+            />
+          </div>
+        </Sider>
+      )}
+      <AntLayout className={`${styles.rightLayout} ${collapsed ? styles.rightLayoutCollapsed : ''}`}>
+        <Header className={styles.header}>
+          <div className={styles.headerLeft}>
+            <div className={styles.pageTitle}>
+              {currentPageInfo.showBack && (
+                <Button
+                  type="text"
+                  icon={<LeftOutlined />}
+                  onClick={handleBack}
+                  className={styles.backButton}
+                />
+              )}
+              <span className={styles.pageTitleText}>
+                {currentPageInfo.title}
+              </span>
+            </div>
+          </div>
+          <div className={styles.headerRight}>
+            <div className={styles.welcomeText}>
+              模板系统 - 微前端标准模板
+            </div>
+
             <Dropdown
               menu={{ items: userMenuItems }}
               placement="bottomRight"
+              trigger={['click']}
             >
-              <Space style={{ cursor: 'pointer' }}>
-                <Avatar icon={<UserOutlined />} />
-                <span>模板用户</span>
-              </Space>
+              <div className={styles.userInfo}>
+                <Avatar
+                  size={32}
+                  icon={<UserOutlined />}
+                  className={styles.userAvatar}
+                />
+                <span className={styles.userName}>模板用户</span>
+                <div className={styles.dropdownArrow}>
+                  ▼
+                </div>
+              </div>
             </Dropdown>
-          </Space>
+          </div>
         </Header>
-        <Content style={{ 
-          margin: '0',
-          background: '#f0f2f5',
-          minHeight: 'calc(100vh - 64px)'
-        }}>
-          {children}
+        <Content className={styles.content}>
+          <div className={styles.pageTransition}>
+            {children}
+          </div>
         </Content>
       </AntLayout>
     </AntLayout>

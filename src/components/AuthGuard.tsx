@@ -35,7 +35,9 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
         alignItems: 'center',
         height: '100vh'
       }}>
-        <Spin size="large" tip="正在验证身份..." />
+        <Spin size="large" spinning={true} tip="正在验证身份...">
+          <div style={{ minHeight: '200px' }} />
+        </Spin>
       </div>
     );
   }

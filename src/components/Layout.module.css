@@ -1,0 +1,299 @@
+/* Layout 组件样式 */
+.layout {
+  min-height: 100vh;
+}
+
+.sider {
+  position: fixed !important;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 100;
+}
+
+.logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border-bottom: 1px solid #ffffff1a;
+}
+
+.logoCollapsed {
+  font-size: 16px;
+}
+
+.logoExpanded {
+  font-size: 18px;
+}
+
+/* 菜单容器 */
+.menuContainer {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.menu {
+  border-right: none;
+  background: transparent;
+}
+
+/* 折叠按钮容器 */
+.collapseButtonContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.collapseButton {
+  color: rgba(255, 255, 255, 0.8) !important;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+  font-size: 16px;
+  background: transparent;
+}
+
+.collapseButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.collapseButton:focus {
+  color: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.collapseButton:active {
+  color: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(1px);
+}
+
+/* 右侧布局 */
+.rightLayout {
+  margin-left: 200px;
+  transition: margin-left 0.2s;
+}
+
+.rightLayoutCollapsed {
+  margin-left: 80px;
+}
+
+.header {
+  padding: 0 16px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.menuButton {
+  font-size: 16px;
+  width: 64px;
+  height: 64px;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.backButton:hover {
+  background-color: #f5f5f5;
+  color: #1890ff;
+}
+
+.pageTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pageTitleText {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.backButton {
+  color: #666;
+  border: none;
+  background: transparent;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.backButton:hover {
+  background-color: #f5f5f5;
+  color: #1890ff;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 欢迎信息 */
+.welcomeText {
+  font-size: 14px;
+  font-weight: 400;
+  color: #595959;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userInfo {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.userInfo:hover {
+  background-color: #f5f5f5;
+}
+
+.userAvatar {
+  flex-shrink: 0;
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: 500;
+  color: #262626;
+}
+
+.dropdownArrow {
+  color: #bfbfbf;
+  font-size: 10px;
+  margin-left: 4px;
+}
+
+.content {
+  background: #f0f2f5;
+  min-height: calc(100vh - 64px);
+  transition: margin-left 0.2s;
+}
+
+.contentCollapsed {
+  margin-left: 80px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .sider {
+    position: fixed !important;
+    height: 100vh;
+    z-index: 1000;
+  }
+
+  .welcomeText {
+    display: none;
+  }
+
+  .headerRight {
+    gap: 12px;
+  }
+
+  .rightLayout,
+  .rightLayoutCollapsed {
+    margin-left: 0 !important;
+  }
+
+  .header {
+    padding: 0 12px;
+  }
+
+  .pageTitleText {
+    font-size: 16px;
+  }
+
+  .userName {
+    display: none;
+  }
+}
+
+/* 菜单样式优化 */
+:global(.ant-menu-dark .ant-menu-item-selected) {
+  background-color: #1890ff;
+}
+
+:global(.ant-layout-sider-collapsed) .logo {
+  padding: 0;
+}
+
+/* 用户下拉菜单样式 */
+:global(.ant-dropdown-menu-item) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 加载动画 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f2f5;
+}
+
+/* 页面过渡动画 */
+.pageTransition {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
