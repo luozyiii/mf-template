@@ -20,10 +20,10 @@
   },
   "devDependencies": {
     "@module-federation/rsbuild-plugin": "^0.17.1",
-    "@rsbuild/core": "^1.1.8",
+    "@rsbuild/core": "^1.2.15",
     "@rsbuild/plugin-react": "^1.1.1",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "typescript": "^5.6.3"
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "~18.3.1",
+    "typescript": "^5.7.2"
   }
 }
