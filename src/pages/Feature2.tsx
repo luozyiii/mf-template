@@ -3,7 +3,7 @@ import { Card, Typography, Table, Tag, Space } from 'antd';
 
 const { Title, Paragraph } = Typography;
 
-export const Feature2: React.FC = () => {
+const Feature2: React.FC = () => {
   // 示例配置数据
   const configData = [
     {
@@ -145,3 +145,5 @@ export const Feature2: React.FC = () => {
     </div>
   );
 };
+
+export default Feature2;

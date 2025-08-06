@@ -3,7 +3,7 @@ import { Card, Typography, Alert, Steps, Space } from 'antd';
 
 const { Title, Paragraph, Text } = Typography;
 
-export const Feature1: React.FC = () => {
+const Feature1: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <Title level={2}>功能模块1</Title>
@@ -75,3 +75,5 @@ export const Feature1: React.FC = () => {
     </div>
   );
 };
+
+export default Feature1;

@@ -9,7 +9,7 @@ import {
 
 const { Title, Paragraph } = Typography;
 
-export const Dashboard: React.FC = () => {
+const Dashboard: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <Title level={2}>微前端模板系统</Title>
@@ -92,3 +92,5 @@ export const Dashboard: React.FC = () => {
     </div>
   );
 };
+
+export default Dashboard;

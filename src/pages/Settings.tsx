@@ -4,7 +4,7 @@ import { Card, Typography, Form, Input, Select, Switch, Button, Space, Divider }
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
 
-export const Settings: React.FC = () => {
+const Settings: React.FC = () => {
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
@@ -123,3 +123,5 @@ export const Settings: React.FC = () => {
     </div>
   );
 };
+
+export default Settings;
