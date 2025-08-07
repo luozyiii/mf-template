@@ -11,6 +11,15 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 
   useEffect(() => {
     const checkAuth = () => {
+      // 检查是否跳过认证（开发环境配置）
+      const skipAuth = process.env.REACT_APP_SKIP_AUTH === 'true';
+
+      if (skipAuth) {
+        console.log('跳过认证检查 (REACT_APP_SKIP_AUTH=true)');
+        setIsChecking(false);
+        return;
+      }
+
       // 检查是否已登录
       if (!AuthUtils.isAuthenticated()) {
         // 未登录，跳转到登录页面
