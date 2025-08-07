@@ -15,22 +15,22 @@ export default createModuleFederationConfig({
     react: {
       singleton: true,
       requiredVersion: false,
-      eager: false
+      eager: false,
     },
     'react-dom': {
       singleton: true,
       requiredVersion: false,
-      eager: false
+      eager: false,
     },
     'react-router-dom': {
       singleton: true,
       requiredVersion: false,
-      eager: false
+      eager: false,
     },
     antd: {
       singleton: true,
       requiredVersion: false,
-      eager: false
+      eager: false,
     },
   },
 });
