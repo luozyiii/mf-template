@@ -10,7 +10,7 @@ import {
   SettingOutlined,
   AppstoreOutlined,
   ControlOutlined,
-  LeftOutlined
+  LeftOutlined,
 } from '@ant-design/icons';
 import { templateRoutes } from '../routes';
 import { AuthUtils } from '../utils/authUtils';
@@ -35,10 +35,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     {
       key: 'settings',
       icon: <SettingOutlined />,
-      label: '设置'
+      label: '设置',
     },
     {
-      type: 'divider' as const
+      type: 'divider' as const,
     },
     {
       key: 'logout',
@@ -47,19 +47,27 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       onClick: () => {
         // 使用AuthUtils处理退出登录
         AuthUtils.logout();
-      }
-    }
+      },
+    },
   ];
 
   // 构建菜单项
   const menuItems = useMemo(() => {
     return templateRoutes.routes.map(route => ({
       key: route.path.replace('/template', ''),
-      icon: route.icon === 'DashboardOutlined' ? <DashboardOutlined /> :
-            route.icon === 'AppstoreOutlined' ? <AppstoreOutlined /> :
-            route.icon === 'SettingOutlined' ? <SettingOutlined /> :
-            route.icon === 'ControlOutlined' ? <ControlOutlined /> : <DashboardOutlined />,
-      label: route.name
+      icon:
+        route.icon === 'DashboardOutlined' ? (
+          <DashboardOutlined />
+        ) : route.icon === 'AppstoreOutlined' ? (
+          <AppstoreOutlined />
+        ) : route.icon === 'SettingOutlined' ? (
+          <SettingOutlined />
+        ) : route.icon === 'ControlOutlined' ? (
+          <ControlOutlined />
+        ) : (
+          <DashboardOutlined />
+        ),
+      label: route.name,
     }));
   }, []);
 
@@ -70,20 +78,22 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   // 获取当前页面信息
   const getCurrentPageInfo = () => {
     const pathname = location.pathname;
-    const route = templateRoutes.routes.find(r => r.path.replace('/template', '') === pathname);
+    const route = templateRoutes.routes.find(
+      r => r.path.replace('/template', '') === pathname
+    );
 
     if (route) {
       return {
         title: route.name,
         showBack: route.showBack || false,
-        backPath: route.backPath?.replace('/template', '') || null
+        backPath: route.backPath?.replace('/template', '') || null,
       };
     }
 
     return {
       title: '模板系统',
       showBack: false,
-      backPath: null
+      backPath: null,
     };
   };
 
@@ -107,7 +117,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           className={styles.sider}
           width={200}
         >
-          <div className={`${styles.logo} ${collapsed ? styles.logoCollapsed : styles.logoExpanded}`}>
+          <div
+            className={`${styles.logo} ${collapsed ? styles.logoCollapsed : styles.logoExpanded}`}
+          >
             {collapsed ? 'MT' : '模板系统'}
           </div>
 
@@ -134,7 +146,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </Sider>
       )}
-      <AntLayout className={`${styles.rightLayout} ${collapsed ? styles.rightLayoutCollapsed : ''}`}>
+      <AntLayout
+        className={`${styles.rightLayout} ${collapsed ? styles.rightLayoutCollapsed : ''}`}
+      >
         <Header className={styles.header}>
           <div className={styles.headerLeft}>
             <div className={styles.pageTitle}>
@@ -152,9 +166,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
           </div>
           <div className={styles.headerRight}>
-            <div className={styles.welcomeText}>
-              模板系统 - 微前端标准模板
-            </div>
+            <div className={styles.welcomeText}>模板系统 - 微前端标准模板</div>
 
             <Dropdown
               menu={{ items: userMenuItems }}
@@ -168,17 +180,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   className={styles.userAvatar}
                 />
                 <span className={styles.userName}>模板用户</span>
-                <div className={styles.dropdownArrow}>
-                  ▼
-                </div>
+                <div className={styles.dropdownArrow}>▼</div>
               </div>
             </Dropdown>
           </div>
         </Header>
         <Content className={styles.content}>
-          <div className={styles.pageTransition}>
-            {children}
-          </div>
+          <div className={styles.pageTransition}>{children}</div>
         </Content>
       </AntLayout>
     </AntLayout>

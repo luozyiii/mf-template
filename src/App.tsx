@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import { templateRoutes } from './routes';
@@ -24,6 +29,20 @@ const AppRoutes: React.FC = () => {
     // 暴露路由配置API
     (window as any).getRoutes = () => templateRoutes;
 
+    // 向主应用发送路由配置消息
+    const sendRoutesToParent = () => {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage(
+          {
+            type: 'MICRO_FRONTEND_ROUTES',
+            appKey: 'template',
+            routes: templateRoutes,
+          },
+          '*'
+        );
+      }
+    };
+
     // 处理 404 重定向
     const redirectPath = sessionStorage.getItem('spa_redirect_path');
     if (redirectPath) {
@@ -37,9 +56,15 @@ const AppRoutes: React.FC = () => {
       // 模拟数据加载、权限检查等
       await new Promise(resolve => setTimeout(resolve, 1000));
       setIsLoading(false);
+
+      // 应用加载完成后发送路由配置
+      sendRoutesToParent();
     };
 
     initializeApp();
+
+    // 立即发送一次路由配置（以防主应用已经加载完成）
+    sendRoutesToParent();
 
     // 监听来自主应用的路由变化消息
     const handleMessage = (event: MessageEvent) => {
@@ -101,7 +126,9 @@ const App: React.FC = () => {
     if (currentConfig.isProduction) {
       // 在 GitHub Pages 上独立运行时使用 /mf-template
       // 在主应用中集成时，主应用会处理 /mf-shell/template 路径
-      return window.location.pathname.startsWith('/mf-template') ? currentConfig.basename : '';
+      return window.location.pathname.startsWith('/mf-template')
+        ? currentConfig.basename
+        : '';
     }
     return currentConfig.basename;
   };

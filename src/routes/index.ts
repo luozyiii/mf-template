@@ -7,30 +7,30 @@ export const templateRoutes = {
       path: '/template/dashboard',
       name: '模板概览',
       icon: 'DashboardOutlined',
-      showBack: false
+      showBack: false,
     },
     {
       path: '/template/feature1',
       name: '功能模块1',
       icon: 'AppstoreOutlined',
       showBack: true,
-      backPath: '/template/dashboard'
+      backPath: '/template/dashboard',
     },
     {
       path: '/template/feature2',
       name: '功能模块2',
       icon: 'SettingOutlined',
       showBack: true,
-      backPath: '/template/dashboard'
+      backPath: '/template/dashboard',
     },
     {
       path: '/template/settings',
       name: '系统设置',
       icon: 'ControlOutlined',
-      showBack: true
+      showBack: true,
       // 不设置backPath，默认返回上一页
-    }
-  ]
+    },
+  ],
 };
 
 // 导出路由配置供主应用使用

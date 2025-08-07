@@ -26,11 +26,13 @@ const Feature1: React.FC = () => {
           items={[
             {
               title: '复制模板项目',
-              description: '将此模板项目复制到新的目录，并重命名为目标项目名称。',
+              description:
+                '将此模板项目复制到新的目录，并重命名为目标项目名称。',
             },
             {
               title: '修改配置文件',
-              description: '更新 package.json、rsbuild.config.ts 等配置文件中的项目名称和端口。',
+              description:
+                '更新 package.json、rsbuild.config.ts 等配置文件中的项目名称和端口。',
             },
             {
               title: '更新部署配置',

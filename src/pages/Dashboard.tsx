@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card, Row, Col, Statistic, Typography, Space } from 'antd';
-import { 
-  UserOutlined, 
-  AppstoreOutlined, 
-  SettingOutlined, 
-  ControlOutlined 
+import {
+  UserOutlined,
+  AppstoreOutlined,
+  SettingOutlined,
+  ControlOutlined,
 } from '@ant-design/icons';
 
 const { Title, Paragraph } = Typography;
@@ -65,27 +65,19 @@ const Dashboard: React.FC = () => {
         <Space direction="vertical" size="middle" style={{ width: '100%' }}>
           <div>
             <Title level={4}>✅ 完整的微前端配置</Title>
-            <Paragraph>
-              包含 Module Federation、路由、部署等完整配置
-            </Paragraph>
+            <Paragraph>包含 Module Federation、路由、部署等完整配置</Paragraph>
           </div>
           <div>
             <Title level={4}>✅ 统一的认证系统</Title>
-            <Paragraph>
-              与主应用集成的认证和权限管理
-            </Paragraph>
+            <Paragraph>与主应用集成的认证和权限管理</Paragraph>
           </div>
           <div>
             <Title level={4}>✅ GitHub Pages 部署</Title>
-            <Paragraph>
-              支持自动化部署到 GitHub Pages
-            </Paragraph>
+            <Paragraph>支持自动化部署到 GitHub Pages</Paragraph>
           </div>
           <div>
             <Title level={4}>✅ 响应式布局</Title>
-            <Paragraph>
-              基于 Ant Design 的现代化 UI 组件
-            </Paragraph>
+            <Paragraph>基于 Ant Design 的现代化 UI 组件</Paragraph>
           </div>
         </Space>
       </Card>

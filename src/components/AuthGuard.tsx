@@ -17,24 +17,26 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
         AuthUtils.redirectToLogin();
         return;
       }
-      
+
       setIsChecking(false);
     };
 
     // 延迟检查，避免闪烁
     const timer = setTimeout(checkAuth, 100);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
   if (isChecking) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
         <Spin size="large" spinning={true} tip="正在验证身份...">
           <div style={{ minHeight: '200px' }} />
         </Spin>

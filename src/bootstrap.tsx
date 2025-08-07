@@ -4,11 +4,14 @@ import { templateRoutes } from './routes';
 const sendRoutesToParent = () => {
   if (window.parent && window.parent !== window) {
     try {
-      window.parent.postMessage({
-        type: 'MICRO_FRONTEND_ROUTES',
-        appKey: 'template',
-        routes: templateRoutes
-      }, '*');
+      window.parent.postMessage(
+        {
+          type: 'MICRO_FRONTEND_ROUTES',
+          appKey: 'template',
+          routes: templateRoutes,
+        },
+        '*'
+      );
       console.log('Template routes sent to parent:', templateRoutes);
     } catch (error) {
       console.warn('Failed to send routes to parent:', error);

@@ -11,43 +11,43 @@ const Feature2: React.FC = () => {
       name: 'rsbuild.config.ts',
       description: 'Rsbuild 构建配置',
       status: 'required',
-      category: '构建配置'
+      category: '构建配置',
     },
     {
       key: '2',
       name: 'module-federation.config.ts',
       description: 'Module Federation 配置',
       status: 'required',
-      category: '微前端'
+      category: '微前端',
     },
     {
       key: '3',
       name: 'deployment.ts',
       description: '部署环境配置',
       status: 'required',
-      category: '部署配置'
+      category: '部署配置',
     },
     {
       key: '4',
       name: 'authUtils.ts',
       description: '认证工具函数',
       status: 'required',
-      category: '工具函数'
+      category: '工具函数',
     },
     {
       key: '5',
       name: '404.html',
       description: 'SPA 路由重定向',
       status: 'required',
-      category: 'GitHub Pages'
+      category: 'GitHub Pages',
     },
     {
       key: '6',
       name: 'deploy.yml',
       description: 'GitHub Actions 部署流程',
       status: 'required',
-      category: 'CI/CD'
-    }
+      category: 'CI/CD',
+    },
   ];
 
   const columns = [
@@ -67,14 +67,21 @@ const Feature2: React.FC = () => {
       dataIndex: 'category',
       key: 'category',
       render: (category: string) => (
-        <Tag color={
-          category === '构建配置' ? 'blue' :
-          category === '微前端' ? 'green' :
-          category === '部署配置' ? 'orange' :
-          category === '工具函数' ? 'purple' :
-          category === 'GitHub Pages' ? 'red' :
-          'default'
-        }>
+        <Tag
+          color={
+            category === '构建配置'
+              ? 'blue'
+              : category === '微前端'
+                ? 'green'
+                : category === '部署配置'
+                  ? 'orange'
+                  : category === '工具函数'
+                    ? 'purple'
+                    : category === 'GitHub Pages'
+                      ? 'red'
+                      : 'default'
+          }
+        >
           {category}
         </Tag>
       ),
@@ -99,9 +106,9 @@ const Feature2: React.FC = () => {
       </Paragraph>
 
       <Card title="模板配置文件清单" style={{ marginBottom: '24px' }}>
-        <Table 
-          columns={columns} 
-          dataSource={configData} 
+        <Table
+          columns={columns}
+          dataSource={configData}
           pagination={false}
           size="middle"
         />
@@ -114,18 +121,32 @@ const Feature2: React.FC = () => {
             <Paragraph>
               创建新项目时，需要修改以下变量：
               <ul>
-                <li><code>项目名称</code>：package.json 中的 name 字段</li>
-                <li><code>端口号</code>：rsbuild.config.ts 中的 server.port</li>
-                <li><code>模块名</code>：module-federation.config.ts 中的 name</li>
-                <li><code>URL 配置</code>：deployment.ts 中的各种 URL</li>
+                <li>
+                  <code>项目名称</code>：package.json 中的 name 字段
+                </li>
+                <li>
+                  <code>端口号</code>：rsbuild.config.ts 中的 server.port
+                </li>
+                <li>
+                  <code>模块名</code>：module-federation.config.ts 中的 name
+                </li>
+                <li>
+                  <code>URL 配置</code>：deployment.ts 中的各种 URL
+                </li>
               </ul>
             </Paragraph>
           </div>
           <div>
             <Title level={4}>📁 目录结构</Title>
             <Paragraph>
-              <pre style={{ background: '#f5f5f5', padding: '12px', borderRadius: '4px' }}>
-{`mf-template/
+              <pre
+                style={{
+                  background: '#f5f5f5',
+                  padding: '12px',
+                  borderRadius: '4px',
+                }}
+              >
+                {`mf-template/
 ├── .github/workflows/     # GitHub Actions 配置
 ├── public/               # 静态资源
 ├── src/
