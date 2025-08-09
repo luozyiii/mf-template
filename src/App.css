@@ -94,6 +94,11 @@ code {
   background-color: #f0f2f5;
 }
 
+/* Typography 样式优化 */
+.ant-typography {
+  margin-top: 0;
+}
+
 /* 页面过渡动画 */
 .page-transition-enter {
   opacity: 0;
