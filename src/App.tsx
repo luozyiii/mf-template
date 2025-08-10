@@ -6,6 +6,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
+import { HelmetProvider } from 'react-helmet-async';
 import zhCN from 'antd/locale/zh_CN';
 import { templateRoutes } from './routes';
 import { Layout } from './components/Layout';
@@ -136,21 +137,23 @@ const App: React.FC = () => {
   const basename = getBasename();
 
   return (
-    <ConfigProvider locale={zhCN}>
-      <Router basename={basename}>
-        {isInMicroFrontend ? (
-          // 微前端环境：只显示内容，不显示导航（主应用已处理认证）
-          <AppRoutes />
-        ) : (
-          // 独立运行：需要认证守卫 + 完整布局
-          <AuthGuard>
-            <Layout>
-              <AppRoutes />
-            </Layout>
-          </AuthGuard>
-        )}
-      </Router>
-    </ConfigProvider>
+    <HelmetProvider>
+      <ConfigProvider locale={zhCN}>
+        <Router basename={basename}>
+          {isInMicroFrontend ? (
+            // 微前端环境：只显示内容，不显示导航（主应用已处理认证）
+            <AppRoutes />
+          ) : (
+            // 独立运行：需要认证守卫 + 完整布局
+            <AuthGuard>
+              <Layout>
+                <AppRoutes />
+              </Layout>
+            </AuthGuard>
+          )}
+        </Router>
+      </ConfigProvider>
+    </HelmetProvider>
   );
 };
 
