@@ -100,7 +100,9 @@ const Feature2: React.FC = () => {
 
   return (
     <div style={{ padding: '24px' }}>
-      <Title level={2}>功能模块2</Title>
+      <Title level={2} style={{ marginTop: 0 }}>
+        功能模块2
+      </Title>
       <Paragraph>
         这个页面展示了模板项目中包含的所有配置文件和它们的作用。
       </Paragraph>
@@ -114,7 +116,7 @@ const Feature2: React.FC = () => {
         />
       </Card>
 
-      <Card title="使用说明">
+      <Card title="使用说明" style={{ marginTop: 0 }}>
         <Space direction="vertical" size="middle" style={{ width: '100%' }}>
           <div>
             <Title level={4}>🔧 配置文件修改</Title>

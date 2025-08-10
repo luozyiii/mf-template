@@ -23,7 +23,9 @@ const Settings: React.FC = () => {
 
   return (
     <div style={{ padding: '24px' }}>
-      <Title level={2}>系统设置</Title>
+      <Title level={2} style={{ marginTop: 0 }}>
+        系统设置
+      </Title>
       <Paragraph>这是一个示例设置页面，展示了常见的系统配置选项。</Paragraph>
 
       <Card title="基础配置" style={{ marginBottom: '24px' }}>

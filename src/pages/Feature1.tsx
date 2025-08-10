@@ -6,7 +6,9 @@ const { Title, Paragraph, Text } = Typography;
 const Feature1: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
-      <Title level={2}>功能模块1</Title>
+      <Title level={2} style={{ marginTop: 0 }}>
+        功能模块1
+      </Title>
       <Paragraph>
         这是一个示例功能模块页面。您可以根据实际需求替换为具体的业务功能。
       </Paragraph>
