@@ -95,3 +95,13 @@ jspm_packages/
 
 # TernJS port file
 .tern-port
+
+# Module Federation specific
+**/remoteEntry.js
+**/remoteEntry.js.map
+**/@mf-types/
+**/@mf-types.zip
+.mf/
+
+# Rsbuild specific
+.rsbuild/

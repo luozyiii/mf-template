@@ -20,15 +20,33 @@ export const deploymentConfig = {
 
   // 获取当前环境的配置
   getCurrentConfig() {
-    const env =
-      (typeof window !== 'undefined' && (window as any).__NODE_ENV__) ||
-      'development';
-    return {
+    // 优先从 window 对象获取环境变量，然后检查 hostname 来判断环境
+    let env = 'development';
+
+    if (typeof window !== 'undefined') {
+      // 检查是否在 GitHub Pages 环境
+      if (window.location.hostname.includes('github.io')) {
+        env = 'production';
+      }
+      // 或者从 window 对象获取环境变量
+      else if ((window as any).__NODE_ENV__) {
+        env = (window as any).__NODE_ENV__;
+      }
+    }
+
+    const config = {
       shellUrl: this.shellApp[env as keyof typeof this.shellApp],
       templateUrl: this.templateApp[env as keyof typeof this.templateApp],
       basename: this.basename[env as keyof typeof this.basename],
       isProduction: env === 'production',
     };
+
+    // 在开发环境下打印配置信息
+    if (env === 'development') {
+      console.log('🔧 Deployment config:', { env, config });
+    }
+
+    return config;
   },
 };
 

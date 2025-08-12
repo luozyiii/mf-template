@@ -10,6 +10,10 @@ export default defineConfig({
   },
   html: {
     title: '微前端模板系统',
+    template: './public/index.html',
+    templateParameters: {
+      NODE_ENV: process.env.NODE_ENV || 'development',
+    },
   },
   output: {
     // GitHub Pages 部署配置
@@ -19,14 +23,17 @@ export default defineConfig({
         : '/',
   },
   source: {
-    // 设置 basename 用于路由
+    // 设置 basename 用于路由和环境变量
     define: {
       'process.env.PUBLIC_URL': JSON.stringify(
         process.env.NODE_ENV === 'production' ? '/mf-template' : ''
       ),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       'process.env.REACT_APP_SKIP_AUTH': JSON.stringify(
         process.env.REACT_APP_SKIP_AUTH
       ),
+      // 注入到 window 对象，供运行时使用
+      '__NODE_ENV__': JSON.stringify(process.env.NODE_ENV || 'development'),
     },
   },
 });
