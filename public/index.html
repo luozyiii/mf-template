@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>微前端模板系统</title>
-  <meta name="description" content="微前端子系统标准模板" />
+  <title><%= APP_DISPLAY_NAME || '微前端子系统' %></title>
+  <meta name="description" content="<%= APP_DISPLAY_NAME || '微前端子系统' %> - 标准模板" />
   <script>
     // 注入环境变量到 window 对象
     window.__NODE_ENV__ = '<%= NODE_ENV %>' || 'development';

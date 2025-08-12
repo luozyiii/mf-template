@@ -6,32 +6,47 @@ import moduleFederationConfig from './module-federation.config';
 export default defineConfig({
   plugins: [pluginReact(), pluginModuleFederation(moduleFederationConfig)],
   server: {
-    port: 3003, // 模板项目使用 3003 端口
+    port: Number(process.env.PORT) || 3003,
   },
   html: {
-    title: '微前端模板系统',
+    title: process.env.APP_DISPLAY_NAME || '微前端子系统',
     template: './public/index.html',
     templateParameters: {
       NODE_ENV: process.env.NODE_ENV || 'development',
+      APP_DISPLAY_NAME: process.env.APP_DISPLAY_NAME || '微前端子系统',
     },
   },
   output: {
     // GitHub Pages 部署配置
     assetPrefix:
       process.env.NODE_ENV === 'production'
-        ? '/mf-template/' // 使用相对路径，让浏览器自动处理协议和域名
+        ? `/${process.env.PROJECT_NAME || 'mf-template'}/`
         : '/',
   },
   source: {
-    // 设置 basename 用于路由和环境变量
+    // 注入环境变量到应用中
     define: {
-      'process.env.PUBLIC_URL': JSON.stringify(
-        process.env.NODE_ENV === 'production' ? '/mf-template' : ''
-      ),
+      // 基础环境变量
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-      'process.env.REACT_APP_SKIP_AUTH': JSON.stringify(
-        process.env.REACT_APP_SKIP_AUTH
-      ),
+      'process.env.PUBLIC_URL': JSON.stringify(process.env.BASENAME || ''),
+
+      // 应用配置
+      'process.env.MODULE_NAME': JSON.stringify(process.env.MODULE_NAME || 'template'),
+      'process.env.APP_DISPLAY_NAME': JSON.stringify(process.env.APP_DISPLAY_NAME || '模板系统'),
+      'process.env.PROJECT_NAME': JSON.stringify(process.env.PROJECT_NAME || 'mf-template'),
+      'process.env.PORT': JSON.stringify(process.env.PORT || '3003'),
+
+      // GitHub 配置
+      'process.env.GITHUB_USERNAME': JSON.stringify(process.env.GITHUB_USERNAME || 'luozyiii'),
+
+      // URL 配置
+      'process.env.SHELL_URL': JSON.stringify(process.env.SHELL_URL || 'http://localhost:3000'),
+      'process.env.CURRENT_APP_URL': JSON.stringify(process.env.CURRENT_APP_URL || 'http://localhost:3003'),
+      'process.env.BASENAME': JSON.stringify(process.env.BASENAME || ''),
+
+      // 其他配置
+      'process.env.REACT_APP_SKIP_AUTH': JSON.stringify(process.env.REACT_APP_SKIP_AUTH),
+
       // 注入到 window 对象，供运行时使用
       '__NODE_ENV__': JSON.stringify(process.env.NODE_ENV || 'development'),
     },

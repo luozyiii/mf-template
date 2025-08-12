@@ -13,7 +13,7 @@ import {
   ControlOutlined,
   LeftOutlined,
 } from '@ant-design/icons';
-import { templateRouteConfig } from '../config/routes.config';
+import { appRouteConfig } from '../config/routes.config';
 import { AuthUtils } from '../utils/authUtils';
 import styles from './Layout.module.css';
 
@@ -54,8 +54,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // 构建菜单项
   const menuItems = useMemo(() => {
-    return templateRouteConfig.routes.map(route => ({
-      key: route.path.replace('/template', ''),
+    const moduleName = (process.env.MODULE_NAME as string) || 'template';
+    return appRouteConfig.routes.map(route => ({
+      key: route.path.replace(`/${moduleName}`, ''),
       icon:
         route.icon === 'DashboardOutlined' ? (
           <DashboardOutlined />
@@ -79,8 +80,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   // 获取当前页面信息
   const getCurrentPageInfo = () => {
     const pathname = location.pathname;
-    const route = templateRouteConfig.routes.find(
-      r => r.path.replace('/template', '') === pathname
+    const moduleName = (process.env.MODULE_NAME as string) || 'template';
+    const route = appRouteConfig.routes.find(
+      r => r.path.replace(`/${moduleName}`, '') === pathname
     );
 
     if (route) {
@@ -111,7 +113,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <>
       <Helmet>
-        <title>{currentPageInfo.title} - 模板系统</title>
+        <title>
+          {currentPageInfo.title} -{' '}
+          {(process.env.APP_DISPLAY_NAME as string) || '模板系统'}
+        </title>
       </Helmet>
       <AntLayout className={styles.layout}>
         {!isInMicroFrontend && (
@@ -125,7 +130,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div
               className={`${styles.logo} ${collapsed ? styles.logoCollapsed : styles.logoExpanded}`}
             >
-              {collapsed ? 'MT' : '模板系统'}
+              {collapsed
+                ? ((process.env.MODULE_NAME as string) || 'template')
+                    .substring(0, 2)
+                    .toUpperCase()
+                : (process.env.APP_DISPLAY_NAME as string) || '模板系统'}
             </div>
 
             <div className={styles.menuContainer}>
@@ -172,7 +181,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
             <div className={styles.headerRight}>
               <div className={styles.welcomeText}>
-                模板系统 - 微前端标准模板
+                {(process.env.APP_DISPLAY_NAME as string) || '模板系统'} -
+                微前端子系统
               </div>
 
               <Dropdown
@@ -186,7 +196,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     icon={<UserOutlined />}
                     className={styles.userAvatar}
                   />
-                  <span className={styles.userName}>模板用户</span>
+                  <span className={styles.userName}>
+                    {(process.env.APP_DISPLAY_NAME as string) || '模板系统'}用户
+                  </span>
                   <div className={styles.dropdownArrow}>▼</div>
                 </div>
               </Dropdown>

@@ -1,26 +1,8 @@
 // 部署配置
 export const deploymentConfig = {
-  // 主应用 URL
-  shellApp: {
-    development: 'http://localhost:3000',
-    production: 'https://luozyiii.github.io/mf-shell',
-  },
-
-  // 当前模板模块 URL
-  templateApp: {
-    development: 'http://localhost:3003',
-    production: 'https://luozyiii.github.io/mf-template',
-  },
-
-  // 路由 basename 配置
-  basename: {
-    development: '',
-    production: '/mf-template',
-  },
-
   // 获取当前环境的配置
   getCurrentConfig() {
-    // 优先从 window 对象获取环境变量，然后检查 hostname 来判断环境
+    // 优先从环境变量获取，然后检查 hostname 来判断环境
     let env = 'development';
 
     if (typeof window !== 'undefined') {
@@ -34,11 +16,21 @@ export const deploymentConfig = {
       }
     }
 
+    // 从环境变量获取配置（这些在构建时已经注入）
+    const shellUrl =
+      (process.env.SHELL_URL as string) || 'http://localhost:3000';
+    const currentUrl =
+      (process.env.CURRENT_APP_URL as string) || 'http://localhost:3003';
+    const basename = (process.env.BASENAME as string) || '';
+
     const config = {
-      shellUrl: this.shellApp[env as keyof typeof this.shellApp],
-      templateUrl: this.templateApp[env as keyof typeof this.templateApp],
-      basename: this.basename[env as keyof typeof this.basename],
+      shellUrl,
+      currentUrl,
+      basename,
       isProduction: env === 'production',
+      moduleName: (process.env.MODULE_NAME as string) || 'template',
+      appDisplayName: (process.env.APP_DISPLAY_NAME as string) || '模板系统',
+      projectName: (process.env.PROJECT_NAME as string) || 'mf-template',
     };
 
     // 在开发环境下打印配置信息
