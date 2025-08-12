@@ -8,6 +8,7 @@ import {
 import { ConfigProvider } from 'antd';
 import { HelmetProvider } from 'react-helmet-async';
 import zhCN from 'antd/locale/zh_CN';
+import 'antd/dist/reset.css'; // 引入 Ant Design 的基础样式
 import { templateRouteConfig } from './config/routes.config';
 import { Layout } from './components/Layout';
 import { AuthGuard } from './components/AuthGuard';

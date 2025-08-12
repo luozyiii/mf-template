@@ -55,7 +55,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   // 构建菜单项
   const menuItems = useMemo(() => {
     const moduleName = (process.env.MODULE_NAME as string) || 'template';
-    return appRouteConfig.routes.map(route => ({
+    const routeItems = appRouteConfig.routes.map(route => ({
       key: route.path.replace(`/${moduleName}`, ''),
       icon:
         route.icon === 'DashboardOutlined' ? (
@@ -71,6 +71,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         ),
       label: route.name,
     }));
+
+    return routeItems;
   }, []);
 
   const handleMenuClick = ({ key }: { key: string }) => {

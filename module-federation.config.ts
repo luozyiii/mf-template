@@ -4,6 +4,7 @@ export default createModuleFederationConfig({
   name: process.env.MODULE_NAME || 'template',
   filename: 'remoteEntry.js',
   exposes: {
+    './App': './src/App.tsx',
     './routes': './src/config/routes.config.ts',
     './Dashboard': './src/pages/Dashboard.tsx',
     './Feature1': './src/pages/Feature1.tsx',
@@ -13,19 +14,18 @@ export default createModuleFederationConfig({
   shared: {
     react: {
       singleton: true,
-      eager: false,
+      eager: true,
     },
     'react-dom': {
       singleton: true,
-      eager: false,
+      eager: true,
     },
     'react-router-dom': {
       singleton: true,
-      eager: false,
+      eager: true,
     },
     antd: {
       singleton: true,
-      eager: false,
     },
   },
 });

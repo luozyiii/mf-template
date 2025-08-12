@@ -94,6 +94,39 @@ code {
   background-color: #f0f2f5;
 }
 
+/* 修复 Spin 组件文字显示问题 */
+.ant-spin-text {
+  text-align: center !important;
+  white-space: nowrap !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
+
+/* 确保 Spin 容器正确显示 */
+.ant-spin-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* AuthGuard 加载样式 */
+.auth-guard-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f2f5;
+  flex-direction: column;
+}
+
+.auth-guard-loading .ant-spin-text {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+}
+
 /* 页面过渡动画 */
 .page-transition-enter {
   opacity: 0;

@@ -38,16 +38,16 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 
   if (isChecking) {
     return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
-        <Spin size="large" spinning={true} tip="正在验证身份...">
-          <div style={{ minHeight: '200px' }} />
+      <div className="auth-guard-loading">
+        <Spin
+          size="large"
+          spinning={true}
+          tip="正在验证身份..."
+        >
+          <div style={{
+            minHeight: '60px',
+            minWidth: '60px'
+          }} />
         </Spin>
       </div>
     );

@@ -195,10 +195,6 @@
   transition: all 0.3s;
 }
 
-.userInfo:hover {
-  background-color: #f5f5f5;
-}
-
 .userAvatar {
   flex-shrink: 0;
 }

@@ -6,4 +6,5 @@ import { templateRouteConfig } from './config/routes.config';
 
 console.log('📋 Template routes available:', templateRouteConfig);
 
-import('./main');
+// 同步导入 main，避免异步加载问题
+import './main';
