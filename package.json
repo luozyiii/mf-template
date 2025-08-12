@@ -2,6 +2,7 @@
   "name": "mf-template",
   "private": true,
   "version": "1.0.0",
+  "packageManager": "pnpm@10.13.1",
   "description": "微前端子系统模板项目",
   "scripts": {
     "dev": "rsbuild dev --open",
