@@ -8,7 +8,7 @@ import {
 import { ConfigProvider } from 'antd';
 import { HelmetProvider } from 'react-helmet-async';
 import zhCN from 'antd/locale/zh_CN';
-import { templateRoutes } from './routes';
+import { templateRouteConfig } from './config/routes.config';
 import { Layout } from './components/Layout';
 import { AuthGuard } from './components/AuthGuard';
 import { AuthUtils } from './utils/authUtils';
@@ -27,22 +27,8 @@ const AppRoutes: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // 暴露路由配置API
-    (window as any).getRoutes = () => templateRoutes;
-
-    // 向主应用发送路由配置消息
-    const sendRoutesToParent = () => {
-      if (window.parent && window.parent !== window) {
-        window.parent.postMessage(
-          {
-            type: 'MICRO_FRONTEND_ROUTES',
-            appKey: 'template',
-            routes: templateRoutes,
-          },
-          '*'
-        );
-      }
-    };
+    // 暴露路由配置API（用于调试）
+    (window as any).getRoutes = () => templateRouteConfig;
 
     // 处理 404 重定向
     const redirectPath = sessionStorage.getItem('spa_redirect_path');
@@ -58,14 +44,14 @@ const AppRoutes: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       setIsLoading(false);
 
-      // 应用加载完成后发送路由配置
-      sendRoutesToParent();
+      // 应用加载完成
+      console.log('✅ Template app initialized');
     };
 
     initializeApp();
 
-    // 立即发送一次路由配置（以防主应用已经加载完成）
-    sendRoutesToParent();
+    // 初始化完成
+    console.log('🚀 Template app setup complete');
 
     // 监听来自主应用的路由变化消息
     const handleMessage = (event: MessageEvent) => {

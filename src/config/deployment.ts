@@ -20,7 +20,9 @@ export const deploymentConfig = {
 
   // 获取当前环境的配置
   getCurrentConfig() {
-    const env = process.env.NODE_ENV || 'development';
+    const env =
+      (typeof window !== 'undefined' && (window as any).__NODE_ENV__) ||
+      'development';
     return {
       shellUrl: this.shellApp[env as keyof typeof this.shellApp],
       templateUrl: this.templateApp[env as keyof typeof this.templateApp],

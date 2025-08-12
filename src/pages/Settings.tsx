@@ -107,7 +107,10 @@ const Settings: React.FC = () => {
               在开发环境中启用调试模式，显示更多的日志信息和开发工具。
             </Paragraph>
             <Switch
-              defaultChecked={process.env.NODE_ENV === 'development'}
+              defaultChecked={
+                typeof window !== 'undefined' &&
+                (window as any).__NODE_ENV__ === 'development'
+              }
               disabled
             />
           </div>

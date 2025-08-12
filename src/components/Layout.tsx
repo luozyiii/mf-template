@@ -13,7 +13,7 @@ import {
   ControlOutlined,
   LeftOutlined,
 } from '@ant-design/icons';
-import { templateRoutes } from '../routes';
+import { templateRouteConfig } from '../config/routes.config';
 import { AuthUtils } from '../utils/authUtils';
 import styles from './Layout.module.css';
 
@@ -54,7 +54,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // 构建菜单项
   const menuItems = useMemo(() => {
-    return templateRoutes.routes.map(route => ({
+    return templateRouteConfig.routes.map(route => ({
       key: route.path.replace('/template', ''),
       icon:
         route.icon === 'DashboardOutlined' ? (
@@ -79,7 +79,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   // 获取当前页面信息
   const getCurrentPageInfo = () => {
     const pathname = location.pathname;
-    const route = templateRoutes.routes.find(
+    const route = templateRouteConfig.routes.find(
       r => r.path.replace('/template', '') === pathname
     );
 
