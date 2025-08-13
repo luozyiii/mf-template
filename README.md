@@ -1,6 +1,6 @@
 # 🎯 微前端子系统标准模板 (mf-template)
 
-这是一个经过精心设计的微前端子系统标准模板，基于 mf-marketing 和 mf-finance 的最佳实践，提供了完整的配置和基础功能，可以快速创建新的微前端子系统。
+这是一个经过精心设计的微前端子系统标准模板，基于成熟的微前端最佳实践，提供了完整的配置和基础功能，可以快速创建新的微前端子系统。
 
 ## ✨ 核心特性
 
@@ -13,10 +13,9 @@
 - 📱 **SPA 路由支持** - GitHub Pages 单页应用路由重定向
 - 🛠️ **开发工具** - 自动化创建脚本和详细文档
 
-## 🎨 模板特色
+## 🎯 模板优势
 
 ### 📋 基于最佳实践
-本模板基于 **mf-marketing** 和 **mf-finance** 两个成熟子系统的配置经验，确保：
 - 🔧 配置架构完全统一
 - 🚀 部署流程标准化
 - 🔐 认证集成无缝对接
@@ -81,25 +80,12 @@ mf-template/
 ### 方法一：使用自动化脚本（推荐）
 
 ```bash
-# 1. 复制模板到新项目目录
-cp -r mf-template mf-your-new-module
-cd mf-your-new-module
+# 在项目根目录执行
+./mf-internal/scripts/create-micro-frontend.sh <模块名> <端口号> "<系统标题>"
 
-# 2. 运行自动化设置脚本
-./scripts/setup-template.sh
+# 示例：创建库存管理系统
+./mf-internal/scripts/create-micro-frontend.sh inventory 3004 "库存管理系统"
 ```
-
-脚本会引导您输入：
-- 📝 模块名称（如：inventory, order, user）
-- 🔢 端口号（如：3004）
-- 🏷️ 应用显示名称（如：库存管理系统）
-- 👤 GitHub 用户名（如：luozyiii）
-
-脚本会自动：
-- 🔄 替换所有配置中的模板变量
-- 📝 生成对应的项目配置
-- 🧹 清理模板相关文件
-- ✅ 确保配置的一致性
 
 ### 方法二：手动复制和配置
 
@@ -109,9 +95,9 @@ cp -r mf-template mf-your-new-module
 cd mf-your-new-module
 
 # 2. 删除不需要的文件
-rm -rf .git node_modules dist scripts/create-new-module.sh TEMPLATE_USAGE.md
+rm -rf .git node_modules dist
 
-# 3. 手动修改配置文件（参考 TEMPLATE_USAGE.md）
+# 3. 手动修改配置文件（参考下面的配置说明）
 ```
 
 ## 🛠️ 技术栈
@@ -127,29 +113,19 @@ rm -rf .git node_modules dist scripts/create-new-module.sh TEMPLATE_USAGE.md
 | **GitHub Pages** | - | 部署平台 |
 | **GitHub Actions** | - | CI/CD 流水线 |
 
-## 📦 快速开始
+## ⚙️ 手动配置说明
 
-### 1. 复制模板
+如果选择手动配置，需要修改以下关键文件：
 
-```bash
-# 复制模板项目到新目录
-cp -r mf-template mf-your-module
-cd mf-your-module
-```
-
-### 2. 修改配置
-
-需要修改以下文件中的配置：
-
-#### package.json
+### 1. package.json
 ```json
 {
   "name": "mf-your-module",  // 修改项目名称
-  // ...
+  "description": "您的模块描述"
 }
 ```
 
-#### rsbuild.config.ts
+### 2. rsbuild.config.ts
 ```typescript
 export default defineConfig({
   server: {
@@ -163,17 +139,10 @@ export default defineConfig({
       ? '/mf-your-module/'  // 修改项目名称
       : '/',
   },
-  source: {
-    define: {
-      'process.env.PUBLIC_URL': JSON.stringify(
-        process.env.NODE_ENV === 'production' ? '/mf-your-module' : ''  // 修改项目名称
-      ),
-    },
-  },
 });
 ```
 
-#### module-federation.config.ts
+### 3. module-federation.config.ts
 ```typescript
 export default createModuleFederationConfig({
   name: 'yourModule',  // 修改模块名称
@@ -181,59 +150,16 @@ export default createModuleFederationConfig({
 });
 ```
 
-#### src/config/deployment.ts
-```typescript
-export const deploymentConfig = {
-  // 当前模块 URL
-  yourModuleApp: {  // 修改模块名称
-    development: 'http://localhost:3004',  // 修改端口
-    production: 'https://luozyiii.github.io/mf-your-module'  // 修改项目名称
-  },
-  basename: {
-    development: '',
-    production: '/mf-your-module'  // 修改项目名称
-  },
-  getCurrentConfig() {
-    const env = process.env.NODE_ENV || 'development';
-    return {
-      shellUrl: this.shellApp[env as keyof typeof this.shellApp],
-      yourModuleUrl: this.yourModuleApp[env as keyof typeof this.yourModuleApp],  // 修改属性名
-      basename: this.basename[env as keyof typeof this.basename],
-      isProduction: env === 'production'
-    };
-  }
-};
-```
-
-#### .github/workflows/deploy.yml
-```yaml
-- name: Build with Rsbuild
-  run: npm run build
-  env:
-    NODE_ENV: production
-    PUBLIC_URL: https://luozyiii.github.io/mf-your-module/  # 修改项目名称
-```
-
-#### public/404.html
-```javascript
-// 修改所有 '/mf-template' 为 '/mf-your-module'
-```
-
-### 3. 安装依赖
+### 4. 安装依赖并启动
 
 ```bash
+# 安装依赖
 npm install
-```
 
-### 4. 启动开发服务器
-
-```bash
+# 启动开发服务器
 npm run dev
-```
 
-### 5. 构建生产版本
-
-```bash
+# 构建生产版本
 npm run build
 ```
 
@@ -249,6 +175,7 @@ npm run build
 ### 手动部署
 
 ```bash
+npm run build
 npm run deploy
 ```
 
@@ -260,11 +187,6 @@ npm run deploy
 2. 在 `src/routes/index.ts` 中添加路由配置
 3. 在 `src/App.tsx` 中添加路由映射
 4. 在 `src/components/Layout.tsx` 中添加菜单项
-
-### 修改样式
-
-- 全局样式：修改 `src/App.css`
-- 组件样式：使用 Ant Design 的主题定制或 CSS-in-JS
 
 ### 集成到主应用
 
@@ -280,28 +202,22 @@ npm run deploy
 3. **路由配置**: basename 配置要与部署路径一致
 4. **认证集成**: 确保与主应用的认证系统正确集成
 
-## 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request 来改进这个模板！
-
 ## 🎯 使用示例
 
 ### 创建库存管理系统
 
 ```bash
 # 1. 使用脚本创建
-./scripts/create-new-module.sh inventory 3004 "库存管理系统"
+./mf-internal/scripts/create-micro-frontend.sh inventory 3004 "库存管理系统"
 
 # 2. 进入项目目录
 cd mf-inventory
 
-# 3. 安装依赖
+# 3. 安装依赖并启动
 npm install
-
-# 4. 启动开发服务器
 npm run dev
 
-# 5. 访问应用
+# 4. 访问应用
 open http://localhost:3004
 ```
 
@@ -320,39 +236,15 @@ git push -u origin main
 
 ## 🌟 项目优势
 
-### 🚀 快速开发
-- **5分钟创建** - 从模板到运行的完整项目
-- **零配置** - 所有配置都已优化完成
-- **即时预览** - 热重载开发体验
+- **🚀 快速开发** - 5分钟创建完整项目
+- **🔧 高度一致** - 统一架构和标准配置
+- **📈 易于维护** - 文档完善，自动化工具支持
 
-### 🔧 高度一致
-- **统一架构** - 与现有子系统完全一致
-- **标准配置** - 避免配置差异导致的问题
-- **最佳实践** - 基于生产环境验证的配置
+## 📚 相关文档
 
-### 📈 易于维护
-- **文档完善** - 详细的使用指南和注释
-- **自动化工具** - 减少手动配置错误
-- **版本同步** - 依赖版本与其他子系统保持一致
-
-## 🤝 贡献指南
-
-欢迎提交 Issue 和 Pull Request 来改进这个模板！
-
-### 改进建议
-- 🐛 发现 Bug 请提交 Issue
-- 💡 功能建议请详细描述使用场景
-- 📝 文档改进永远欢迎
-- 🔧 配置优化请说明理由
-
-## 📞 技术支持
-
-如果在使用过程中遇到问题：
-
-1. 📖 查看 `TEMPLATE_USAGE.md` 详细指南
-2. 🔍 检查 GitHub Issues 中的常见问题
-3. 💬 提交新的 Issue 描述问题
-4. 📧 联系开发团队获取支持
+- [创建新子系统指南](../mf-internal/docs/CREATE_NEW_SUBSYSTEM.md)
+- [环境配置指南](../mf-internal/docs/ENV_CONFIG.md)
+- [部署指南](../mf-internal/docs/DEPLOYMENT.md)
 
 ## 📄 许可证
 
@@ -362,4 +254,4 @@ MIT License
 
 **🎉 开始您的微前端开发之旅吧！**
 
-这个模板将帮助您快速创建高质量、标准化的微前端子系统，让您专注于业务逻辑的实现，而不是基础配置的搭建。
+这个模板将帮助您快速创建高质量、标准化的微前端子系统，让您专注于业务逻辑的实现。
