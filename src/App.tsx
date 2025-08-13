@@ -13,6 +13,7 @@ import 'antd/dist/reset.css'; // 引入 Ant Design 的基础样式
 import { AppSkeleton } from './components/AppSkeleton';
 import { AuthGuard } from './components/AuthGuard';
 import { Layout } from './components/Layout';
+import { ScrollToTop } from './components/ScrollToTop';
 import { currentConfig } from './config/deployment';
 import { templateRouteConfig } from './config/routes.config';
 import Dashboard from './pages/Dashboard';
@@ -76,14 +77,22 @@ const AppRoutes: React.FC = () => {
   }
 
   return (
-    <Routes>
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/feature1" element={<Feature1 />} />
-      <Route path="/feature2" element={<Feature2 />} />
-      <Route path="/settings" element={<Settings />} />
-      <Route path="/" element={<Dashboard />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <>
+      {/* 微前端环境下的滚动处理 */}
+      <ScrollToTop
+        smooth={true}
+        delay={100} // 微前端环境下稍短的延迟
+        autoScroll={true}
+      />
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/feature1" element={<Feature1 />} />
+        <Route path="/feature2" element={<Feature2 />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 };
 

@@ -165,6 +165,45 @@ const Feature2: React.FC = () => {
           </div>
         </Space>
       </Card>
+
+      {/* 添加更多内容来测试滚动功能 */}
+      {Array.from({ length: 8 }, (_, index) => (
+        <Card
+          key={index}
+          title={`配置示例 ${index + 1}`}
+          style={{ marginBottom: '24px' }}
+        >
+          <Paragraph>
+            这是第 {index + 1} 个配置示例卡片。这些卡片用于测试页面滚动功能。
+          </Paragraph>
+          <Paragraph>
+            <Title level={5}>示例配置内容：</Title>
+            <pre
+              style={{
+                background: '#f8f9fa',
+                padding: '12px',
+                borderRadius: '4px',
+                fontSize: '12px',
+              }}
+            >
+              {`// 示例配置 ${index + 1}
+export const config${index + 1} = {
+  name: 'example-${index + 1}',
+  version: '1.0.${index}',
+  enabled: true,
+  settings: {
+    autoScroll: true,
+    smooth: true,
+    delay: ${index * 100}
+  }
+};`}
+            </pre>
+          </Paragraph>
+          <Tag color="blue">配置 {index + 1}</Tag>
+          <Tag color="green">已启用</Tag>
+          <Tag color="orange">测试用途</Tag>
+        </Card>
+      ))}
     </div>
   );
 };

@@ -1,5 +1,46 @@
 import { createModuleFederationConfig } from '@module-federation/rsbuild-plugin';
 
+// 与主应用保持一致的共享依赖配置
+const sharedDependencies = {
+  // 核心 React 依赖 - 从主应用获取
+  react: {
+    singleton: true,
+    eager: false, // 子应用不预加载，从主应用获取
+    requiredVersion: '^18.0.0',
+    strictVersion: false,
+  },
+  'react-dom': {
+    singleton: true,
+    eager: false,
+    requiredVersion: '^18.0.0',
+    strictVersion: false,
+  },
+
+  // 路由依赖 - 从主应用获取
+  'react-router-dom': {
+    singleton: true,
+    eager: false,
+    requiredVersion: '^6.0.0',
+    strictVersion: false,
+  },
+
+  // UI 库 - 从主应用获取
+  antd: {
+    singleton: true,
+    eager: false,
+    requiredVersion: '^5.0.0',
+    strictVersion: false,
+  },
+
+  // 工具库 - 从主应用获取
+  'react-helmet-async': {
+    singleton: true,
+    eager: false,
+    requiredVersion: '^1.0.0',
+    strictVersion: false,
+  },
+};
+
 export default createModuleFederationConfig({
   name: process.env.MODULE_NAME || 'template',
   filename: 'remoteEntry.js',
@@ -11,21 +52,5 @@ export default createModuleFederationConfig({
     './Feature2': './src/pages/Feature2.tsx',
     './Settings': './src/pages/Settings.tsx',
   },
-  shared: {
-    react: {
-      singleton: true,
-      eager: true,
-    },
-    'react-dom': {
-      singleton: true,
-      eager: true,
-    },
-    'react-router-dom': {
-      singleton: true,
-      eager: true,
-    },
-    antd: {
-      singleton: true,
-    },
-  },
+  shared: sharedDependencies,
 });

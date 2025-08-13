@@ -76,6 +76,38 @@ const Feature1: React.FC = () => {
           </div>
         </Space>
       </Card>
+
+      {/* 添加更多内容来测试滚动功能 */}
+      {Array.from({ length: 10 }, (_, index) => (
+        <Card
+          key={index}
+          title={`测试卡片 ${index + 1}`}
+          style={{ marginBottom: '24px' }}
+        >
+          <Paragraph>
+            这是第 {index + 1} 个测试卡片，用于测试页面滚动功能。
+            当您在不同页面之间切换时，页面应该自动滚动到顶部。
+          </Paragraph>
+          <Paragraph>滚动功能特性：</Paragraph>
+          <ul>
+            <li>路由切换时自动滚动到顶部</li>
+            <li>支持平滑滚动动画</li>
+            <li>微前端环境下的跨应用滚动</li>
+            <li>兼容不同的滚动容器</li>
+          </ul>
+          <Text type="secondary">
+            卡片编号：{index + 1} | 当前时间：{new Date().toLocaleTimeString()}
+          </Text>
+        </Card>
+      ))}
+
+      <Alert
+        message="滚动测试说明"
+        description="请尝试滚动到页面底部，然后切换到其他页面，再切换回来，观察页面是否自动滚动到顶部。"
+        type="success"
+        showIcon
+        style={{ marginBottom: '24px' }}
+      />
     </div>
   );
 };
