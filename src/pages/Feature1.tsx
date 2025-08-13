@@ -1,5 +1,5 @@
-import React from 'react';
-import { Card, Typography, Alert, Steps, Space } from 'antd';
+import { Alert, Card, Space, Steps, Typography } from 'antd';
+import type React from 'react';
 
 const { Title, Paragraph, Text } = Typography;
 

@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/locale/zh_CN';
+import type React from 'react';
+import { useEffect, useState } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 import {
+  Route,
   BrowserRouter as Router,
   Routes,
-  Route,
   useNavigate,
 } from 'react-router-dom';
-import { ConfigProvider } from 'antd';
-import { HelmetProvider } from 'react-helmet-async';
-import zhCN from 'antd/locale/zh_CN';
 import 'antd/dist/reset.css'; // 引入 Ant Design 的基础样式
-import { templateRouteConfig } from './config/routes.config';
-import { Layout } from './components/Layout';
+import { AppSkeleton } from './components/AppSkeleton';
 import { AuthGuard } from './components/AuthGuard';
-import { AuthUtils } from './utils/authUtils';
+import { Layout } from './components/Layout';
 import { currentConfig } from './config/deployment';
+import { templateRouteConfig } from './config/routes.config';
 import Dashboard from './pages/Dashboard';
 import Feature1 from './pages/Feature1';
 import Feature2 from './pages/Feature2';
-import Settings from './pages/Settings';
 import { NotFound } from './pages/NotFound';
-import { AppSkeleton } from './components/AppSkeleton';
+import Settings from './pages/Settings';
+import { AuthUtils } from './utils/authUtils';
 import './App.css';
 
 // 内部路由组件，用于处理路由监听
@@ -42,7 +43,7 @@ const AppRoutes: React.FC = () => {
     // 模拟应用初始化加载
     const initializeApp = async () => {
       // 模拟数据加载、权限检查等
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setIsLoading(false);
 
       // 应用加载完成

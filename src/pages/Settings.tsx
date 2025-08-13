@@ -1,15 +1,15 @@
-import React from 'react';
 import {
+  Button,
   Card,
-  Typography,
+  Divider,
   Form,
   Input,
   Select,
-  Switch,
-  Button,
   Space,
-  Divider,
+  Switch,
+  Typography,
 } from 'antd';
+import type React from 'react';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;

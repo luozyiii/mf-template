@@ -1,5 +1,5 @@
 import { Card, Col, Row, Skeleton } from 'antd';
-import React from 'react';
+import type React from 'react';
 
 export const AppSkeleton: React.FC = () => {
   return (

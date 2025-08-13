@@ -1,18 +1,19 @@
-import React, { useState, useMemo } from 'react';
-import { Layout as AntLayout, Menu, Button, Avatar, Dropdown } from 'antd';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  DashboardOutlined,
-  UserOutlined,
-  LogoutOutlined,
-  SettingOutlined,
   AppstoreOutlined,
   ControlOutlined,
+  DashboardOutlined,
   LeftOutlined,
+  LogoutOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  SettingOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
+import { Layout as AntLayout, Avatar, Button, Dropdown, Menu } from 'antd';
+import type React from 'react';
+import { useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { appRouteConfig } from '../config/routes.config';
 import { AuthUtils } from '../utils/authUtils';
 import styles from './Layout.module.css';
@@ -55,7 +56,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   // 构建菜单项
   const menuItems = useMemo(() => {
     const moduleName = (process.env.MODULE_NAME as string) || 'template';
-    const routeItems = appRouteConfig.routes.map(route => ({
+    const routeItems = appRouteConfig.routes.map((route) => ({
       key: route.path.replace(`/${moduleName}`, ''),
       icon:
         route.icon === 'DashboardOutlined' ? (
@@ -84,7 +85,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     const pathname = location.pathname;
     const moduleName = (process.env.MODULE_NAME as string) || 'template';
     const route = appRouteConfig.routes.find(
-      r => r.path.replace(`/${moduleName}`, '') === pathname
+      (r) => r.path.replace(`/${moduleName}`, '') === pathname
     );
 
     if (route) {

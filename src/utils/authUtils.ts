@@ -12,7 +12,7 @@ export class AuthUtils {
    */
   static getToken(): string | null {
     try {
-      return sessionStorage.getItem(this.TOKEN_KEY);
+      return sessionStorage.getItem(AuthUtils.TOKEN_KEY);
     } catch (error) {
       console.warn('Failed to get token:', error);
       return null;
@@ -24,7 +24,7 @@ export class AuthUtils {
    */
   static setToken(token: string): void {
     try {
-      sessionStorage.setItem(this.TOKEN_KEY, token);
+      sessionStorage.setItem(AuthUtils.TOKEN_KEY, token);
     } catch (error) {
       console.warn('Failed to set token:', error);
     }
@@ -35,9 +35,9 @@ export class AuthUtils {
    */
   static removeToken(): void {
     try {
-      sessionStorage.removeItem(this.TOKEN_KEY);
-      sessionStorage.removeItem(this.USER_KEY);
-      sessionStorage.removeItem(this.PERMISSIONS_KEY);
+      sessionStorage.removeItem(AuthUtils.TOKEN_KEY);
+      sessionStorage.removeItem(AuthUtils.USER_KEY);
+      sessionStorage.removeItem(AuthUtils.PERMISSIONS_KEY);
     } catch (error) {
       console.warn('Failed to remove token:', error);
     }
@@ -47,7 +47,7 @@ export class AuthUtils {
    * 检查是否已登录
    */
   static isAuthenticated(): boolean {
-    const token = this.getToken();
+    const token = AuthUtils.getToken();
     return !!token;
   }
 
@@ -56,7 +56,7 @@ export class AuthUtils {
    */
   static getUserData(): any {
     try {
-      const userData = sessionStorage.getItem(this.USER_KEY);
+      const userData = sessionStorage.getItem(AuthUtils.USER_KEY);
       return userData ? JSON.parse(userData) : null;
     } catch (error) {
       console.warn('Failed to get user data:', error);
@@ -69,7 +69,7 @@ export class AuthUtils {
    */
   static setUserData(userData: any): void {
     try {
-      sessionStorage.setItem(this.USER_KEY, JSON.stringify(userData));
+      sessionStorage.setItem(AuthUtils.USER_KEY, JSON.stringify(userData));
     } catch (error) {
       console.warn('Failed to set user data:', error);
     }
@@ -80,7 +80,7 @@ export class AuthUtils {
    */
   static getPermissions(): any {
     try {
-      const permissions = sessionStorage.getItem(this.PERMISSIONS_KEY);
+      const permissions = sessionStorage.getItem(AuthUtils.PERMISSIONS_KEY);
       return permissions ? JSON.parse(permissions) : null;
     } catch (error) {
       console.warn('Failed to get permissions:', error);
@@ -93,7 +93,10 @@ export class AuthUtils {
    */
   static setPermissions(permissions: any): void {
     try {
-      sessionStorage.setItem(this.PERMISSIONS_KEY, JSON.stringify(permissions));
+      sessionStorage.setItem(
+        AuthUtils.PERMISSIONS_KEY,
+        JSON.stringify(permissions)
+      );
     } catch (error) {
       console.warn('Failed to set permissions:', error);
     }
@@ -114,7 +117,7 @@ export class AuthUtils {
    * 退出登录
    */
   static logout(): void {
-    this.removeToken();
+    AuthUtils.removeToken();
     // 跳转到主应用登录页面，携带当前页面作为回调地址
     const currentUrl = window.location.href;
     const shellUrl = currentConfig.shellUrl;
@@ -125,7 +128,7 @@ export class AuthUtils {
    * 检查token是否过期（简单实现）
    */
   static isTokenExpired(): boolean {
-    const token = this.getToken();
+    const token = AuthUtils.getToken();
     return !token;
   }
 }

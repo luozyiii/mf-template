@@ -1,11 +1,11 @@
-import React from 'react';
-import { Card, Row, Col, Statistic, Typography, Space } from 'antd';
 import {
-  UserOutlined,
   AppstoreOutlined,
-  SettingOutlined,
   ControlOutlined,
+  SettingOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
+import { Card, Col, Row, Space, Statistic, Typography } from 'antd';
+import type React from 'react';
 
 const { Title, Paragraph } = Typography;
 

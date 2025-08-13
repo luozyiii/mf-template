@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
 import { Spin } from 'antd';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import { AuthUtils } from '../utils/authUtils';
 
 interface AuthGuardProps {
@@ -39,15 +40,13 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
   if (isChecking) {
     return (
       <div className="auth-guard-loading">
-        <Spin
-          size="large"
-          spinning={true}
-          tip="正在验证身份..."
-        >
-          <div style={{
-            minHeight: '60px',
-            minWidth: '60px'
-          }} />
+        <Spin size="large" spinning={true} tip="正在验证身份...">
+          <div
+            style={{
+              minHeight: '60px',
+              minWidth: '60px',
+            }}
+          />
         </Spin>
       </div>
     );
