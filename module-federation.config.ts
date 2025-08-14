@@ -45,7 +45,7 @@ export default createModuleFederationConfig({
   name: process.env.MODULE_NAME || 'template',
   filename: 'remoteEntry.js',
   remotes: {
-    'mf-shared': 'mfShared@http://localhost:2999/remoteEntry.js',
+    'mf-shared': `mfShared@${process.env.MF_SHARED_URL || 'http://localhost:2999'}/remoteEntry.js`,
   },
   exposes: {
     './App': './src/App.tsx',
