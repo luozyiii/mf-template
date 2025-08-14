@@ -43,6 +43,9 @@ export default defineConfig({
       'process.env.SHELL_URL': JSON.stringify(process.env.SHELL_URL || 'http://localhost:3000'),
       'process.env.CURRENT_APP_URL': JSON.stringify(process.env.CURRENT_APP_URL || 'http://localhost:3003'),
       'process.env.BASENAME': JSON.stringify(process.env.BASENAME || ''),
+      'process.env.MF_SHARED_URL': JSON.stringify(
+        process.env.MF_SHARED_URL || 'http://localhost:2999'
+      ),
 
       // 其他配置
       'process.env.REACT_APP_SKIP_AUTH': JSON.stringify(process.env.REACT_APP_SKIP_AUTH),

@@ -71,6 +71,16 @@ export const appRouteConfig: AppRouteConfig = {
       showInMenu: true,
       menuOrder: 4,
     },
+    {
+      path: `/${(process.env.MODULE_NAME as string) || 'template'}/store-demo`,
+      name: 'Store 演示',
+      icon: 'DatabaseOutlined',
+      component: 'StoreDemo',
+      showBack: true,
+      backPath: `/${(process.env.MODULE_NAME as string) || 'template'}/dashboard`,
+      showInMenu: true,
+      menuOrder: 5,
+    },
   ],
 };
 

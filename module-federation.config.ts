@@ -44,6 +44,9 @@ const sharedDependencies = {
 export default createModuleFederationConfig({
   name: process.env.MODULE_NAME || 'template',
   filename: 'remoteEntry.js',
+  remotes: {
+    'mf-shared': 'mfShared@http://localhost:2999/remoteEntry.js',
+  },
   exposes: {
     './App': './src/App.tsx',
     './routes': './src/config/routes.config.ts',
@@ -51,6 +54,7 @@ export default createModuleFederationConfig({
     './Feature1': './src/pages/Feature1.tsx',
     './Feature2': './src/pages/Feature2.tsx',
     './Settings': './src/pages/Settings.tsx',
+    './StoreDemo': './src/pages/StoreDemo.tsx',
   },
   shared: sharedDependencies,
 });
