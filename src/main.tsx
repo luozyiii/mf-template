@@ -9,30 +9,37 @@ const initStoreForStandalone = async () => {
     try {
       // 动态导入存储模块并初始化
       // @ts-ignore - Module Federation 动态导入，运行时存在
-      const { initGlobalStore, setStoreValue } = await import('mf-shared/store');
+      const { initGlobalStore, setStoreValue } = await import(
+        'mf-shared/store'
+      );
 
       initGlobalStore({
         enablePersistence: true,
         enableEncryption: true,
-        storageKey: 'mf-template-standalone-store'
+        storageKey: 'mf-template-store',
       });
 
       // 设置一些默认数据
       setStoreValue('userinfo', {
         name: '独立用户',
         age: 25,
-        role: 'user'
+        role: 'user',
       });
 
       setStoreValue('appConfig', {
         theme: 'light',
         language: 'zh-CN',
-        version: '1.0.0-standalone'
+        version: '1.0.0-standalone',
       });
 
-      console.log('🗄️ Template app: Global Store initialized for standalone mode');
+      console.log(
+        '🗄️ Template app: Global Store initialized for standalone mode'
+      );
     } catch (error) {
-      console.warn('Template app: Failed to initialize store for standalone mode:', error);
+      console.warn(
+        'Template app: Failed to initialize store for standalone mode:',
+        error
+      );
     }
   } else {
     console.log('🗄️ Template app: Using existing global store from shell');

@@ -11,12 +11,15 @@ import {
 } from '@ant-design/icons';
 import { Layout as AntLayout, Avatar, Button, Dropdown, Menu } from 'antd';
 import type React from 'react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { appRouteConfig } from '../config/routes.config';
 import { AuthUtils } from '../utils/authUtils';
 import styles from './Layout.module.css';
+
+// @ts-ignore - MF runtime
+import { getStoreValue, subscribeStore } from 'mf-shared/store';
 
 const { Header, Sider, Content } = AntLayout;
 
@@ -102,6 +105,24 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       backPath: null,
     };
   };
+  // 订阅 globalStore 的模板用户信息，动态展示右上角用户名
+  const [userName, setUserName] = useState<string>('模板系统用户');
+  useEffect(() => {
+    try {
+      const user = getStoreValue<any>('user');
+      if (user?.name) setUserName(user.name);
+      const unsub = subscribeStore?.('user', (_k: string, newVal: any) => {
+        if (newVal?.name) setUserName(newVal.name);
+      });
+      return () => {
+        try {
+          unsub?.();
+        } catch {}
+      };
+    } catch {
+      // 忽略
+    }
+  }, []);
 
   const currentPageInfo = getCurrentPageInfo();
 
@@ -199,9 +220,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     icon={<UserOutlined />}
                     className={styles.userAvatar}
                   />
-                  <span className={styles.userName}>
-                    {(process.env.APP_DISPLAY_NAME as string) || '模板系统'}用户
-                  </span>
+                  <span className={styles.userName}>{userName}</span>
                   <div className={styles.dropdownArrow}>▼</div>
                 </div>
               </Dropdown>

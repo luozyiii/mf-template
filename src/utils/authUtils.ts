@@ -1,4 +1,7 @@
 import { currentConfig } from '../config/deployment';
+import { clearByShortPrefix } from '../store/keys';
+// @ts-ignore - MF runtime
+import { getStoreValue, clearStoreByPrefix } from 'mf-shared/store';
 
 // 认证相关工具类
 export class AuthUtils {
@@ -6,12 +9,16 @@ export class AuthUtils {
   private static readonly TOKEN_KEY = 'auth_token';
   private static readonly USER_KEY = 'user_data';
   private static readonly PERMISSIONS_KEY = 'permissions_data';
+  private static readonly PREFIX = 'mf-template-';
 
   /**
    * 获取token
    */
   static getToken(): string | null {
     try {
+      // 优先从 globalStore（模板前缀）读取
+      const v = getStoreValue<string>(`${AuthUtils.PREFIX}token`);
+      if (v) return v;
       return sessionStorage.getItem(AuthUtils.TOKEN_KEY);
     } catch (error) {
       console.warn('Failed to get token:', error);
@@ -117,6 +124,12 @@ export class AuthUtils {
    * 退出登录
    */
   static logout(): void {
+    try {
+      // 清理模板前缀的 globalStore 数据（旧命名空间）
+      clearStoreByPrefix(AuthUtils.PREFIX);
+      // 清理短键命名空间（独立：user/app/roles/token；集成：g:sh:*）
+      clearByShortPrefix();
+    } catch {}
     AuthUtils.removeToken();
     // 跳转到主应用登录页面，携带当前页面作为回调地址
     const currentUrl = window.location.href;

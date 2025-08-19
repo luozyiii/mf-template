@@ -2,6 +2,8 @@ import { Spin } from 'antd';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import { AuthUtils } from '../utils/authUtils';
+// @ts-ignore - MF runtime
+import { getStoreValue } from 'mf-shared/store';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -21,8 +23,9 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
         return;
       }
 
-      // 检查是否已登录
-      if (!AuthUtils.isAuthenticated()) {
+      // 检查是否已登录：优先看 globalStore（mf-template-token），其次旧逻辑
+      const tokenFromStore = getStoreValue<string>('mf-template-token');
+      if (!tokenFromStore && !AuthUtils.isAuthenticated()) {
         // 未登录，跳转到登录页面
         AuthUtils.redirectToLogin();
         return;

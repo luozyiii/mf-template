@@ -24,6 +24,11 @@ import Settings from './pages/Settings';
 import StoreDemo from './pages/StoreDemo';
 import { AuthUtils } from './utils/authUtils';
 import './App.css';
+// @ts-ignore - JSON modules
+import users from './mock/userinfo.json';
+import { keyOf } from './store/keys';
+// @ts-ignore - MF runtime
+import { configureStoreStrategy, setStoreValue } from 'mf-shared/store';
 
 // 内部路由组件，用于处理路由监听
 const AppRoutes: React.FC = () => {
@@ -108,7 +113,49 @@ const App: React.FC = () => {
     const token = urlParams.get('token');
 
     if (token) {
-      // 存储token到localStorage
+      // 将 token/user/app/roles 写入短键（根据模式自动选择 g:sh: 或 t:tp:）
+      try {
+        configureStoreStrategy(keyOf('token'), {
+          medium: 'local',
+          encrypted: false,
+        });
+        setStoreValue(keyOf('token'), token);
+
+        // 根据 token 在本地 mock 中匹配用户（简单规则：按 id=token 后缀）
+        const matched = (users as any[]).find((u) =>
+          token.includes(`_${u.id}_`)
+        );
+        if (matched) {
+          configureStoreStrategy(keyOf('user'), {
+            medium: 'local',
+            encrypted: true,
+          });
+          configureStoreStrategy(keyOf('app'), {
+            medium: 'local',
+            encrypted: false,
+          });
+          configureStoreStrategy(keyOf('roles'), {
+            medium: 'local',
+            encrypted: false,
+          });
+          setStoreValue(keyOf('user'), {
+            id: matched.id,
+            username: matched.username,
+            name: matched.name,
+            role: matched.role,
+            roles: matched.roles,
+          });
+          setStoreValue(keyOf('app'), matched.appConfig);
+          try {
+            const permMap = Object.fromEntries(
+              (matched.permissions || []).map((p: string) => [p, true])
+            );
+            setStoreValue(keyOf('roles'), permMap);
+          } catch {}
+        }
+      } catch {}
+
+      // 同时保留现有的 sessionStorage 存储，兼容旧逻辑
       AuthUtils.setToken(token);
 
       // 清除URL中的token参数，避免token暴露在URL中

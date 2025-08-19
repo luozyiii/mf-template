@@ -1,31 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Card, 
-  Row, 
-  Col, 
-  Button, 
-  Typography, 
-  message, 
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  Card,
+  Row,
+  Col,
+  Button,
+  Typography,
+  message,
   Space,
   Tag,
   Divider,
   Alert,
   Statistic,
   Timeline,
-  Badge,
-  List
+  List,
 } from 'antd';
-import { 
-  DatabaseOutlined, 
-  SendOutlined, 
+import {
+  DatabaseOutlined,
+  SendOutlined,
   SyncOutlined,
   UserOutlined,
   SettingOutlined,
   BellOutlined,
   SwapOutlined,
   CheckCircleOutlined,
-  ClockCircleOutlined
+  ClockCircleOutlined,
 } from '@ant-design/icons';
+
+import { getVal, setVal, subscribeVal, ensureMigrated } from '../store/keys';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -65,144 +66,206 @@ const StoreDemo: React.FC = () => {
   const unsubscribeFunctionsRef = React.useRef<(() => void)[]>([]);
 
   // 加载存储模块
+  // biome-ignore lint/correctness/useExhaustiveDependencies: only run once on mount and cleanup
   useEffect(() => {
     loadStoreModule();
-
-    // 清理函数：组件卸载时取消所有订阅
     return () => {
-      unsubscribeFunctionsRef.current.forEach(unsubscribe => unsubscribe());
+      unsubscribeFunctionsRef.current.forEach((unsubscribe) => unsubscribe());
       unsubscribeFunctionsRef.current = [];
     };
   }, []);
 
-  const loadStoreModule = async () => {
+  const addNotification = useCallback((notification: any) => {
+    setNotifications((prev) => [notification, ...prev.slice(0, 9)]); // 保留最新10条
+    setTimeout(() => {
+      if (notificationScrollRef.current) {
+        notificationScrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 100);
+  }, []);
+
+  const refreshData = useCallback(() => {
+    try {
+      ensureMigrated();
+      const userinfo = getVal('user');
+      const appConfig = getVal('app');
+      const token = getVal('token');
+      const permissions = getVal('roles');
+      setCurrentData({
+        userinfo: userinfo || {},
+        appConfig: appConfig || {},
+        token: token || '',
+        permissions: permissions || {},
+      });
+    } catch (error) {
+      console.error('Failed to refresh data:', error);
+    }
+  }, []);
+
+  const loadStoreModule = useCallback(async () => {
     try {
       // @ts-ignore - 模块联邦动态导入
       const module = await import('mf-shared/store');
       setStoreModule(module);
       setIsConnected(true);
-      
-      // 检查是否为独立运行模式
+
+      // 检查是否为独立运行模式（使用本地变量，避免异步状态导致前缀判断错误）
       const globalStore = (window as any).globalStore;
       const storageKey = globalStore?.options?.storageKey;
-      setIsStandalone(storageKey === 'mf-template-standalone-store');
-      
-      // 获取当前数据
-      refreshData(module);
-      
+      const standalone = storageKey === 'mf-template-store';
+      setIsStandalone(standalone);
+
+      // 获取当前数据（短键 + 迁移）
+      try {
+        ensureMigrated();
+        const userinfo = getVal('user');
+        const appConfig = getVal('app');
+        const token = getVal('token');
+        const permissions = getVal('roles');
+        setCurrentData({
+          userinfo: userinfo || {},
+          appConfig: appConfig || {},
+          token: token || '',
+          permissions: permissions || {},
+        });
+      } catch (e) {
+        console.warn('Initial refresh failed', e);
+      }
+
       // 清理之前的订阅
-      unsubscribeFunctionsRef.current.forEach(unsubscribe => unsubscribe());
+      unsubscribeFunctionsRef.current.forEach((unsubscribe) => unsubscribe());
       unsubscribeFunctionsRef.current = [];
 
-      // 订阅数据变化
-      const unsubscribeUserinfo = module.subscribeStore('userinfo', (key: string, newVal: any, oldVal: any) => {
-        setMessageCount(prev => prev + 1);
-        setLastUpdate(new Date().toLocaleTimeString());
-        refreshData(module);
-        message.success(`收到用户信息更新: ${key}`);
-
-        addNotification({
-          type: 'userinfo',
-          message: `用户信息更新: ${JSON.stringify(newVal)}`,
-          time: new Date().toLocaleTimeString()
-        });
-      });
-
-      const unsubscribeAppConfig = module.subscribeStore('appConfig', (key: string, newVal: any, oldVal: any) => {
-        setMessageCount(prev => prev + 1);
-        setLastUpdate(new Date().toLocaleTimeString());
-        refreshData(module);
-        message.info(`收到配置更新: ${key}`);
-
-        addNotification({
-          type: 'config',
-          message: `配置更新: ${JSON.stringify(newVal)}`,
-          time: new Date().toLocaleTimeString()
-        });
-      });
-
-      const unsubscribeNotifications = module.subscribeStore('notifications', (key: string, newVal: any) => {
-        if (newVal && newVal.message) {
-          message.info(`收到通知: ${newVal.message}`);
+      // 订阅数据变化（短键 + 旧键兼容）
+      const unsubscribeUserinfo = subscribeVal(
+        'user',
+        (_key: string, newVal: any) => {
+          setMessageCount((prev) => prev + 1);
+          setLastUpdate(new Date().toLocaleTimeString());
+          refreshData();
+          message.success(`收到用户信息更新`);
           addNotification({
-            type: 'notification',
-            message: newVal.message,
-            time: new Date().toLocaleTimeString()
+            type: 'userinfo',
+            message: `用户信息更新: ${JSON.stringify(newVal)}`,
+            time: new Date().toLocaleTimeString(),
           });
         }
-      });
+      );
+
+      const unsubscribeAppConfig = subscribeVal(
+        'app',
+        (_key: string, newVal: any) => {
+          setMessageCount((prev) => prev + 1);
+          setLastUpdate(new Date().toLocaleTimeString());
+          refreshData();
+          message.info(`收到配置更新`);
+          addNotification({
+            type: 'config',
+            message: `配置更新: ${JSON.stringify(newVal)}`,
+            time: new Date().toLocaleTimeString(),
+          });
+        }
+      );
+
+      const unsubscribeNotifications = module.subscribeStore(
+        'notifications',
+        (_key: string, newVal: any) => {
+          if (newVal?.message) {
+            message.info(`收到通知: ${newVal.message}`);
+            addNotification({
+              type: 'notification',
+              message: newVal.message,
+              time: new Date().toLocaleTimeString(),
+            });
+          }
+        }
+      );
 
       // 保存取消订阅函数
       unsubscribeFunctionsRef.current = [
         unsubscribeUserinfo,
         unsubscribeAppConfig,
-        unsubscribeNotifications
+        unsubscribeNotifications,
       ];
-
     } catch (error) {
       console.error('Failed to load store module:', error);
       setIsConnected(false);
     }
-  };
+  }, [addNotification, refreshData]);
 
-  const addNotification = (notification: any) => {
-    setNotifications(prev => [notification, ...prev.slice(0, 9)]); // 保留最新10条
-
-    // 自动滚动到顶部显示最新通知
-    setTimeout(() => {
-      if (notificationScrollRef.current) {
-        notificationScrollRef.current.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      }
-    }, 100);
-  };
-
-  const refreshData = (module = storeModule) => {
-    if (!module) return;
-    
-    try {
-      const userinfo = module.getStoreValue('userinfo');
-      const appConfig = module.getStoreValue('appConfig');
-      
-      setCurrentData({
-        userinfo: userinfo || {},
-        appConfig: appConfig || {}
-      });
-    } catch (error) {
-      console.error('Failed to refresh data:', error);
-    }
-  };
+  // 注意：下两个函数必须在 loadStoreModule 之前声明，避免依赖顺序报错
 
   const updateFromChild = () => {
-    if (!storeModule) return;
-    
     const newName = `子应用用户${Math.floor(Math.random() * 1000)}`;
-    storeModule.setStoreValue('userinfo.name', newName);
+    const curUser = (getVal('user') as any) || {};
+    setVal('user', { ...curUser, name: newName });
+    setCurrentData((prev: any) => ({
+      ...prev,
+      userinfo: { ...(prev?.userinfo || {}), name: newName },
+    }));
     message.success(`从子应用更新用户名: ${newName}`);
   };
 
   const updateChildConfig = () => {
-    if (!storeModule) return;
-    
-    const newLanguage = currentData.appConfig?.language === 'zh-CN' ? 'en-US' : 'zh-CN';
-    storeModule.setStoreValue('appConfig.language', newLanguage);
+    const newLanguage =
+      currentData.appConfig?.language === 'zh-CN' ? 'en-US' : 'zh-CN';
+    const curApp = (getVal('app') as any) || {};
+    setVal('app', { ...curApp, language: newLanguage });
+    setCurrentData((prev: any) => ({
+      ...prev,
+      appConfig: { ...(prev?.appConfig || {}), language: newLanguage },
+    }));
     message.success(`语言已切换为: ${newLanguage}`);
   };
 
   const sendToParent = () => {
     if (!storeModule) return;
-    
+
     const childMessage = {
       id: Date.now(),
       message: '来自子应用的消息',
       timestamp: new Date().toISOString(),
-      source: 'template-app'
+      source: 'template-app',
     };
-    
+
     storeModule.setStoreValue('childMessages', childMessage);
     message.success('消息已发送到主应用');
+  };
+
+  const clearNamespace = () => {
+    if (!storeModule) return;
+    try {
+      const prefix = isStandalone ? 'mf-template-' : 'mf-shell-';
+      storeModule.clearByPrefix(prefix);
+      message.success('已清理命名空间数据');
+      setCurrentData({
+        userinfo: {},
+        appConfig: {},
+        token: '',
+        permissions: {},
+      });
+      refreshData();
+    } catch (_e) {
+      message.error('清理失败');
+    }
+  };
+
+  const writeLargeData = () => {
+    if (!storeModule) return;
+    const bigArray = Array.from({ length: 800 }, (_, i) => ({
+      id: i,
+      text: `模板记录-${i}`,
+    }));
+    try {
+      storeModule.configureStrategy?.('mf-template-bigdata', {
+        medium: 'local',
+        encrypted: false,
+      });
+      storeModule.setStoreValue('mf-template-bigdata', bigArray);
+      message.success('已写入模板大数据到命名空间（localStorage）');
+    } catch {
+      message.warning('当前环境不支持配置策略，已跳过');
+    }
   };
 
   return (
@@ -237,6 +300,7 @@ const StoreDemo: React.FC = () => {
           }
         `}
       </style>
+
       <Title level={2}>🗄️ Store 演示 - 子应用</Title>
       <Paragraph>
         这个页面演示了子应用如何与主应用进行实时数据通信。
@@ -247,15 +311,19 @@ const StoreDemo: React.FC = () => {
         {/* 连接状态 */}
         <Col span={24}>
           <Alert
-            message={isStandalone ? "独立运行模式" : "跨应用通信模式"}
+            message={isStandalone ? '独立运行模式' : '跨应用通信模式'}
             description={
-              isConnected 
-                ? (isStandalone 
-                    ? "✅ 子应用独立运行，使用本地存储" 
-                    : "✅ 已连接到主应用全局存储，可以实时通信")
-                : "❌ 未连接到存储系统"
+              <>
+                {isConnected
+                  ? isStandalone
+                    ? '✅ 子应用独立运行，使用本地存储'
+                    : '✅ 已连接到主应用全局存储，可以实时通信'
+                  : '❌ 未连接到存储系统'}{' '}
+                <br />
+                {`当前命名空间前缀：${isStandalone ? 'mf-template-store' : 'mf-shell-store'}`}
+              </>
             }
-            type={isConnected ? (isStandalone ? "info" : "success") : "error"}
+            type={isConnected ? (isStandalone ? 'info' : 'success') : 'error'}
             showIcon
             icon={<DatabaseOutlined />}
           />
@@ -267,7 +335,7 @@ const StoreDemo: React.FC = () => {
             <Col span={6}>
               <Statistic
                 title="运行模式"
-                value={isStandalone ? "独立模式" : "集成模式"}
+                value={isStandalone ? '独立模式' : '集成模式'}
                 prefix={<SwapOutlined />}
                 valueStyle={{ color: isStandalone ? '#722ed1' : '#1890ff' }}
               />
@@ -291,7 +359,7 @@ const StoreDemo: React.FC = () => {
             <Col span={6}>
               <Statistic
                 title="连接状态"
-                value={isConnected ? "已连接" : "未连接"}
+                value={isConnected ? '已连接' : '未连接'}
                 prefix={<DatabaseOutlined />}
                 valueStyle={{ color: isConnected ? '#3f8600' : '#cf1322' }}
               />
@@ -301,7 +369,7 @@ const StoreDemo: React.FC = () => {
 
         {/* 数据展示和操作 */}
         <Col span={12}>
-          <Card 
+          <Card
             title={
               <Space>
                 <UserOutlined />
@@ -321,27 +389,33 @@ const StoreDemo: React.FC = () => {
               </div>
               <div>
                 <Text strong>主题: </Text>
-                <Tag color={currentData.appConfig?.theme === 'dark' ? 'default' : 'gold'}>
+                <Tag
+                  color={
+                    currentData.appConfig?.theme === 'dark' ? 'default' : 'gold'
+                  }
+                >
                   {currentData.appConfig?.theme || '未设置'}
                 </Tag>
               </div>
               <div>
                 <Text strong>语言: </Text>
-                <Tag color="cyan">{currentData.appConfig?.language || '未设置'}</Tag>
+                <Tag color="cyan">
+                  {currentData.appConfig?.language || '未设置'}
+                </Tag>
               </div>
-              
+
               <Divider />
-              
+
               <Space wrap>
-                <Button 
-                  type="primary" 
+                <Button
+                  type="primary"
                   icon={<SendOutlined />}
                   onClick={updateFromChild}
                   size="small"
                 >
                   更新用户名
                 </Button>
-                <Button 
+                <Button
                   icon={<SettingOutlined />}
                   onClick={updateChildConfig}
                   size="small"
@@ -349,7 +423,7 @@ const StoreDemo: React.FC = () => {
                   切换语言
                 </Button>
                 {!isStandalone && (
-                  <Button 
+                  <Button
                     icon={<BellOutlined />}
                     onClick={sendToParent}
                     size="small"
@@ -357,12 +431,29 @@ const StoreDemo: React.FC = () => {
                     发送消息
                   </Button>
                 )}
-                <Button 
+                <Button
                   icon={<SyncOutlined />}
                   onClick={() => refreshData()}
                   size="small"
                 >
                   刷新数据
+                </Button>
+              </Space>
+
+              <Space wrap style={{ marginTop: 8 }}>
+                <Button
+                  icon={<DatabaseOutlined />}
+                  onClick={clearNamespace}
+                  size="small"
+                >
+                  清理模板命名空间
+                </Button>
+                <Button
+                  icon={<DatabaseOutlined />}
+                  onClick={writeLargeData}
+                  size="small"
+                >
+                  写入大数据（策略演示）
                 </Button>
               </Space>
             </Space>
@@ -371,7 +462,7 @@ const StoreDemo: React.FC = () => {
 
         {/* 消息通知 */}
         <Col span={12}>
-          <Card 
+          <Card
             title={
               <Space>
                 <BellOutlined />
@@ -391,33 +482,44 @@ const StoreDemo: React.FC = () => {
                     <Timeline.Item
                       key={index}
                       dot={
-                        notif.type === 'userinfo' ? <UserOutlined /> :
-                        notif.type === 'config' ? <SettingOutlined /> :
-                        <BellOutlined />
+                        notif.type === 'userinfo' ? (
+                          <UserOutlined />
+                        ) : notif.type === 'config' ? (
+                          <SettingOutlined />
+                        ) : (
+                          <BellOutlined />
+                        )
                       }
                       color={
-                        notif.type === 'userinfo' ? 'blue' :
-                        notif.type === 'config' ? 'green' : 'orange'
+                        notif.type === 'userinfo'
+                          ? 'blue'
+                          : notif.type === 'config'
+                            ? 'green'
+                            : 'orange'
                       }
                     >
-                      <div style={{
-                        fontSize: '12px',
-                        paddingBottom: '8px',
-                        lineHeight: '1.4',
-                        minHeight: '32px' // 确保每个通知项有最小高度
-                      }}>
-                        <div style={{
-                          marginBottom: '4px',
-                          fontWeight: '500',
-                          color: '#262626'
-                        }}>
+                      <div
+                        style={{
+                          fontSize: '12px',
+                          paddingBottom: '8px',
+                          lineHeight: '1.4',
+                          minHeight: '32px', // 确保每个通知项有最小高度
+                        }}
+                      >
+                        <div
+                          style={{
+                            marginBottom: '4px',
+                            fontWeight: '500',
+                            color: '#262626',
+                          }}
+                        >
                           {notif.message}
                         </div>
                         <Text
                           type="secondary"
                           style={{
                             fontSize: '11px',
-                            display: 'block'
+                            display: 'block',
                           }}
                         >
                           {notif.time}
@@ -468,7 +570,7 @@ const StoreDemo: React.FC = () => {
                           addNotification({
                             type: 'module',
                             message: '模块A已加载',
-                            time: new Date().toLocaleTimeString()
+                            time: new Date().toLocaleTimeString(),
                           });
                         }}
                       >
@@ -481,7 +583,7 @@ const StoreDemo: React.FC = () => {
                           addNotification({
                             type: 'module',
                             message: '模块B已加载',
-                            time: new Date().toLocaleTimeString()
+                            time: new Date().toLocaleTimeString(),
                           });
                         }}
                       >
@@ -498,7 +600,10 @@ const StoreDemo: React.FC = () => {
                         type="primary"
                         block
                         onClick={() => {
-                          const data = { timestamp: Date.now(), value: Math.random() };
+                          const data = {
+                            timestamp: Date.now(),
+                            value: Math.random(),
+                          };
                           storeModule?.setStoreValue('localData', data);
                           message.success('本地数据已保存');
                         }}
@@ -531,7 +636,7 @@ const StoreDemo: React.FC = () => {
                             addNotification({
                               type: 'service',
                               message: '独立服务响应成功',
-                              time: new Date().toLocaleTimeString()
+                              time: new Date().toLocaleTimeString(),
                             });
                           }, 1000);
                         }}
@@ -566,23 +671,33 @@ const StoreDemo: React.FC = () => {
                   {isStandalone ? (
                     <>
                       <List.Item>
-                        <ClockCircleOutlined style={{ color: '#1890ff', marginRight: 8 }} />
+                        <ClockCircleOutlined
+                          style={{ color: '#1890ff', marginRight: 8 }}
+                        />
                         当前为独立运行模式，使用本地存储
                       </List.Item>
                       <List.Item>
-                        <ClockCircleOutlined style={{ color: '#1890ff', marginRight: 8 }} />
+                        <ClockCircleOutlined
+                          style={{ color: '#1890ff', marginRight: 8 }}
+                        />
                         数据会持久化到 localStorage 并加密
                       </List.Item>
                       <List.Item>
-                        <ClockCircleOutlined style={{ color: '#1890ff', marginRight: 8 }} />
+                        <ClockCircleOutlined
+                          style={{ color: '#1890ff', marginRight: 8 }}
+                        />
                         可以测试模块的独立功能
                       </List.Item>
                       <List.Item>
-                        <ClockCircleOutlined style={{ color: '#1890ff', marginRight: 8 }} />
+                        <ClockCircleOutlined
+                          style={{ color: '#1890ff', marginRight: 8 }}
+                        />
                         访问 http://localhost:3000 体验集成模式
                       </List.Item>
                       <List.Item>
-                        <ClockCircleOutlined style={{ color: '#1890ff', marginRight: 8 }} />
+                        <ClockCircleOutlined
+                          style={{ color: '#1890ff', marginRight: 8 }}
+                        />
                         <a
                           href={process.env.MF_SHARED_URL}
                           target="_blank"
@@ -596,19 +711,27 @@ const StoreDemo: React.FC = () => {
                   ) : (
                     <>
                       <List.Item>
-                        <CheckCircleOutlined style={{ color: '#52c41a', marginRight: 8 }} />
+                        <CheckCircleOutlined
+                          style={{ color: '#52c41a', marginRight: 8 }}
+                        />
                         在主应用中修改数据，观察此页面的实时更新
                       </List.Item>
                       <List.Item>
-                        <CheckCircleOutlined style={{ color: '#52c41a', marginRight: 8 }} />
+                        <CheckCircleOutlined
+                          style={{ color: '#52c41a', marginRight: 8 }}
+                        />
                         在此页面修改数据，观察主应用的同步变化
                       </List.Item>
                       <List.Item>
-                        <CheckCircleOutlined style={{ color: '#52c41a', marginRight: 8 }} />
+                        <CheckCircleOutlined
+                          style={{ color: '#52c41a', marginRight: 8 }}
+                        />
                         所有数据变化都会触发实时通知
                       </List.Item>
                       <List.Item>
-                        <CheckCircleOutlined style={{ color: '#52c41a', marginRight: 8 }} />
+                        <CheckCircleOutlined
+                          style={{ color: '#52c41a', marginRight: 8 }}
+                        />
                         <a
                           href={process.env.MF_SHARED_URL}
                           target="_blank"
@@ -627,15 +750,21 @@ const StoreDemo: React.FC = () => {
                   <Title level={5}>独立运行模式</Title>
                   <List size="small">
                     <List.Item>
-                      <ClockCircleOutlined style={{ color: '#1890ff', marginRight: 8 }} />
+                      <ClockCircleOutlined
+                        style={{ color: '#1890ff', marginRight: 8 }}
+                      />
                       直接访问 http://localhost:3003 进入独立模式
                     </List.Item>
                     <List.Item>
-                      <ClockCircleOutlined style={{ color: '#1890ff', marginRight: 8 }} />
+                      <ClockCircleOutlined
+                        style={{ color: '#1890ff', marginRight: 8 }}
+                      />
                       独立模式下使用本地存储，不与主应用通信
                     </List.Item>
                     <List.Item>
-                      <ClockCircleOutlined style={{ color: '#1890ff', marginRight: 8 }} />
+                      <ClockCircleOutlined
+                        style={{ color: '#1890ff', marginRight: 8 }}
+                      />
                       数据仍然会持久化到 localStorage
                     </List.Item>
                   </List>

@@ -5,13 +5,13 @@ const sharedDependencies = {
   // 核心 React 依赖 - 从主应用获取
   react: {
     singleton: true,
-    eager: false, // 子应用不预加载，从主应用获取
+    eager: true, // 与主应用保持一致，避免共享依赖生成按需块
     requiredVersion: '^18.0.0',
     strictVersion: false,
   },
   'react-dom': {
     singleton: true,
-    eager: false,
+    eager: true, // 与主应用保持一致
     requiredVersion: '^18.0.0',
     strictVersion: false,
   },
