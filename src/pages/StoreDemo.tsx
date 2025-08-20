@@ -74,7 +74,7 @@ const StoreDemo: React.FC = () => {
       const userinfo = getVal('user');
       const appConfig = getVal('app');
       const token = getVal('token');
-      const permissions = getVal('roles');
+      const permissions = getVal('permissions');
       setCurrentData({
         userinfo: userinfo || {},
         appConfig: appConfig || {},
@@ -98,7 +98,7 @@ const StoreDemo: React.FC = () => {
         const userinfo = getVal('user');
         const appConfig = getVal('app');
         const token = getVal('token');
-        const permissions = getVal('roles');
+        const permissions = getVal('permissions');
         setCurrentData({
           userinfo: userinfo || {},
           appConfig: appConfig || {},

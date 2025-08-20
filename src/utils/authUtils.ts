@@ -127,7 +127,7 @@ export class AuthUtils {
     try {
       // 清理模板前缀的 globalStore 数据（旧命名空间）
       clearStoreByPrefix(AuthUtils.PREFIX);
-      // 清理短键命名空间（独立：user/app/roles/token；集成：g:sh:*）
+      // 清理短键命名空间（独立：user/app/permissions/token；集成：g:sh:*）
       clearByShortPrefix();
     } catch {}
     AuthUtils.removeToken();

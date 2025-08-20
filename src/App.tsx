@@ -107,7 +107,7 @@ const App: React.FC = () => {
     const token = urlParams.get('token');
 
     if (token) {
-      // 将 token/user/app/roles 写入短键（根据模式自动选择 g:sh: 或 t:tp:）
+      // 将 token/user/app/permissions 写入短键（根据模式自动选择 g:sh: 或 t:tp:）
       try {
         configureStoreStrategy(keyOf('token'), {
           medium: 'local',
@@ -128,7 +128,7 @@ const App: React.FC = () => {
             medium: 'local',
             encrypted: false,
           });
-          configureStoreStrategy(keyOf('roles'), {
+          configureStoreStrategy(keyOf('permissions'), {
             medium: 'local',
             encrypted: false,
           });
@@ -137,14 +137,14 @@ const App: React.FC = () => {
             username: matched.username,
             name: matched.name,
             role: matched.role,
-            roles: matched.roles,
+            permissions: matched.permissions,
           });
           setStoreValue(keyOf('app'), matched.appConfig);
           try {
             const permMap = Object.fromEntries(
               (matched.permissions || []).map((p: string) => [p, true])
             );
-            setStoreValue(keyOf('roles'), permMap);
+            setStoreValue(keyOf('permissions'), permMap);
           } catch {}
         }
       } catch {}

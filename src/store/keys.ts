@@ -1,5 +1,5 @@
 // Short key scheme for mf-template
-// env:app:scope with scopes { user, app, roles, token }
+// env:app:scope with scopes { user, app, permissions, token }
 // env: t (template standalone) when standalone; g:sh when integrated (operate shell's data)
 
 // @ts-ignore - MF runtime
@@ -11,7 +11,7 @@ import {
   clearStoreByPrefix,
 } from 'mf-shared/store';
 
-export type Scope = 'user' | 'app' | 'roles' | 'token';
+export type Scope = 'user' | 'app' | 'permissions' | 'token';
 
 const isStandaloneEnv = () => {
   try {
@@ -22,7 +22,7 @@ const isStandaloneEnv = () => {
   }
 };
 
-// 统一使用简化键（user/app/roles/token），无论是否集成
+// 统一使用简化键（user/app/permissions/token），无论是否集成
 export const shortPrefix = () => '';
 export const keyOf = (scope: Scope) => scope;
 
@@ -35,7 +35,7 @@ const oldKeyOf = (scope: Scope) => {
       return `${base}userinfo`;
     case 'app':
       return `${base}appconfig`;
-    case 'roles':
+    case 'permissions':
       return `${base}permissions`;
     case 'token':
       return `${base}token`;
@@ -46,7 +46,7 @@ let migrated = false;
 export const ensureMigrated = () => {
   if (migrated) return;
   try {
-    (['user', 'app', 'roles', 'token'] as Scope[]).forEach((s) => {
+    (['user', 'app', 'permissions', 'token'] as Scope[]).forEach((s) => {
       const newK = keyOf(s);
       const oldK = oldKeyOf(s);
       const gshK = `g:sh:${s}`;
