@@ -101,7 +101,9 @@ export class AuthUtils {
     const currentUrl = returnUrl || window.location.href;
     // 跳转到主应用登录页面
     const shellUrl = currentConfig.shellUrl;
-    window.location.href = `${shellUrl}/login?returnUrl=${encodeURIComponent(currentUrl)}`;
+    // 确保 shellUrl 以 / 结尾，避免重复的 /
+    const baseUrl = shellUrl.endsWith('/') ? shellUrl.slice(0, -1) : shellUrl;
+    window.location.href = `${baseUrl}/login?returnUrl=${encodeURIComponent(currentUrl)}`;
   }
 
   /**
@@ -124,7 +126,9 @@ export class AuthUtils {
     // 跳转到主应用登录页面，携带当前页面作为回调地址
     const currentUrl = window.location.href;
     const shellUrl = currentConfig.shellUrl;
-    window.location.href = `${shellUrl}/login?returnUrl=${encodeURIComponent(currentUrl)}`;
+    // 确保 shellUrl 以 / 结尾，避免重复的 /
+    const baseUrl = shellUrl.endsWith('/') ? shellUrl.slice(0, -1) : shellUrl;
+    window.location.href = `${baseUrl}/login?returnUrl=${encodeURIComponent(currentUrl)}`;
   }
 
   /**
