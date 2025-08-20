@@ -6,7 +6,7 @@ export type TemplatePermission = 'template:read' | string;
 
 export const useTemplatePermissions = () => {
   const [permissions, setPermissions] = useState<Record<string, boolean>>({});
-  const [permissions, setRoles] = useState<string[]>([]);
+  const [roles, setRoles] = useState<string[]>([]);
 
   useEffect(() => {
     try {
@@ -43,12 +43,12 @@ export const useTemplatePermissions = () => {
   const hasAnyRole = useCallback(
     (need: string[]): boolean => {
       if (!need?.length) return true;
-      return need.some((r) => permissions.includes(r));
+      return need.some((r) => roles.includes(r));
     },
-    [permissions]
+    [roles]
   );
 
-  const summary = useMemo(() => ({ permissions, permissions }), [permissions, permissions]);
+  const summary = useMemo(() => ({ permissions, roles }), [permissions, roles]);
 
-  return { permissions, permissions, hasPermission, hasAnyRole, summary };
+  return { permissions, roles, hasPermission, hasAnyRole, summary };
 };
