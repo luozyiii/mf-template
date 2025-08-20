@@ -1,23 +1,19 @@
 import { currentConfig } from '../config/deployment';
-import { clearByShortPrefix } from '../store/keys';
-// @ts-ignore - MF runtime
-import { getStoreValue, clearStoreByPrefix } from 'mf-shared/store';
+import { getVal, setVal } from '../store/keys';
+import { clearAppData } from 'mf-shared/store';
 
 // 认证相关工具类
 export class AuthUtils {
   // 存储键名
   private static readonly TOKEN_KEY = 'auth_token';
-  private static readonly USER_KEY = 'user_data';
-  private static readonly PERMISSIONS_KEY = 'permissions_data';
-  private static readonly PREFIX = 'mf-template-';
 
   /**
    * 获取token
    */
   static getToken(): string | null {
     try {
-      // 优先从 globalStore（模板前缀）读取
-      const v = getStoreValue<string>(`${AuthUtils.PREFIX}token`);
+      // 优先从 globalStore 读取
+      const v = getVal('token');
       if (v) return v;
       return sessionStorage.getItem(AuthUtils.TOKEN_KEY);
     } catch (error) {
@@ -43,8 +39,6 @@ export class AuthUtils {
   static removeToken(): void {
     try {
       sessionStorage.removeItem(AuthUtils.TOKEN_KEY);
-      sessionStorage.removeItem(AuthUtils.USER_KEY);
-      sessionStorage.removeItem(AuthUtils.PERMISSIONS_KEY);
     } catch (error) {
       console.warn('Failed to remove token:', error);
     }
@@ -63,8 +57,7 @@ export class AuthUtils {
    */
   static getUserData(): any {
     try {
-      const userData = sessionStorage.getItem(AuthUtils.USER_KEY);
-      return userData ? JSON.parse(userData) : null;
+      return getVal('user');
     } catch (error) {
       console.warn('Failed to get user data:', error);
       return null;
@@ -76,7 +69,7 @@ export class AuthUtils {
    */
   static setUserData(userData: any): void {
     try {
-      sessionStorage.setItem(AuthUtils.USER_KEY, JSON.stringify(userData));
+      setVal('user', userData);
     } catch (error) {
       console.warn('Failed to set user data:', error);
     }
@@ -87,8 +80,7 @@ export class AuthUtils {
    */
   static getPermissions(): any {
     try {
-      const permissions = sessionStorage.getItem(AuthUtils.PERMISSIONS_KEY);
-      return permissions ? JSON.parse(permissions) : null;
+      return getVal('permissions');
     } catch (error) {
       console.warn('Failed to get permissions:', error);
       return null;
@@ -100,10 +92,7 @@ export class AuthUtils {
    */
   static setPermissions(permissions: any): void {
     try {
-      sessionStorage.setItem(
-        AuthUtils.PERMISSIONS_KEY,
-        JSON.stringify(permissions)
-      );
+      setVal('permissions', permissions);
     } catch (error) {
       console.warn('Failed to set permissions:', error);
     }
@@ -125,12 +114,18 @@ export class AuthUtils {
    */
   static logout(): void {
     try {
-      // 清理模板前缀的 globalStore 数据（旧命名空间）
-      clearStoreByPrefix(AuthUtils.PREFIX);
-      // 清理短键命名空间（独立：user/app/permissions/token；集成：g:sh:*）
-      clearByShortPrefix();
-    } catch {}
-    AuthUtils.removeToken();
+      // 获取当前应用的存储键名
+      const storageKey = (window as any)?.globalStore?.options?.storageKey || 'mf-template-store';
+
+      // 使用新的 clearAppData 方法清理所有应用数据
+      clearAppData(storageKey);
+
+      // 清理 session 数据
+      AuthUtils.removeToken();
+    } catch (error) {
+      console.warn('Failed to logout:', error);
+    }
+
     // 跳转到主应用登录页面，携带当前页面作为回调地址
     const currentUrl = window.location.href;
     const shellUrl = currentConfig.shellUrl;

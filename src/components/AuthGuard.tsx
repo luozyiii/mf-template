@@ -2,7 +2,6 @@ import { Spin } from 'antd';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import { AuthUtils } from '../utils/authUtils';
-// @ts-ignore - MF runtime
 import { getStoreValue } from 'mf-shared/store';
 
 interface AuthGuardProps {

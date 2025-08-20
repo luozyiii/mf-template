@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-// @ts-ignore - MF runtime
 import { getStoreValue, subscribeStore } from 'mf-shared/store';
 
 export type TemplatePermission = 'template:read' | string;

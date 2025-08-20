@@ -17,7 +17,6 @@ import { appRouteConfig } from '../config/routes.config';
 import { AuthUtils } from '../utils/authUtils';
 import styles from './Layout.module.css';
 
-// @ts-ignore - MF runtime
 import { getStoreValue, subscribeStore } from 'mf-shared/store';
 
 const { Header, Sider, Content } = AntLayout;

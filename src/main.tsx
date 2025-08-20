@@ -8,7 +8,6 @@ const initStoreForStandalone = async () => {
   if (typeof window !== 'undefined' && !(window as any).globalStore) {
     try {
       // 动态导入存储模块并初始化
-      // @ts-ignore - Module Federation 动态导入，运行时存在
       const { initGlobalStore, setStoreValue } = await import(
         'mf-shared/store'
       );

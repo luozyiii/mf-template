@@ -13,7 +13,7 @@ import {
 } from 'antd';
 import { UserOutlined, SettingOutlined, BellOutlined } from '@ant-design/icons';
 
-import { getVal, setVal, subscribeVal, ensureMigrated } from '../store/keys';
+import { getVal, setVal, subscribeVal } from '../store/keys';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -54,7 +54,9 @@ const StoreDemo: React.FC = () => {
   useEffect(() => {
     loadStoreModule();
     return () => {
-      unsubscribeFunctionsRef.current.forEach((unsubscribe) => unsubscribe());
+      for (const unsubscribe of unsubscribeFunctionsRef.current) {
+        unsubscribe();
+      }
       unsubscribeFunctionsRef.current = [];
     };
   }, []);
@@ -70,7 +72,6 @@ const StoreDemo: React.FC = () => {
 
   const refreshData = useCallback(() => {
     try {
-      ensureMigrated();
       const userinfo = getVal('user');
       const appConfig = getVal('app');
       const token = getVal('token');
@@ -88,13 +89,11 @@ const StoreDemo: React.FC = () => {
 
   const loadStoreModule = useCallback(async () => {
     try {
-      // @ts-ignore - 模块联邦动态导入
       const module = await import('mf-shared/store');
       setStoreModule(module);
 
-      // 获取当前数据（短键 + 迁移）
+      // 获取当前数据
       try {
-        ensureMigrated();
         const userinfo = getVal('user');
         const appConfig = getVal('app');
         const token = getVal('token');
@@ -110,7 +109,9 @@ const StoreDemo: React.FC = () => {
       }
 
       // 清理之前的订阅
-      unsubscribeFunctionsRef.current.forEach((unsubscribe) => unsubscribe());
+      for (const unsubscribe of unsubscribeFunctionsRef.current) {
+        unsubscribe();
+      }
       unsubscribeFunctionsRef.current = [];
 
       // 订阅数据变化（短键 + 旧键兼容）

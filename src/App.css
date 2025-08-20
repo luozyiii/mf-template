@@ -39,13 +39,13 @@ code {
 /* 响应式设计 */
 @media (max-width: 768px) {
   .ant-layout-sider {
-    position: fixed !important;
+    position: fixed;
     height: 100vh;
     z-index: 999;
   }
 
   .ant-layout-content {
-    margin-left: 0 !important;
+    margin-left: 0;
   }
 }
 
@@ -96,10 +96,10 @@ code {
 
 /* 修复 Spin 组件文字显示问题 */
 .ant-spin-text {
-  text-align: center !important;
-  white-space: nowrap !important;
-  writing-mode: horizontal-tb !important;
-  text-orientation: mixed !important;
+  text-align: center;
+  white-space: nowrap;
+  writing-mode: horizontal-tb;
+  text-orientation: mixed;
 }
 
 /* 确保 Spin 容器正确显示 */

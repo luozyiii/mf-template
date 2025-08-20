@@ -21,10 +21,8 @@ import { NotFound } from './pages/NotFound';
 import StoreDemo from './pages/StoreDemo';
 import { AuthUtils } from './utils/authUtils';
 import './App.css';
-// @ts-ignore - JSON modules
 import users from './mock/userinfo.json';
 import { keyOf } from './store/keys';
-// @ts-ignore - MF runtime
 import { configureStoreStrategy, setStoreValue } from 'mf-shared/store';
 
 // 内部路由组件，用于处理路由监听
