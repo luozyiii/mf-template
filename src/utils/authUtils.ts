@@ -4,18 +4,13 @@ import { clearAppData } from 'mf-shared/store';
 
 // 认证相关工具类
 export class AuthUtils {
-  // 存储键名
-  private static readonly TOKEN_KEY = 'auth_token';
-
   /**
    * 获取token
    */
   static getToken(): string | null {
     try {
-      // 优先从 globalStore 读取
-      const v = getVal('token');
-      if (v) return v;
-      return sessionStorage.getItem(AuthUtils.TOKEN_KEY);
+      // 从 globalStore 读取
+      return getVal('token') || null;
     } catch (error) {
       console.warn('Failed to get token:', error);
       return null;
@@ -27,7 +22,7 @@ export class AuthUtils {
    */
   static setToken(token: string): void {
     try {
-      sessionStorage.setItem(AuthUtils.TOKEN_KEY, token);
+      setVal('token', token);
     } catch (error) {
       console.warn('Failed to set token:', error);
     }
@@ -38,7 +33,7 @@ export class AuthUtils {
    */
   static removeToken(): void {
     try {
-      sessionStorage.removeItem(AuthUtils.TOKEN_KEY);
+      setVal('token', undefined);
     } catch (error) {
       console.warn('Failed to remove token:', error);
     }

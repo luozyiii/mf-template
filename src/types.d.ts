@@ -33,6 +33,7 @@ declare module 'mf-shared/store' {
     strategy: any
   ): void;
   export function clearStoreByPrefix(prefix: string): void;
+  export function clearAppData(appStorageKey: string): void;
   const _default: any;
   export default _default;
 }
