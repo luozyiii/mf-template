@@ -1,5 +1,4 @@
 import {
-  AppstoreOutlined,
   ControlOutlined,
   DashboardOutlined,
   LeftOutlined,
@@ -64,8 +63,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       icon:
         route.icon === 'DashboardOutlined' ? (
           <DashboardOutlined />
-        ) : route.icon === 'AppstoreOutlined' ? (
-          <AppstoreOutlined />
         ) : route.icon === 'SettingOutlined' ? (
           <SettingOutlined />
         ) : route.icon === 'ControlOutlined' ? (

@@ -17,10 +17,7 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { currentConfig } from './config/deployment';
 import { templateRouteConfig } from './config/routes.config';
 import Dashboard from './pages/Dashboard';
-import Feature1 from './pages/Feature1';
-import Feature2 from './pages/Feature2';
 import { NotFound } from './pages/NotFound';
-import Settings from './pages/Settings';
 import StoreDemo from './pages/StoreDemo';
 import { AuthUtils } from './utils/authUtils';
 import './App.css';
@@ -92,9 +89,6 @@ const AppRoutes: React.FC = () => {
       />
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/feature1" element={<Feature1 />} />
-        <Route path="/feature2" element={<Feature2 />} />
-        <Route path="/settings" element={<Settings />} />
         <Route path="/store-demo" element={<StoreDemo />} />
         <Route path="/" element={<Dashboard />} />
         <Route path="*" element={<NotFound />} />
