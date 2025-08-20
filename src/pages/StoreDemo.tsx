@@ -9,7 +9,6 @@ import {
   Space,
   Divider,
   Timeline,
-  List,
   Descriptions,
 } from 'antd';
 import { UserOutlined, SettingOutlined, BellOutlined } from '@ant-design/icons';
@@ -196,23 +195,19 @@ const StoreDemo: React.FC = () => {
     message.success(`年龄已更新为: ${newAge}`);
   };
 
-  const updateUserRoles = () => {
+  const updateUserRole = () => {
     const curUser = (getVal('user') as any) || {};
-    let roles: string[] = Array.isArray(curUser?.roles)
-      ? [...curUser.roles]
-      : curUser?.role
-        ? [curUser.role]
-        : [];
-    if (roles.includes('developer')) {
-      roles = roles.filter((r) => r !== 'developer');
+    let role = curUser.role;
+    if (role === 'admin') {
+      role = 'developer';
     } else {
-      roles.push('developer');
+      role = 'admin';
     }
-    const nextUser = { ...curUser, roles, role: roles[0] };
+    const nextUser = { ...curUser, role };
     setVal('user', nextUser);
     addNotification({
       type: 'userinfo',
-      message: `角色更新: ${roles.join(', ') || '无'}`,
+      message: `角色更新: ${role}`,
       time: new Date().toLocaleTimeString(),
     });
     refreshData();
@@ -317,9 +312,7 @@ const StoreDemo: React.FC = () => {
                 {currentData.userinfo?.age ?? '-'}
               </Descriptions.Item>
               <Descriptions.Item label="角色">
-                {Array.isArray(currentData.userinfo?.roles)
-                  ? currentData.userinfo.roles.join(', ')
-                  : currentData.userinfo?.role || '-'}
+                {currentData.userinfo?.role}
               </Descriptions.Item>
             </Descriptions>
           </Col>
@@ -350,7 +343,7 @@ const StoreDemo: React.FC = () => {
             更新用户名
           </Button>
           <Button onClick={updateAge}>更新年龄</Button>
-          <Button onClick={updateUserRoles}>更新角色</Button>
+          <Button onClick={updateUserRole}>更新角色</Button>
         </Space>
       </Card>
 

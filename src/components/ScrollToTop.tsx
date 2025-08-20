@@ -89,7 +89,7 @@ export const ScrollToTop: React.FC<ScrollToTopProps> = ({
           window.parent.postMessage(
             {
               type: 'MICRO_FRONTEND_SCROLL_TO_TOP',
-              source: 'template',
+              source: 'route-change', // 标记为路由变化引起的滚动
               smooth,
             },
             '*'
@@ -156,7 +156,7 @@ export const scrollToTop = (
         window.parent.postMessage(
           {
             type: 'MICRO_FRONTEND_SCROLL_TO_TOP',
-            source: 'template',
+            source: 'manual', // 标记为手动调用的滚动
             smooth,
           },
           '*'
