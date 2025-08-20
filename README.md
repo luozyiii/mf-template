@@ -1,258 +1,300 @@
-# 🎯 微前端子系统标准模板 (mf-template)
+# mf-template
 
-这是一个经过精心设计的微前端子系统标准模板，基于成熟的微前端最佳实践，提供了完整的配置和基础功能，可以快速创建新的微前端子系统。
+基于 Module Federation 和 Rsbuild 的微前端子系统标准模板。
 
-## ✨ 核心特性
+## 核心特性
 
-- 🏗️ **完整的微前端架构** - Module Federation + Rsbuild 构建
-- 🔐 **统一认证系统** - 与主应用 mf-shell 无缝集成
-- 🚀 **自动化部署** - GitHub Pages + GitHub Actions CI/CD
-- 🎨 **现代化 UI** - Ant Design 5.x 响应式布局
-- 📝 **TypeScript 支持** - 完整的类型定义和检查
-- 🔧 **标准化配置** - 与现有子系统完全一致的配置模式
-- 📱 **SPA 路由支持** - GitHub Pages 单页应用路由重定向
-- 🛠️ **开发工具** - 自动化创建脚本和详细文档
-- 🦋 **Biome 集成** - 快速的代码检查和格式化工具
+- **微前端架构** - 基于 Module Federation 的完整微前端配置
+- **统一认证** - 与主应用集成的认证和权限管理系统
+- **路由管理** - 支持 SPA 路由和跨应用导航
+- **现代化 UI** - 基于 Ant Design 的响应式界面
+- **TypeScript** - 完整的类型支持和开发体验
+- **自动化部署** - 支持 GitHub Pages 自动部署
+- **开发工具** - 集成 Biome 代码格式化和 lint
+- **全局状态** - 集成 mf-shared 跨应用状态管理
 
-## 🎯 模板优势
+## 技术栈
 
-### 📋 基于最佳实践
-- 🔧 配置架构完全统一
-- 🚀 部署流程标准化
-- 🔐 认证集成无缝对接
-- 📱 路由处理一致性
+- **框架**: React 19 + TypeScript
+- **构建工具**: Rsbuild + Module Federation
+- **UI 组件**: Ant Design 5.x
+- **路由**: React Router DOM 7.x
+- **状态管理**: mf-shared GlobalStore
+- **样式**: CSS Modules + Ant Design
+- **代码规范**: Biome (ESLint + Prettier 替代方案)
+- **Git 钩子**: Husky + lint-staged
+- **提交规范**: Commitlint
 
-### 🎯 开箱即用的功能
-- **完整的页面示例** - Dashboard、功能模块、设置页面
-- **响应式布局** - 支持桌面和移动端
-- **主题定制** - 基于 Ant Design 的现代化设计
-- **错误处理** - 404 页面和错误边界
-- **加载状态** - 骨架屏和加载动画
-
-### 🔄 智能路由处理
-- **开发环境** - 直接路由，无 basename
-- **生产环境** - 自动检测独立部署 vs 主应用集成
-- **SPA 支持** - GitHub Pages 单页应用路由重定向
-- **微前端通信** - 与主应用的消息传递
-
-## 📁 项目结构
-
-```
-mf-template/
-├── .github/workflows/     # GitHub Actions 配置
-│   └── deploy.yml        # 自动部署配置
-├── public/               # 静态资源
-│   ├── index.html       # 主页面模板
-│   └── 404.html         # SPA 路由重定向
-├── src/
-│   ├── components/       # 通用组件
-│   │   ├── Layout.tsx   # 布局组件
-│   │   ├── AuthGuard.tsx # 认证守卫
-│   │   └── AppSkeleton.tsx # 加载骨架屏
-│   ├── config/          # 配置文件
-│   │   └── deployment.ts # 部署环境配置
-│   ├── pages/           # 页面组件
-│   │   ├── Dashboard.tsx # 首页
-│   │   ├── Feature1.tsx # 功能页面1
-│   │   ├── Feature2.tsx # 功能页面2
-│   │   ├── Settings.tsx # 设置页面
-│   │   └── NotFound.tsx # 404页面
-│   ├── routes/          # 路由配置
-│   │   └── index.ts     # 路由定义
-│   ├── utils/           # 工具函数
-│   │   └── authUtils.ts # 认证工具
-│   ├── App.tsx          # 主应用组件
-│   ├── App.css          # 全局样式
-│   ├── main.tsx         # 应用入口
-│   ├── bootstrap.tsx    # 微前端启动文件
-│   └── index.ts         # 入口文件
-├── package.json         # 项目配置
-├── rsbuild.config.ts    # 构建配置
-├── module-federation.config.ts # 微前端配置
-├── tsconfig.json        # TypeScript 配置
-├── scripts/            # 工具脚本
-│   └── create-new-module.sh # 自动化创建脚本
-├── TEMPLATE_USAGE.md   # 详细使用指南
-└── README.md           # 项目文档
-```
-
-## 🚀 快速开始
-
-### 方法一：使用自动化脚本（推荐）
-
-```bash
-# 在项目根目录执行
-./mf-internal/scripts/create-micro-frontend.sh <模块名> <端口号> "<系统标题>"
-
-# 示例：创建库存管理系统
-./mf-internal/scripts/create-micro-frontend.sh inventory 3004 "库存管理系统"
-```
-
-### 方法二：手动复制和配置
-
-```bash
-# 1. 复制模板到新项目目录
-cp -r mf-template mf-your-new-module
-cd mf-your-new-module
-
-# 2. 删除不需要的文件
-rm -rf .git node_modules dist
-
-# 3. 手动修改配置文件（参考下面的配置说明）
-```
-
-## 🛠️ 技术栈
-
-| 技术 | 版本 | 说明 |
-|------|------|------|
-| **React** | 18.3.1 | 前端框架 |
-| **TypeScript** | 5.6.3 | 类型系统 |
-| **Ant Design** | 5.26.7 | UI 组件库 |
-| **Rsbuild** | 1.1.8 | 构建工具 |
-| **Module Federation** | 0.17.1 | 微前端架构 |
-| **React Router** | 7.7.1 | 路由管理 |
-| **GitHub Pages** | - | 部署平台 |
-| **GitHub Actions** | - | CI/CD 流水线 |
-
-## ⚙️ 手动配置说明
-
-如果选择手动配置，需要修改以下关键文件：
-
-### 1. package.json
-```json
-{
-  "name": "mf-your-module",  // 修改项目名称
-  "description": "您的模块描述"
-}
-```
-
-### 2. rsbuild.config.ts
-```typescript
-export default defineConfig({
-  server: {
-    port: 3004,  // 修改端口号
-  },
-  html: {
-    title: '您的模块名称',  // 修改标题
-  },
-  output: {
-    assetPrefix: process.env.NODE_ENV === 'production'
-      ? '/mf-your-module/'  // 修改项目名称
-      : '/',
-  },
-});
-```
-
-### 3. module-federation.config.ts
-```typescript
-export default createModuleFederationConfig({
-  name: 'yourModule',  // 修改模块名称
-  // ...
-});
-```
-
-### 4. 安装依赖并启动
+## 快速开始
 
 ```bash
 # 安装依赖
-npm install
+pnpm install
 
 # 启动开发服务器
-npm run dev
+pnpm dev
 
 # 构建生产版本
-npm run build
+pnpm build
+
+# 代码检查和格式化
+pnpm lint
+pnpm format
 ```
 
-## 🚀 部署
+## 项目结构
 
-### GitHub Pages 自动部署
+```
+src/
+├── App.css             # 应用样式
+├── App.tsx             # 主应用组件
+├── bootstrap.tsx       # 应用启动文件
+├── index.ts            # 入口文件
+├── main.tsx            # 主入口
+├── types.d.ts          # 类型定义
+├── components/         # 通用组件
+│   ├── Layout.tsx      # 应用布局
+│   ├── Layout.module.css # 布局样式
+│   ├── AuthGuard.tsx   # 认证守卫
+│   ├── AppSkeleton.tsx # 加载骨架屏
+│   ├── ScrollToTop.tsx # 滚动到顶部组件
+│   └── WithPermission.tsx # 权限包装组件
+├── pages/              # 页面组件
+│   ├── Dashboard.tsx   # 仪表盘页面
+│   ├── DashboardWithPerm.tsx # 带权限的仪表盘
+│   ├── NotFound.tsx    # 404页面
+│   └── StoreDemo.tsx   # 状态管理演示
+├── config/             # 配置文件
+│   ├── routes.config.ts # 路由配置
+│   └── deployment.ts   # 部署配置
+├── hooks/              # 自定义 Hooks
+│   └── usePermissions.ts # 权限钩子
+├── store/              # 状态管理
+│   └── keys.ts         # 存储键定义
+├── utils/              # 工具函数
+│   └── authUtils.ts    # 认证工具
+└── mock/               # 模拟数据
+    └── userinfo.json   # 用户信息模拟数据
+```
 
-1. 将代码推送到 GitHub 仓库
-2. 在仓库设置中启用 GitHub Pages
-3. 选择 "GitHub Actions" 作为部署源
-4. 推送代码到 main 分支即可自动部署
+## Module Federation 配置
 
-### 手动部署
+### 暴露的模块
+
+- `./App` - 主应用组件
+- `./routes` - 路由配置
+- `./Dashboard` - 仪表盘页面
+- `./StoreDemo` - 状态管理演示
+
+### 共享依赖
+
+- `react` - 单例模式，预加载
+- `react-dom` - 单例模式，预加载
+- `react-router-dom` - 单例模式，按需加载
+- `antd` - 按需加载
+
+## 路由配置
+
+```typescript
+export const appRouteConfig: AppRouteConfig = {
+  appKey: process.env.MODULE_NAME || 'template',
+  appName: process.env.APP_DISPLAY_NAME || '模板系统',
+  routePrefix: `/${process.env.MODULE_NAME || 'template'}`,
+  enabled: true,
+  permissions: [`${process.env.MODULE_NAME || 'template'}:read`],
+  routes: [
+    {
+      path: `/${process.env.MODULE_NAME || 'template'}/dashboard`,
+      name: `${process.env.APP_DISPLAY_NAME || '模板系统'}概览`,
+      icon: 'DashboardOutlined',
+      component: 'Dashboard',
+      showBack: false,
+      showInMenu: true,
+      menuOrder: 1
+    },
+    {
+      path: `/${process.env.MODULE_NAME || 'template'}/store-demo`,
+      name: 'Store 演示',
+      icon: 'DatabaseOutlined',
+      component: 'StoreDemo',
+      showBack: true,
+      backPath: `/${process.env.MODULE_NAME || 'template'}/dashboard`,
+      showInMenu: true,
+      menuOrder: 2
+    }
+  ]
+};
+```
+
+## 认证系统
+
+### AuthUtils 工具类
+
+```typescript
+// Token 管理
+AuthUtils.getToken()           // 获取token
+AuthUtils.setToken(token)      // 设置token
+AuthUtils.removeToken()        // 移除token
+
+// 认证状态
+AuthUtils.isAuthenticated()    // 检查登录状态
+AuthUtils.isTokenExpired()     // 检查token是否过期
+
+// 用户信息管理
+AuthUtils.getUserData()        // 获取用户信息
+AuthUtils.setUserData(data)    // 设置用户信息
+
+// 权限管理
+AuthUtils.getPermissions()     // 获取用户权限
+AuthUtils.setPermissions(perms) // 设置用户权限
+
+// 登录/登出
+AuthUtils.redirectToLogin(returnUrl) // 跳转到登录页
+AuthUtils.logout()             // 退出登录并清理数据
+```
+
+### 权限守卫
+
+```typescript
+// 认证守卫 - 检查登录状态
+<AuthGuard>
+  <Dashboard />
+</AuthGuard>
+
+// 权限守卫 - 检查具体权限
+<WithPermission requirePerm="template:read">
+  <Dashboard />
+</WithPermission>
+
+// 角色守卫 - 检查用户角色
+<WithPermission requireAnyRole={['admin', 'manager']}>
+  <AdminPanel />
+</WithPermission>
+```
+
+## 全局状态管理
+
+```typescript
+import { getStoreValue, setStoreValue, subscribeStore } from 'mf-shared/store';
+import { getVal, setVal, subscribeVal } from './store/keys';
+
+// 方式一：直接使用 mf-shared 的 API
+const userData = getStoreValue('user');
+setStoreValue('user', newUserData);
+
+// 方式二：使用本地封装的工具函数（推荐）
+const userData = getVal('user');        // 获取用户数据
+const token = getVal('token');          // 获取token
+const permissions = getVal('permissions'); // 获取权限
+
+setVal('user', newUserData);            // 设置用户数据
+setVal('token', newToken);              // 设置token
+
+// 订阅状态变化
+const unsubscribe = subscribeVal('user', (key, value) => {
+  console.log('用户数据更新:', value);
+});
+
+// 取消订阅
+unsubscribe();
+```
+
+## 环境变量
+
+| 变量名 | 默认值 | 说明 |
+|--------|--------|------|
+| `MODULE_NAME` | `your-module` | 模块名称，如: inventory, order, user |
+| `APP_DISPLAY_NAME` | `您的系统名称` | 显示名称，如: 库存管理系统 |
+| `PROJECT_NAME` | `mf-your-module` | 项目名称，通常是 mf- + MODULE_NAME |
+| `PORT` | `3004` | 开发服务器端口 |
+| `GITHUB_USERNAME` | `your-username` | GitHub 用户名 |
+| `SHELL_URL` | `http://localhost:3000` | 主应用地址 |
+| `CURRENT_APP_URL` | `http://localhost:3004` | 当前应用地址 |
+| `BASENAME` | `` | 路由基础路径 |
+| `MF_SHARED_URL` | `http://localhost:2999` | 共享模块地址 |
+
+## 开发命令
 
 ```bash
-npm run build
-npm run deploy
+# 开发模式（自动打开浏览器）
+pnpm run dev
+
+# 生产构建
+pnpm run build
+
+# 预览构建结果
+pnpm run preview
+
+# 代码检查
+pnpm run lint
+
+# 代码检查并自动修复
+pnpm run lint:fix
+
+# 代码格式化
+pnpm run format
+
+# 检查代码格式
+pnpm run format:check
+
+# 类型检查
+pnpm run type-check
+
+# 代码质量检查（包含 lint + format + type-check）
+pnpm run code-quality
 ```
 
-## 🔧 开发指南
+## 部署
 
-### 添加新页面
+### GitHub Pages
 
-1. 在 `src/pages/` 目录下创建新的页面组件
-2. 在 `src/routes/index.ts` 中添加路由配置
-3. 在 `src/App.tsx` 中添加路由映射
-4. 在 `src/components/Layout.tsx` 中添加菜单项
+项目支持自动部署到 GitHub Pages：
 
-### 集成到主应用
+1. 推送代码到 `main` 分支
+2. GitHub Actions 自动构建和部署
+3. 访问 `https://username.github.io/mf-template/`
 
-模板已经配置好了与主应用的集成，包括：
-- 认证状态同步
-- 路由消息通信
-- 环境检测（独立运行 vs 微前端环境）
-
-## 📝 注意事项
-
-1. **端口冲突**: 确保每个子系统使用不同的端口号
-2. **模块名称**: Module Federation 的模块名称必须唯一
-3. **路由配置**: basename 配置要与部署路径一致
-4. **认证集成**: 确保与主应用的认证系统正确集成
-
-## 🎯 使用示例
-
-### 创建库存管理系统
+### 自定义部署
 
 ```bash
-# 1. 使用脚本创建
-./mf-internal/scripts/create-micro-frontend.sh inventory 3004 "库存管理系统"
+# 构建生产版本
+pnpm build
 
-# 2. 进入项目目录
-cd mf-inventory
-
-# 3. 安装依赖并启动
-npm install
-npm run dev
-
-# 4. 访问应用
-open http://localhost:3004
+# 部署 dist 目录到服务器
 ```
 
-### 部署到 GitHub Pages
+## 构建配置
 
-```bash
-# 1. 创建 GitHub 仓库 mf-inventory
-# 2. 推送代码
-git remote add origin https://github.com/your-username/mf-inventory.git
-git push -u origin main
+### Rsbuild 配置
 
-# 3. 在仓库设置中启用 GitHub Pages
-# 4. 选择 "GitHub Actions" 作为部署源
-# 5. 访问 https://your-username.github.io/mf-inventory
-```
+- **端口配置**: 通过 `PORT` 环境变量设置开发服务器端口
+- **HTML 模板**: 支持动态标题和模板参数注入
+- **资源路径**: 生产环境支持 GitHub Pages 部署路径
+- **环境变量**: 自动注入所有必要的环境变量到应用中
 
-## 🌟 项目优势
+### 代码规范
 
-- **🚀 快速开发** - 5分钟创建完整项目
-- **🔧 高度一致** - 统一架构和标准配置
-- **📈 易于维护** - 文档完善，自动化工具支持
+项目使用 Biome 作为代码格式化和 lint 工具：
 
-## 📚 相关文档
+- **格式化**: 2空格缩进，单引号，行宽80字符
+- **Lint 规则**: 启用推荐规则，禁用部分严格规则
+- **CSS 支持**: 支持 CSS Modules 解析
+- **Git 集成**: 自动使用 .gitignore 文件
 
-- [创建新子系统指南](../mf-internal/docs/CREATE_NEW_SUBSYSTEM.md)
-- [环境配置指南](../mf-internal/docs/ENV_CONFIG.md)
-- [部署指南](../mf-internal/docs/DEPLOYMENT.md)
+### Git 工作流
 
-## 📄 许可证
+- **Pre-commit**: 自动格式化和 lint 检查
+- **Commit 规范**: 使用 Conventional Commits 规范
+- **Lint-staged**: 只检查暂存区文件，提高效率
 
-MIT License
+## 模板使用
 
----
+1. **复制模板**：复制整个 `mf-template` 目录
+2. **修改配置**：更新 `package.json`、环境变量等
+3. **自定义功能**：根据需求修改页面和组件
+4. **更新路由**：修改 `routes.config.ts` 中的路由配置
+5. **部署应用**：配置 CI/CD 流程
 
-**🎉 开始您的微前端开发之旅吧！**
+## 许可证
 
-这个模板将帮助您快速创建高质量、标准化的微前端子系统，让您专注于业务逻辑的实现。
+MIT
