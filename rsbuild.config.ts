@@ -6,7 +6,7 @@ import moduleFederationConfig from './module-federation.config';
 export default defineConfig({
   plugins: [pluginReact(), pluginModuleFederation(moduleFederationConfig)],
   server: {
-    port: Number(process.env.PORT) || 3003,
+    port: Number(process.env.PORT) || 3001,
   },
   html: {
     title: process.env.APP_DISPLAY_NAME || '微前端子系统',
@@ -34,14 +34,14 @@ export default defineConfig({
       'process.env.MODULE_NAME': JSON.stringify(process.env.MODULE_NAME || 'template'),
       'process.env.APP_DISPLAY_NAME': JSON.stringify(process.env.APP_DISPLAY_NAME || '模板系统'),
       'process.env.PROJECT_NAME': JSON.stringify(process.env.PROJECT_NAME || 'mf-template'),
-      'process.env.PORT': JSON.stringify(process.env.PORT || '3003'),
+      'process.env.PORT': JSON.stringify(process.env.PORT || '3001'),
 
       // GitHub 配置
       'process.env.GITHUB_USERNAME': JSON.stringify(process.env.GITHUB_USERNAME || 'luozyiii'),
 
       // URL 配置
       'process.env.SHELL_URL': JSON.stringify(process.env.SHELL_URL || 'http://localhost:3000'),
-      'process.env.CURRENT_APP_URL': JSON.stringify(process.env.CURRENT_APP_URL || 'http://localhost:3003'),
+      'process.env.CURRENT_APP_URL': JSON.stringify(process.env.CURRENT_APP_URL || 'http://localhost:3001'),
       'process.env.BASENAME': JSON.stringify(process.env.BASENAME || ''),
       'process.env.MF_SHARED_URL': JSON.stringify(
         process.env.MF_SHARED_URL || 'http://localhost:2999'

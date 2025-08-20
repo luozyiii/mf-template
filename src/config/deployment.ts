@@ -20,7 +20,7 @@ export const deploymentConfig = {
     const shellUrl =
       (process.env.SHELL_URL as string) || 'http://localhost:3000';
     const currentUrl =
-      (process.env.CURRENT_APP_URL as string) || 'http://localhost:3003';
+      (process.env.CURRENT_APP_URL as string) || 'http://localhost:3001';
     const basename = (process.env.BASENAME as string) || '';
 
     const config = {
