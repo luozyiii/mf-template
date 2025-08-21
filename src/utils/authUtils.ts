@@ -9,8 +9,40 @@ export class AuthUtils {
    */
   static getToken(): string | null {
     try {
-      // 从 globalStore 读取
-      return getVal('token') || null;
+      // 优先从 globalStore 读取
+      const token = getVal('token');
+      if (token) {
+        console.log('AuthUtils.getToken: Found token via getVal');
+        return token;
+      }
+
+      // 如果没有找到，尝试从不同的存储位置读取
+      // 检查 mf-shell-store（主应用存储）
+      const shellStoreData = localStorage.getItem('mf-shell-store');
+      if (shellStoreData) {
+        try {
+          const parsed = JSON.parse(shellStoreData);
+          if (parsed.token) {
+            console.log('AuthUtils.getToken: Found token in mf-shell-store');
+            return parsed.token;
+          }
+        } catch {}
+      }
+
+      // 检查 mf-template-store（独立运行存储）
+      const templateStoreData = localStorage.getItem('mf-template-store');
+      if (templateStoreData) {
+        try {
+          const parsed = JSON.parse(templateStoreData);
+          if (parsed.token) {
+            console.log('AuthUtils.getToken: Found token in mf-template-store');
+            return parsed.token;
+          }
+        } catch {}
+      }
+
+      console.log('AuthUtils.getToken: No token found in any storage');
+      return null;
     } catch (error) {
       console.warn('Failed to get token:', error);
       return null;

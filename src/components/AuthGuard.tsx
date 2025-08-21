@@ -21,11 +21,12 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
         const authUtilsCheck = AuthUtils.isAuthenticated();
 
         // 任何一种方式能获取到token就认为已登录
-        const hasToken = !!(tokenFromGlobalStore || tokenFromKeys);
+        const hasToken = !!(tokenFromGlobalStore || tokenFromKeys || authUtilsCheck);
 
         console.log('AuthGuard token check:', {
           tokenFromGlobalStore: !!tokenFromGlobalStore,
           tokenFromKeys: !!tokenFromKeys,
+          authUtilsCheck,
           hasToken
         });
 
@@ -40,13 +41,20 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 
           console.log('AuthGuard: No token found after retries, redirecting to login');
           // 未登录，跳转到登录页面
-          // AuthUtils.redirectToLogin();
+          AuthUtils.redirectToLogin();
           return;
         }
 
         console.log('AuthGuard: Token found, user authenticated');
         setIsChecking(false);
       } catch (error) {
+        console.warn('AuthGuard: Error during auth check:', error);
+        // 发生错误时，仍然尝试使用AuthUtils检查
+        if (!AuthUtils.isAuthenticated()) {
+          console.log('AuthGuard: Fallback auth check failed, redirecting to login');
+          AuthUtils.redirectToLogin();
+          return;
+        }
         console.log('AuthGuard: Fallback auth check passed');
         setIsChecking(false);
       }
