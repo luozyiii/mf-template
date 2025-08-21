@@ -1,7 +1,7 @@
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import type React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import {
   Route,
@@ -30,7 +30,7 @@ const AppRoutes: React.FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // 暴露路由配置API（用于调试）
     (window as any).getRoutes = () => templateRouteConfig;
 
