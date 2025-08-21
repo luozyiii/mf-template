@@ -170,7 +170,7 @@ export class AuthUtils {
     }
 
     // 跳转到主应用登录页面，携带当前页面作为回调地址
-    const currentUrl = window.location.href;
+    const currentUrl = window.location.origin + window.location.pathname;
     const shellUrl = currentConfig.shellUrl;
     // 确保 shellUrl 以 / 结尾，避免重复的 /
     const baseUrl = shellUrl.endsWith('/') ? shellUrl.slice(0, -1) : shellUrl;
