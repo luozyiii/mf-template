@@ -106,12 +106,18 @@ const App: React.FC = () => {
     const token = urlParams.get('token');
 
     if (token) {
+      // 首先使用AuthUtils设置token，确保一致性
+      console.log('App: Setting token via AuthUtils:', token);
+      AuthUtils.setToken(token);
+
       // 将 token/user/app/permissions 写入短键（根据模式自动选择 g:sh: 或 t:tp:）
       try {
         configureStoreStrategy(keyOf('token'), {
           medium: 'local',
           encrypted: false,
         });
+        // 确保与AuthUtils使用相同的token值
+        console.log('App: Setting token via setStoreValue:', token);
         setStoreValue(keyOf('token'), token);
 
         // 根据 token 在本地 mock 中匹配用户（简单规则：按 id=token 后缀）
@@ -146,10 +152,9 @@ const App: React.FC = () => {
             setStoreValue(keyOf('permissions'), permMap);
           } catch {}
         }
-      } catch {}
-
-      // 同时保留现有的 sessionStorage 存储，兼容旧逻辑
-      AuthUtils.setToken(token);
+      } catch {
+        console.warn('Failed to configure store strategy for token');
+      }
 
       // 清除URL中的所有token参数，避免token暴露在URL中
       const newUrl = new URL(window.location.href);
