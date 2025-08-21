@@ -144,7 +144,24 @@ export class AuthUtils {
    * @param returnUrl 登录成功后的回调地址
    */
   static redirectToLogin(returnUrl?: string): void {
-    const currentUrl = returnUrl || window.location.href;
+    // 清理URL，移除可能存在的token参数，避免URL污染
+    let currentUrl = returnUrl || (window.location.origin + window.location.pathname);
+
+    // 如果没有提供returnUrl，检查当前URL是否有有效的查询参数需要保留
+    if (!returnUrl) {
+      const urlParams = new URLSearchParams(window.location.search);
+      // 移除token相关参数
+      urlParams.delete('token');
+
+      // 如果还有其他有效参数，保留它们
+      const cleanParams = urlParams.toString();
+      if (cleanParams) {
+        currentUrl += '?' + cleanParams;
+      }
+    }
+
+    console.log('AuthUtils.redirectToLogin: Redirecting with URL:', currentUrl);
+
     // 跳转到主应用登录页面
     const shellUrl = currentConfig.shellUrl;
     // 确保 shellUrl 以 / 结尾，避免重复的 /
