@@ -102,23 +102,26 @@ const App: React.FC = () => {
 
   // 检查URL中的token参数并存储
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+    const processToken = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
 
-    if (token) {
-      // 首先使用AuthUtils设置token，确保一致性
-      console.log('App: Setting token via AuthUtils:', token);
-      AuthUtils.setToken(token);
+      if (token) {
+        console.log('App: Processing token from URL:', token);
 
-      // 将 token/user/app/permissions 写入短键（根据模式自动选择 g:sh: 或 t:tp:）
-      try {
-        configureStoreStrategy(keyOf('token'), {
-          medium: 'local',
-          encrypted: false,
-        });
-        // 确保与AuthUtils使用相同的token值
-        console.log('App: Setting token via setStoreValue:', token);
-        setStoreValue(keyOf('token'), token);
+        // 首先使用AuthUtils设置token，确保一致性
+        console.log('App: Setting token via AuthUtils:', token);
+        AuthUtils.setToken(token);
+
+        // 将 token/user/app/permissions 写入短键（根据模式自动选择 g:sh: 或 t:tp:）
+        try {
+          configureStoreStrategy(keyOf('token'), {
+            medium: 'local',
+            encrypted: false,
+          });
+          // 确保与AuthUtils使用相同的token值
+          console.log('App: Setting token via setStoreValue:', token);
+          setStoreValue(keyOf('token'), token);
 
         // 根据 token 在本地 mock 中匹配用户（简单规则：按 id=token 后缀）
         const matched = (users as any[]).find((u) =>
@@ -156,6 +159,17 @@ const App: React.FC = () => {
         console.warn('Failed to configure store strategy for token');
       }
 
+      // 等待一小段时间确保存储操作完成
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // 验证token是否成功存储
+      const storedToken = AuthUtils.getToken();
+      if (storedToken === token) {
+        console.log('App: Token successfully stored and verified');
+      } else {
+        console.warn('App: Token storage verification failed');
+      }
+
       // 清除URL中的所有token参数，避免token暴露在URL中
       const newUrl = new URL(window.location.href);
       // 删除所有token参数（可能有多个）
@@ -164,11 +178,16 @@ const App: React.FC = () => {
       }
       window.history.replaceState({}, '', newUrl.toString());
 
-      console.log('Token received and stored from URL');
+      console.log('App: Token processing completed');
+    } else {
+      console.log('App: No token found in URL');
     }
 
-    // 标记token处理完成
+    // 标记token处理完成（无论是否有token）
     setTokenProcessed(true);
+    };
+
+    processToken();
   }, []);
 
   // 获取 basename 配置
