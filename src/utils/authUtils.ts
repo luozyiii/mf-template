@@ -8,6 +8,15 @@ export class AuthUtils {
    * 获取token
    */
   static getToken(): string | null {
+    // 同步版本，用于向后兼容
+    const result = AuthUtils.getTokenSync();
+    return result;
+  }
+
+  /**
+   * 同步获取token（简化版本）
+   */
+  private static getTokenSync(): string | null {
     try {
       // 优先从 globalStore 读取
       const token = getVal('token');
@@ -16,29 +25,34 @@ export class AuthUtils {
         return token;
       }
 
-      // 如果没有找到，尝试从不同的存储位置读取
-      // 检查 mf-shell-store（主应用存储）
-      const shellStoreData = localStorage.getItem('mf-shell-store');
-      if (shellStoreData) {
+      // 如果没有找到，检查是否有细粒度存储的token
+      // 检查 mf-shell-store:token（主应用的细粒度存储）
+      const shellTokenData = localStorage.getItem('mf-shell-store:token');
+      if (shellTokenData) {
         try {
-          const parsed = JSON.parse(shellStoreData);
-          if (parsed.token) {
-            console.log('AuthUtils.getToken: Found token in mf-shell-store');
-            return parsed.token;
+          // 细粒度存储的token通常是直接存储的
+          const tokenValue = JSON.parse(shellTokenData);
+          if (tokenValue) {
+            console.log('AuthUtils.getToken: Found token in mf-shell-store:token');
+            return tokenValue;
           }
-        } catch {}
+        } catch (e) {
+          console.warn('Failed to parse mf-shell-store:token data:', e);
+        }
       }
 
-      // 检查 mf-template-store（独立运行存储）
-      const templateStoreData = localStorage.getItem('mf-template-store');
-      if (templateStoreData) {
+      // 检查 mf-template-store:token（独立运行的细粒度存储）
+      const templateTokenData = localStorage.getItem('mf-template-store:token');
+      if (templateTokenData) {
         try {
-          const parsed = JSON.parse(templateStoreData);
-          if (parsed.token) {
-            console.log('AuthUtils.getToken: Found token in mf-template-store');
-            return parsed.token;
+          const tokenValue = JSON.parse(templateTokenData);
+          if (tokenValue) {
+            console.log('AuthUtils.getToken: Found token in mf-template-store:token');
+            return tokenValue;
           }
-        } catch {}
+        } catch (e) {
+          console.warn('Failed to parse mf-template-store:token data:', e);
+        }
       }
 
       console.log('AuthUtils.getToken: No token found in any storage');
