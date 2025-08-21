@@ -47,9 +47,6 @@ export default defineConfig({
         process.env.MF_SHARED_URL || 'http://localhost:2999'
       ),
 
-      // 其他配置
-      'process.env.REACT_APP_SKIP_AUTH': JSON.stringify(process.env.REACT_APP_SKIP_AUTH),
-
       // 注入到 window 对象，供运行时使用
       '__NODE_ENV__': JSON.stringify(process.env.NODE_ENV || 'development'),
     },

@@ -98,6 +98,7 @@ const AppRoutes: React.FC = () => {
 const App: React.FC = () => {
   // 检测是否在微前端环境中运行
   const isInMicroFrontend = window !== window.parent;
+  const [tokenProcessed, setTokenProcessed] = useState(false);
 
   // 检查URL中的token参数并存储
   useEffect(() => {
@@ -150,13 +151,19 @@ const App: React.FC = () => {
       // 同时保留现有的 sessionStorage 存储，兼容旧逻辑
       AuthUtils.setToken(token);
 
-      // 清除URL中的token参数，避免token暴露在URL中
+      // 清除URL中的所有token参数，避免token暴露在URL中
       const newUrl = new URL(window.location.href);
-      newUrl.searchParams.delete('token');
+      // 删除所有token参数（可能有多个）
+      while (newUrl.searchParams.has('token')) {
+        newUrl.searchParams.delete('token');
+      }
       window.history.replaceState({}, '', newUrl.toString());
 
       console.log('Token received and stored from URL');
     }
+
+    // 标记token处理完成
+    setTokenProcessed(true);
   }, []);
 
   // 获取 basename 配置
@@ -183,11 +190,16 @@ const App: React.FC = () => {
             <AppRoutes />
           ) : (
             // 独立运行：需要认证守卫 + 完整布局
-            <AuthGuard>
-              <Layout>
-                <AppRoutes />
-              </Layout>
-            </AuthGuard>
+            // 等待token处理完成后再进行认证检查
+            tokenProcessed ? (
+              <AuthGuard>
+                <Layout>
+                  <AppRoutes />
+                </Layout>
+              </AuthGuard>
+            ) : (
+              <AppSkeleton />
+            )
           )}
         </Router>
       </ConfigProvider>

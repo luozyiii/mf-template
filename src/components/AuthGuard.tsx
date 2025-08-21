@@ -3,7 +3,6 @@ import type React from 'react';
 import { useEffect, useState } from 'react';
 import { AuthUtils } from '../utils/authUtils';
 import { getStoreValue } from 'mf-shared/store';
-
 interface AuthGuardProps {
   children: React.ReactNode;
 }
@@ -13,24 +12,25 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 
   useEffect(() => {
     const checkAuth = () => {
-      // 检查是否跳过认证（开发环境配置）
-      const skipAuth = false; // 在生产环境中始终进行认证检查
+      try {
+        // 检查是否已登录：优先看 globalStore（token），其次旧逻辑
+        const tokenFromStore = getStoreValue<string>('token');
+        if (!tokenFromStore && !AuthUtils.isAuthenticated()) {
+          // 未登录，跳转到登录页面
+          AuthUtils.redirectToLogin();
+          return;
+        }
 
-      if (skipAuth) {
-        console.log('跳过认证检查 (REACT_APP_SKIP_AUTH=true)');
         setIsChecking(false);
-        return;
+      } catch (error) {
+        console.warn('AuthGuard: Error during auth check:', error);
+        // 发生错误时，仍然尝试使用AuthUtils检查
+        if (!AuthUtils.isAuthenticated()) {
+          AuthUtils.redirectToLogin();
+          return;
+        }
+        setIsChecking(false);
       }
-
-      // 检查是否已登录：优先看 globalStore（mf-template-token），其次旧逻辑
-      const tokenFromStore = getStoreValue<string>('mf-template-token');
-      if (!tokenFromStore && !AuthUtils.isAuthenticated()) {
-        // 未登录，跳转到登录页面
-        AuthUtils.redirectToLogin();
-        return;
-      }
-
-      setIsChecking(false);
     };
 
     // 延迟检查，避免闪烁
