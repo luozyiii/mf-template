@@ -1,0 +1,49 @@
+{
+  "app": {
+    "title": "Template Application",
+    "welcome": "Welcome to Template Application",
+    "loading": "Loading...",
+    "success": "Success",
+    "error": "Error"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "storeDemo": "Store Demo",
+    "dashboardWithPerm": "Permission Demo",
+    "settings": "Settings"
+  },
+  "common": {
+    "unit": {
+      "people": "people"
+    }
+  },
+  "template": {
+    "title": "Micro Frontend Template System",
+    "description": "This is a micro frontend template application showcasing basic functionality and architecture",
+    "features": "Features",
+    "architecture": "System Architecture",
+    "architectureDescription": "This template adopts modern micro frontend architecture with the following features:",
+    "techStack": "Tech Stack",
+    "techStackDescription": "Main technologies and tools used:",
+    "feature": {
+      "moduleFederation": "Module Federation based micro frontend architecture",
+      "antDesign": "Ant Design component library",
+      "permission": "Complete permission control system",
+      "i18n": "Internationalization multi-language support",
+      "responsive": "Responsive design",
+      "performance": "High performance optimization"
+    }
+  },
+  "demo": {
+    "storeTitle": "Global Store Demo",
+    "permissionTitle": "Permission Control Demo",
+    "currentUser": "Current User",
+    "userRole": "User Role",
+    "activeUsers": "Active Users",
+    "systemPerformance": "System Performance",
+    "dataProcessing": "Data Processing"
+  },
+  "language": {
+    "select": "Select Language"
+  }
+}

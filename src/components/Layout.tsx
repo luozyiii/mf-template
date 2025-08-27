@@ -15,6 +15,7 @@ import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { appRouteConfig } from '../config/routes.config';
 import { AuthUtils } from '../utils/authUtils';
+import LanguageSwitcher from '../i18n/LanguageSwitcher';
 import styles from './Layout.module.css';
 
 import { getStoreValue, subscribeStore } from 'mf-shared/store';
@@ -200,6 +201,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               </div>
             </div>
             <div className={styles.headerRight}>
+              {/* 语言切换器 - 只在独立运行时显示 */}
+              <LanguageSwitcher size="middle" />
+
               <div className={styles.welcomeText}>
                 {(process.env.APP_DISPLAY_NAME as string) || '模板系统'} -
                 微前端子系统

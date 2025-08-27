@@ -16,9 +16,10 @@ import { Layout } from './components/Layout';
 import { ScrollToTop } from './components/ScrollToTop';
 import { currentConfig } from './config/deployment';
 import { templateRouteConfig } from './config/routes.config';
-import Dashboard from './pages/Dashboard';
+import TemplateI18nProvider from './i18n/I18nProvider';
+import Dashboard from './pages/dashboard/Dashboard';
 import { NotFound } from './pages/NotFound';
-import StoreDemo from './pages/StoreDemo';
+import StoreDemo from './pages/store-demo/StoreDemo';
 import { AuthUtils } from './utils/authUtils';
 import './App.css';
 import users from './mock/userinfo.json';
@@ -207,26 +208,28 @@ const App: React.FC = () => {
 
   return (
     <HelmetProvider>
-      <ConfigProvider locale={zhCN}>
-        <Router basename={basename}>
-          {isInMicroFrontend ? (
-            // 微前端环境：只显示内容，不显示导航（主应用已处理认证）
-            <AppRoutes />
-          ) : (
-            // 独立运行：需要认证守卫 + 完整布局
-            // 等待token处理完成后再进行认证检查
-            tokenProcessed ? (
-              <AuthGuard>
-                <Layout>
-                  <AppRoutes />
-                </Layout>
-              </AuthGuard>
+      <TemplateI18nProvider>
+        <ConfigProvider locale={zhCN}>
+          <Router basename={basename}>
+            {isInMicroFrontend ? (
+              // 微前端环境：只显示内容，不显示导航（主应用已处理认证）
+              <AppRoutes />
             ) : (
-              <AppSkeleton />
-            )
-          )}
-        </Router>
-      </ConfigProvider>
+              // 独立运行：需要认证守卫 + 完整布局
+              // 等待token处理完成后再进行认证检查
+              tokenProcessed ? (
+                <AuthGuard>
+                  <Layout>
+                    <AppRoutes />
+                  </Layout>
+                </AuthGuard>
+              ) : (
+                <AppSkeleton />
+              )
+            )}
+          </Router>
+        </ConfigProvider>
+      </TemplateI18nProvider>
     </HelmetProvider>
   );
 };

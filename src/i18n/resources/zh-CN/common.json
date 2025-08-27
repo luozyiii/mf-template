@@ -1,0 +1,49 @@
+{
+  "app": {
+    "title": "模板应用",
+    "welcome": "欢迎使用模板应用",
+    "loading": "加载中...",
+    "success": "成功",
+    "error": "错误"
+  },
+  "navigation": {
+    "dashboard": "仪表板",
+    "storeDemo": "存储演示",
+    "dashboardWithPerm": "权限演示",
+    "settings": "设置"
+  },
+  "common": {
+    "unit": {
+      "people": "人"
+    }
+  },
+  "template": {
+    "title": "微前端模板系统",
+    "description": "这是一个微前端模板应用，展示了基本的功能和架构",
+    "features": "功能特性",
+    "architecture": "系统架构",
+    "architectureDescription": "本模板采用现代化的微前端架构，具备以下特性：",
+    "techStack": "技术栈",
+    "techStackDescription": "使用的主要技术和工具：",
+    "feature": {
+      "moduleFederation": "基于 Module Federation 的微前端架构",
+      "antDesign": "Ant Design 组件库",
+      "permission": "完整的权限控制系统",
+      "i18n": "国际化多语言支持",
+      "responsive": "响应式设计",
+      "performance": "高性能优化"
+    }
+  },
+  "demo": {
+    "storeTitle": "全局存储演示",
+    "permissionTitle": "权限控制演示",
+    "currentUser": "当前用户",
+    "userRole": "用户角色",
+    "activeUsers": "活跃用户",
+    "systemPerformance": "系统性能",
+    "dataProcessing": "数据处理"
+  },
+  "language": {
+    "select": "选择语言"
+  }
+}

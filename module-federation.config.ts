@@ -48,10 +48,12 @@ export default createModuleFederationConfig({
     'mf-shared': `mfShared@${process.env.MF_SHARED_URL || 'http://localhost:2999'}/remoteEntry.js`,
   },
   exposes: {
-    './App': './src/App.tsx',
+    './App': './src/exports/App.tsx',
     './routes': './src/config/routes.config.ts',
-    './Dashboard': './src/pages/Dashboard.tsx',
-    './StoreDemo': './src/pages/StoreDemo.tsx',
+    './Dashboard': './src/exports/Dashboard.tsx',
+    './StoreDemo': './src/exports/StoreDemo.tsx',
+    './I18nDemo': './src/exports/I18nDemo.tsx',
+    './hooks/useSwitchLanguage': './src/i18n/useSwitchLanguage.ts',
   },
   shared: sharedDependencies,
 });
