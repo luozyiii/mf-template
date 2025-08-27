@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useEffect, useState } from 'react';
 import { Select, Space, Spin } from 'antd';
 import { GlobalOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
@@ -32,6 +32,28 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   const { t, i18n } = useTranslation();
   const { switchLanguage } = useSwitchLanguage();
   const isRemote = useIsRemote();
+  const [forceUpdate, setForceUpdate] = useState(0);
+
+  // 监听语言变化并强制更新
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      setForceUpdate(prev => prev + 1);
+    };
+
+    i18n.on('languageChanged', handleLanguageChange);
+
+    // 检查初始化状态
+    if (i18n.isInitialized) {
+      const savedLanguage = localStorage.getItem('mf-template-language') || localStorage.getItem('mf-shell-language');
+      if (savedLanguage && savedLanguage !== i18n.language) {
+        i18n.changeLanguage(savedLanguage);
+      }
+    }
+
+    return () => {
+      i18n.off('languageChanged', handleLanguageChange);
+    };
+  }, [i18n]);
 
   // 如果是远程模式（嵌入在主应用中），不显示语言切换器
   if (isRemote) {

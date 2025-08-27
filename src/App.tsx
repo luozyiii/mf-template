@@ -17,6 +17,7 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { currentConfig } from './config/deployment';
 import { templateRouteConfig } from './config/routes.config';
 import TemplateI18nProvider from './i18n/I18nProvider';
+import useLanguageSync from './i18n/useLanguageSync';
 import Dashboard from './pages/dashboard/Dashboard';
 import { NotFound } from './pages/NotFound';
 import StoreDemo from './pages/store-demo/StoreDemo';
@@ -25,6 +26,12 @@ import './App.css';
 import users from './mock/userinfo.json';
 import { keyOf } from './store/keys';
 import { configureStoreStrategy, setStoreValue } from 'mf-shared/store';
+
+// 语言同步组件
+const LanguageSyncComponent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  useLanguageSync();
+  return <>{children}</>;
+};
 
 // 内部路由组件，用于处理路由监听
 const AppRoutes: React.FC = () => {
@@ -209,26 +216,28 @@ const App: React.FC = () => {
   return (
     <HelmetProvider>
       <TemplateI18nProvider>
-        <ConfigProvider locale={zhCN}>
-          <Router basename={basename}>
-            {isInMicroFrontend ? (
-              // 微前端环境：只显示内容，不显示导航（主应用已处理认证）
-              <AppRoutes />
-            ) : (
-              // 独立运行：需要认证守卫 + 完整布局
-              // 等待token处理完成后再进行认证检查
-              tokenProcessed ? (
-                <AuthGuard>
-                  <Layout>
-                    <AppRoutes />
-                  </Layout>
-                </AuthGuard>
+        <LanguageSyncComponent>
+          <ConfigProvider locale={zhCN}>
+            <Router basename={basename}>
+              {isInMicroFrontend ? (
+                // 微前端环境：只显示内容，不显示导航（主应用已处理认证）
+                <AppRoutes />
               ) : (
-                <AppSkeleton />
-              )
-            )}
-          </Router>
-        </ConfigProvider>
+                // 独立运行：需要认证守卫 + 完整布局
+                // 等待token处理完成后再进行认证检查
+                tokenProcessed ? (
+                  <AuthGuard>
+                    <Layout>
+                      <AppRoutes />
+                    </Layout>
+                  </AuthGuard>
+                ) : (
+                  <AppSkeleton />
+                )
+              )}
+            </Router>
+          </ConfigProvider>
+        </LanguageSyncComponent>
       </TemplateI18nProvider>
     </HelmetProvider>
   );
