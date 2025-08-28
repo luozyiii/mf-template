@@ -5,60 +5,21 @@ import { clearAppData } from 'mf-shared/store';
 // 认证相关工具类
 export class AuthUtils {
   /**
-   * 获取token
+   * 获取token - 简化版本，专注于独立运行
    */
   static getToken(): string | null {
-    // 同步版本，用于向后兼容
-    const result = AuthUtils.getTokenSync();
-    return result;
-  }
-
-  /**
-   * 同步获取token（简化版本）
-   */
-  private static getTokenSync(): string | null {
     try {
-      // 优先从 globalStore 读取
+      // 从统一的存储系统获取token
       const token = getVal('token');
       if (token) {
-        console.log('AuthUtils.getToken: Found token via getVal');
+        console.log('AuthUtils.getToken: Found token');
         return token;
       }
 
-      // 如果没有找到，检查是否有细粒度存储的token
-      // 检查 mf-shell-store:token（主应用的细粒度存储）
-      const shellTokenData = localStorage.getItem('mf-shell-store:token');
-      if (shellTokenData) {
-        try {
-          // 细粒度存储的token通常是直接存储的
-          const tokenValue = JSON.parse(shellTokenData);
-          if (tokenValue) {
-            console.log('AuthUtils.getToken: Found token in mf-shell-store:token');
-            return tokenValue;
-          }
-        } catch (e) {
-          console.warn('Failed to parse mf-shell-store:token data:', e);
-        }
-      }
-
-      // 检查 mf-template-store:token（独立运行的细粒度存储）
-      const templateTokenData = localStorage.getItem('mf-template-store:token');
-      if (templateTokenData) {
-        try {
-          const tokenValue = JSON.parse(templateTokenData);
-          if (tokenValue) {
-            console.log('AuthUtils.getToken: Found token in mf-template-store:token');
-            return tokenValue;
-          }
-        } catch (e) {
-          console.warn('Failed to parse mf-template-store:token data:', e);
-        }
-      }
-
-      console.log('AuthUtils.getToken: No token found in any storage');
+      console.log('AuthUtils.getToken: No token found');
       return null;
     } catch (error) {
-      console.warn('Failed to get token:', error);
+      console.warn('AuthUtils.getToken: Failed to get token:', error);
       return null;
     }
   }
@@ -170,28 +131,23 @@ export class AuthUtils {
   }
 
   /**
-   * 退出登录
+   * 退出登录 - 简化版本
    */
   static logout(): void {
     try {
-      // 获取当前应用的存储键名
-      const storageKey = (window as any)?.globalStore?.options?.storageKey || 'mf-template-store';
+      // 清理应用数据 - 使用固定的存储键名
+      clearAppData('mf-template-store');
 
-      // 使用新的 clearAppData 方法清理所有应用数据
-      clearAppData(storageKey);
-
-      // 清理 session 数据
+      // 清理 token
       AuthUtils.removeToken();
+
+      console.log('AuthUtils.logout: User data cleared successfully');
     } catch (error) {
-      console.warn('Failed to logout:', error);
+      console.warn('AuthUtils.logout: Failed to clear user data:', error);
     }
 
-    // 跳转到主应用登录页面，携带当前页面作为回调地址
-    const currentUrl = window.location.origin + window.location.pathname;
-    const shellUrl = currentConfig.shellUrl;
-    // 确保 shellUrl 以 / 结尾，避免重复的 /
-    const baseUrl = shellUrl.endsWith('/') ? shellUrl.slice(0, -1) : shellUrl;
-    window.location.href = `${baseUrl}/login?returnUrl=${encodeURIComponent(currentUrl)}`;
+    // 跳转到登录页面
+    AuthUtils.redirectToLogin();
   }
 
   /**

@@ -2,69 +2,42 @@ import { Spin } from 'antd';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import { AuthUtils } from '../utils/authUtils';
-import { getStoreValue } from 'mf-shared/store';
-import { getVal } from '../store/keys';
+
 interface AuthGuardProps {
   children: React.ReactNode;
 }
 
 export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
-  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     const checkAuth = () => {
       try {
-        // 多重检查token存在性，确保稳健性
-        const tokenFromGlobalStore = getStoreValue<string>('token');
-        const tokenFromKeys = getVal('token');
-        const authUtilsCheck = AuthUtils.isAuthenticated();
+        // 简化的认证检查 - 独立运行时只需要检查 AuthUtils
+        const isAuthenticated = AuthUtils.isAuthenticated();
 
-        // 任何一种方式能获取到token就认为已登录
-        const hasToken = !!(tokenFromGlobalStore || tokenFromKeys || authUtilsCheck);
+        console.log('AuthGuard: Authentication check result:', isAuthenticated);
 
-        console.log('AuthGuard token check:', {
-          tokenFromGlobalStore: !!tokenFromGlobalStore,
-          tokenFromKeys: !!tokenFromKeys,
-          authUtilsCheck,
-          hasToken
-        });
-
-        if (!hasToken) {
-          // 如果没有token且重试次数未超限，则重试
-          if (retryCount < 5) {
-            console.log(`AuthGuard: No token found, retrying... (${retryCount + 1}/5)`);
-            setRetryCount(prev => prev + 1);
-            setTimeout(checkAuth, 300);
-            return;
-          }
-
-          console.log('AuthGuard: No token found after retries, redirecting to login');
-          // 未登录，跳转到登录页面
+        if (!isAuthenticated) {
+          console.log('AuthGuard: User not authenticated, redirecting to login');
           AuthUtils.redirectToLogin();
           return;
         }
 
-        console.log('AuthGuard: Token found, user authenticated');
+        console.log('AuthGuard: User authenticated successfully');
         setIsChecking(false);
       } catch (error) {
         console.warn('AuthGuard: Error during auth check:', error);
-        // 发生错误时，仍然尝试使用AuthUtils检查
-        if (!AuthUtils.isAuthenticated()) {
-          console.log('AuthGuard: Fallback auth check failed, redirecting to login');
-          AuthUtils.redirectToLogin();
-          return;
-        }
-        console.log('AuthGuard: Fallback auth check passed');
-        setIsChecking(false);
+        // 发生错误时直接跳转到登录页面
+        AuthUtils.redirectToLogin();
       }
     };
 
-    // 延迟检查，避免闪烁
+    // 短暂延迟检查，避免闪烁
     const timer = setTimeout(checkAuth, 100);
 
     return () => clearTimeout(timer);
-  }, [retryCount]);
+  }, []);
 
   if (isChecking) {
     return (
