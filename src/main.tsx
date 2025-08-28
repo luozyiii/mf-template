@@ -12,9 +12,7 @@ const startApp = async () => {
   // 初始化独立运行时的存储
   await StoreUtils.initStandaloneStore();
 
-  const root = ReactDOM.createRoot(
-    document.getElementById('root') as HTMLElement
-  );
+  const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
   root.render(
     <React.StrictMode>

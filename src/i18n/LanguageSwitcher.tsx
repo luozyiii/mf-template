@@ -35,7 +35,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   // 监听语言变化并强制更新
   useEffect(() => {
     const handleLanguageChange = () => {
-      setForceUpdate(prev => prev + 1);
+      setForceUpdate((prev) => prev + 1);
     };
 
     i18n.on('languageChanged', handleLanguageChange);
@@ -49,7 +49,9 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
           const { getStoreValue } = await import('mf-shared/store');
           const appConfig = getStoreValue('app') || {};
           if (appConfig.language && appConfig.language !== i18n.language) {
-            console.log(`🌐 LanguageSwitcher: Syncing to global store language: ${appConfig.language}`);
+            console.log(
+              `🌐 LanguageSwitcher: Syncing to global store language: ${appConfig.language}`
+            );
             i18n.changeLanguage(appConfig.language);
             return;
           }
@@ -58,7 +60,8 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
         }
 
         // 回退到 localStorage
-        const savedLanguage = localStorage.getItem('mf-template-language') || localStorage.getItem('mf-shell-language');
+        const savedLanguage =
+          localStorage.getItem('mf-template-language') || localStorage.getItem('mf-shell-language');
         if (savedLanguage && savedLanguage !== i18n.language) {
           console.log(`🌐 LanguageSwitcher: Using localStorage language: ${savedLanguage}`);
           i18n.changeLanguage(savedLanguage);
@@ -79,23 +82,28 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   }
 
   // 缓存语言选项，避免重复渲染
-  const languageOptions = useMemo(() =>
-    supportedLanguages.map((lang) => ({
-      key: lang.code,
-      value: lang.code,
-      label: lang.name,
-      style: { direction: isRTLLanguage(lang.code) ? 'rtl' : 'ltr' as const }
-    })), []
+  const languageOptions = useMemo(
+    () =>
+      supportedLanguages.map((lang) => ({
+        key: lang.code,
+        value: lang.code,
+        label: lang.name,
+        style: { direction: isRTLLanguage(lang.code) ? 'rtl' : ('ltr' as const) },
+      })),
+    []
   );
 
   // 优化的语言切换处理函数
-  const handleLanguageChange = useCallback(async (languageCode: string) => {
-    try {
-      await switchLanguage(languageCode);
-    } catch (error) {
-      console.error('Failed to switch language:', error);
-    }
-  }, [switchLanguage]);
+  const handleLanguageChange = useCallback(
+    async (languageCode: string) => {
+      try {
+        await switchLanguage(languageCode);
+      } catch (error) {
+        console.error('Failed to switch language:', error);
+      }
+    },
+    [switchLanguage]
+  );
 
   // 当前语言的文本方向
   const currentDirection = isRTLLanguage(i18n.language) ? 'rtl' : 'ltr';
@@ -114,9 +122,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
         suffixIcon={loading ? <Spin size="small" /> : undefined}
         options={languageOptions}
         optionRender={(option) => (
-          <div style={option.data.style as React.CSSProperties}>
-            {option.data.label}
-          </div>
+          <div style={option.data.style as React.CSSProperties}>{option.data.label}</div>
         )}
       />
     </Space>

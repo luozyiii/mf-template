@@ -72,7 +72,10 @@ const getSavedLanguage = async (): Promise<string> => {
       // @ts-expect-error - Module Federation 动态导入
       const { getStoreValue } = await import('mf-shared/store');
       const appConfig = getStoreValue('app') || {};
-      if (appConfig.language && supportedLanguages.some(lang => lang.code === appConfig.language)) {
+      if (
+        appConfig.language &&
+        supportedLanguages.some((lang) => lang.code === appConfig.language)
+      ) {
         console.log(`🌐 Template: Using language from global store: ${appConfig.language}`);
         return appConfig.language;
       }
@@ -86,7 +89,7 @@ const getSavedLanguage = async (): Promise<string> => {
     if (inMicroFrontend) {
       // 微前端模式：回退到主应用的 localStorage 设置
       const shellLanguage = localStorage.getItem('mf-shell-language');
-      if (shellLanguage && supportedLanguages.some(lang => lang.code === shellLanguage)) {
+      if (shellLanguage && supportedLanguages.some((lang) => lang.code === shellLanguage)) {
         console.log(`🌐 Template: Using shell language from localStorage: ${shellLanguage}`);
         return shellLanguage;
       }
@@ -94,7 +97,7 @@ const getSavedLanguage = async (): Promise<string> => {
 
     // 最后回退：读取自己的设置
     const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    if (saved && supportedLanguages.some(lang => lang.code === saved)) {
+    if (saved && supportedLanguages.some((lang) => lang.code === saved)) {
       console.log(`🌐 Template: Using template language from localStorage: ${saved}`);
       return saved;
     }
@@ -164,7 +167,9 @@ const initializeI18n = async () => {
   });
 
   // 确保初始化完成后语言设置正确
-  console.log(`🌐 Template i18n: Initialized successfully, current language: ${templateI18nInstance.language}`);
+  console.log(
+    `🌐 Template i18n: Initialized successfully, current language: ${templateI18nInstance.language}`
+  );
 
   // 如果当前语言与期望的不一致，强制设置
   if (templateI18nInstance.language !== initialLanguage) {
@@ -174,7 +179,7 @@ const initializeI18n = async () => {
 };
 
 // 启动异步初始化
-initializeI18n().catch(error => {
+initializeI18n().catch((error) => {
   console.error('🌐 Template i18n: Failed to initialize:', error);
 });
 

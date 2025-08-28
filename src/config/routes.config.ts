@@ -66,9 +66,7 @@ export const getRouteConfig = (): AppRouteConfig => {
 /**
  * 获取特定环境的路由配置
  */
-export const getRouteConfigForEnvironment = (
-  env: 'development' | 'production'
-): AppRouteConfig => {
+export const getRouteConfigForEnvironment = (env: 'development' | 'production'): AppRouteConfig => {
   const config = { ...appRouteConfig };
 
   if (env === 'development') {

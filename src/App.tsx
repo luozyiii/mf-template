@@ -3,12 +3,7 @@ import zhCN from 'antd/locale/zh_CN';
 import type React from 'react';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
-import {
-  Route,
-  BrowserRouter as Router,
-  Routes,
-  useNavigate,
-} from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 import 'antd/dist/reset.css'; // 引入 Ant Design 的基础样式
 import { AppSkeleton } from './components/AppSkeleton';
 import { AuthGuard } from './components/AuthGuard';
@@ -67,11 +62,7 @@ const AppRoutes: React.FC = () => {
   return (
     <>
       {/* 页面滚动处理 */}
-      <ScrollToTop
-        smooth={true}
-        delay={100}
-        autoScroll={true}
-      />
+      <ScrollToTop smooth={true} delay={100} autoScroll={true} />
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/store-demo" element={<StoreDemo />} />

@@ -80,7 +80,7 @@ export class StoreUtils {
 
       // 根据 token 在本地 mock 中匹配用户（简单规则：按 id=token 后缀）
       const matched = (users as any[]).find((u) => token.includes(`_${u.id}_`));
-      
+
       if (matched) {
         configureStoreStrategy(keyOf('user'), {
           medium: 'local',
@@ -94,7 +94,7 @@ export class StoreUtils {
           medium: 'local',
           encrypted: false,
         });
-        
+
         setStoreValue(keyOf('user'), {
           id: matched.id,
           username: matched.username,
@@ -102,9 +102,9 @@ export class StoreUtils {
           role: matched.role,
           permissions: matched.permissions,
         });
-        
+
         setStoreValue(keyOf('app'), matched.appConfig);
-        
+
         try {
           const permMap = Object.fromEntries(
             (matched.permissions || []).map((p: string) => [p, true])

@@ -1,4 +1,3 @@
-
 import { getVal, setVal } from '../store/keys';
 import { clearAppData } from 'mf-shared/store';
 
@@ -106,7 +105,7 @@ export class AuthUtils {
    */
   static redirectToLogin(returnUrl?: string): void {
     // 清理URL，移除可能存在的token参数，避免URL污染
-    let currentUrl = returnUrl || (window.location.origin + window.location.pathname);
+    let currentUrl = returnUrl || window.location.origin + window.location.pathname;
 
     // 如果没有提供returnUrl，检查当前URL是否有有效的查询参数需要保留
     if (!returnUrl) {

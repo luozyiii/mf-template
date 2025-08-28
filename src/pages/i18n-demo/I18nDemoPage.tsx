@@ -20,9 +20,9 @@ const I18nDemoPage: React.FC = () => {
             <Text strong>当前语言: </Text>
             <Tag color="blue">{i18n.language}</Tag>
           </div>
-          
+
           <Divider />
-          
+
           <Title level={4}>基础翻译演示</Title>
           <Space direction="vertical">
             <Text>应用标题: {t('app.title')}</Text>
@@ -31,9 +31,9 @@ const I18nDemoPage: React.FC = () => {
             <Text>成功状态: {t('app.success')}</Text>
             <Text>错误状态: {t('app.error')}</Text>
           </Space>
-          
+
           <Divider />
-          
+
           <Title level={4}>导航翻译演示</Title>
           <Space wrap>
             <Tag>{t('navigation.dashboard')}</Tag>
@@ -41,9 +41,9 @@ const I18nDemoPage: React.FC = () => {
             <Tag>{t('navigation.dashboardWithPerm')}</Tag>
             <Tag>{t('navigation.settings')}</Tag>
           </Space>
-          
+
           <Divider />
-          
+
           <Title level={4}>模板特定翻译</Title>
           <Space direction="vertical">
             <Text>模板标题: {t('template.title')}</Text>
@@ -51,9 +51,9 @@ const I18nDemoPage: React.FC = () => {
             <Text>功能特性: {t('template.features')}</Text>
             <Text>系统架构: {t('template.architecture')}</Text>
           </Space>
-          
+
           <Divider />
-          
+
           <Title level={4}>演示功能翻译</Title>
           <Space direction="vertical">
             <Text>存储演示: {t('demo.storeTitle')}</Text>
@@ -61,23 +61,20 @@ const I18nDemoPage: React.FC = () => {
             <Text>当前用户: {t('demo.currentUser')}</Text>
             <Text>用户角色: {t('demo.userRole')}</Text>
           </Space>
-          
+
           <Divider />
-          
+
           <Title level={4}>支持的语言</Title>
           <Space wrap>
             {supportedLanguages.map((lang) => (
-              <Tag 
-                key={lang.code} 
-                color={i18n.language === lang.code ? 'green' : 'default'}
-              >
+              <Tag key={lang.code} color={i18n.language === lang.code ? 'green' : 'default'}>
                 {lang.name} ({lang.code})
               </Tag>
             ))}
           </Space>
-          
+
           <Divider />
-          
+
           <Paragraph type="secondary" style={{ fontSize: '12px' }}>
             这个页面展示了模板应用在微前端环境中的多语言功能。
             当主应用切换语言时，这里的所有文本会自动同步更新。

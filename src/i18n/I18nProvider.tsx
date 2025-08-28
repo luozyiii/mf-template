@@ -11,11 +11,7 @@ interface TemplateI18nProviderProps {
  * 使用独立的 i18next 实例，避免与其他微前端应用冲突
  */
 const TemplateI18nProvider: React.FC<TemplateI18nProviderProps> = ({ children }) => {
-  return (
-    <I18nextProvider i18n={templateI18nInstance}>
-      {children}
-    </I18nextProvider>
-  );
+  return <I18nextProvider i18n={templateI18nInstance}>{children}</I18nextProvider>;
 };
 
 export default TemplateI18nProvider;

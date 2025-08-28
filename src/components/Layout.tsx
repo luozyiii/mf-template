@@ -135,8 +135,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     <>
       <Helmet>
         <title>
-          {currentPageInfo.title} -{' '}
-          {(process.env.APP_DISPLAY_NAME as string) || '模板系统'}
+          {currentPageInfo.title} - {(process.env.APP_DISPLAY_NAME as string) || '模板系统'}
         </title>
       </Helmet>
       <AntLayout className={styles.layout}>
@@ -152,9 +151,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               className={`${styles.logo} ${collapsed ? styles.logoCollapsed : styles.logoExpanded}`}
             >
               {collapsed
-                ? ((process.env.MODULE_NAME as string) || 'template')
-                    .substring(0, 2)
-                    .toUpperCase()
+                ? ((process.env.MODULE_NAME as string) || 'template').substring(0, 2).toUpperCase()
                 : (process.env.APP_DISPLAY_NAME as string) || '模板系统'}
             </div>
 
@@ -195,9 +192,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     className={styles.backButton}
                   />
                 )}
-                <span className={styles.pageTitleText}>
-                  {currentPageInfo.title}
-                </span>
+                <span className={styles.pageTitleText}>{currentPageInfo.title}</span>
               </div>
             </div>
             <div className={styles.headerRight}>
@@ -205,21 +200,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <LanguageSwitcher size="middle" />
 
               <div className={styles.welcomeText}>
-                {(process.env.APP_DISPLAY_NAME as string) || '模板系统'} -
-                微前端子系统
+                {(process.env.APP_DISPLAY_NAME as string) || '模板系统'} - 微前端子系统
               </div>
 
-              <Dropdown
-                menu={{ items: userMenuItems }}
-                placement="bottomRight"
-                trigger={['click']}
-              >
+              <Dropdown menu={{ items: userMenuItems }} placement="bottomRight" trigger={['click']}>
                 <div className={styles.userInfo}>
-                  <Avatar
-                    size={32}
-                    icon={<UserOutlined />}
-                    className={styles.userAvatar}
-                  />
+                  <Avatar size={32} icon={<UserOutlined />} className={styles.userAvatar} />
                   <span className={styles.userName}>{userName}</span>
                   <div className={styles.dropdownArrow}>▼</div>
                 </div>

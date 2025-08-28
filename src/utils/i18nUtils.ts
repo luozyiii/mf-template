@@ -9,14 +9,14 @@ import { supportedLanguages } from '../i18n';
  * 检查是否为支持的语言代码
  */
 export const isSupportedLanguage = (languageCode: string): boolean => {
-  return supportedLanguages.some(lang => lang.code === languageCode);
+  return supportedLanguages.some((lang) => lang.code === languageCode);
 };
 
 /**
  * 获取语言的显示名称
  */
 export const getLanguageDisplayName = (languageCode: string): string => {
-  const language = supportedLanguages.find(lang => lang.code === languageCode);
+  const language = supportedLanguages.find((lang) => lang.code === languageCode);
   return language?.name || languageCode;
 };
 
@@ -25,18 +25,16 @@ export const getLanguageDisplayName = (languageCode: string): string => {
  */
 export const getBrowserPreferredLanguage = (): string => {
   const browserLang = navigator.language || navigator.languages?.[0] || 'en-US';
-  
+
   // 精确匹配
   if (isSupportedLanguage(browserLang)) {
     return browserLang;
   }
-  
+
   // 语言前缀匹配（如 'en' 匹配 'en-US'）
   const langPrefix = browserLang.split('-')[0];
-  const matchedLang = supportedLanguages.find(lang => 
-    lang.code.startsWith(langPrefix)
-  );
-  
+  const matchedLang = supportedLanguages.find((lang) => lang.code.startsWith(langPrefix));
+
   return matchedLang?.code || 'en-US';
 };
 
@@ -54,10 +52,10 @@ export const validateTranslationResource = (resource: any): boolean => {
   if (!resource || typeof resource !== 'object') {
     return false;
   }
-  
+
   // 检查必需的顶级键
   const requiredKeys = ['app', 'common', 'navigation'];
-  return requiredKeys.every(key => key in resource);
+  return requiredKeys.every((key) => key in resource);
 };
 
 /**
@@ -68,7 +66,7 @@ export const getFallbackLanguage = (languageCode: string): string => {
   if (languageCode.startsWith('zh')) {
     return 'zh-CN';
   }
-  
+
   // 其他语言回退到英文
   return 'en-US';
 };
@@ -79,23 +77,23 @@ export const getFallbackLanguage = (languageCode: string): string => {
 export const normalizeLanguageCode = (languageCode: string): string => {
   // 处理常见的语言代码变体
   const normalizeMap: Record<string, string> = {
-    'zh': 'zh-CN',
+    zh: 'zh-CN',
     'zh-cn': 'zh-CN',
-    'en': 'en-US',
+    en: 'en-US',
     'en-us': 'en-US',
-    'ja': 'ja-JP',
-    'ko': 'ko-KR',
-    'fr': 'fr-FR',
-    'de': 'de-DE',
-    'es': 'es-ES',
-    'ru': 'ru-RU',
-    'ar': 'ar-SA',
-    'pt': 'pt-BR',
-    'it': 'it-IT',
-    'nl': 'nl-NL',
-    'tr': 'tr-TR',
+    ja: 'ja-JP',
+    ko: 'ko-KR',
+    fr: 'fr-FR',
+    de: 'de-DE',
+    es: 'es-ES',
+    ru: 'ru-RU',
+    ar: 'ar-SA',
+    pt: 'pt-BR',
+    it: 'it-IT',
+    nl: 'nl-NL',
+    tr: 'tr-TR',
   };
-  
+
   const normalized = normalizeMap[languageCode.toLowerCase()];
   return normalized || languageCode;
 };

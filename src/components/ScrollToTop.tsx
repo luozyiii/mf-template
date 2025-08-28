@@ -54,11 +54,7 @@ export const ScrollToTop: React.FC<ScrollToTopProps> = ({
       scrollTargets.forEach((target) => {
         if (target) {
           try {
-            if (
-              smooth &&
-              'scrollTo' in target &&
-              typeof target.scrollTo === 'function'
-            ) {
+            if (smooth && 'scrollTo' in target && typeof target.scrollTo === 'function') {
               // 平滑滚动
               target.scrollTo({
                 top: 0,
@@ -74,10 +70,7 @@ export const ScrollToTop: React.FC<ScrollToTopProps> = ({
             }
           } catch (error) {
             // 降级处理
-            console.warn(
-              'MicroFrontend ScrollToTop: 滚动失败，使用降级方案',
-              error
-            );
+            console.warn('MicroFrontend ScrollToTop: 滚动失败，使用降级方案', error);
             target.scrollTop = 0;
           }
         }
@@ -117,9 +110,7 @@ export const ScrollToTop: React.FC<ScrollToTopProps> = ({
 /**
  * 手动滚动到顶部的工具函数
  */
-export const scrollToTop = (
-  options: { smooth?: boolean; delay?: number } = {}
-) => {
+export const scrollToTop = (options: { smooth?: boolean; delay?: number } = {}) => {
   const { smooth = true, delay = 0 } = options;
 
   const doScroll = () => {

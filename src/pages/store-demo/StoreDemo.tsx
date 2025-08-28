@@ -1,15 +1,5 @@
 import { DatabaseOutlined, UserOutlined } from '@ant-design/icons';
-import {
-  Button,
-  Card,
-  Col,
-  Descriptions,
-  Divider,
-  message,
-  Row,
-  Space,
-  Typography,
-} from 'antd';
+import { Button, Card, Col, Descriptions, Divider, message, Row, Space, Typography } from 'antd';
 import type React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -23,10 +13,10 @@ const StoreDemo: React.FC = () => {
     try {
       // @ts-expect-error - Module Federation 动态导入
       const { getStoreValue } = await import('mf-shared/store');
-      
+
       const userinfo = getStoreValue('user');
       const appConfig = getStoreValue('app');
-      
+
       setCurrentData({
         userinfo: userinfo || { name: '未设置', age: 0, role: 'guest' },
         appConfig: appConfig || {
@@ -49,24 +39,27 @@ const StoreDemo: React.FC = () => {
 
   useEffect(() => {
     refreshData();
-    
+
     // 定期刷新数据
     const interval = setInterval(refreshData, 2000);
     return () => clearInterval(interval);
   }, [refreshData]);
 
-  const updateData = useCallback(async (key: string, value: any) => {
-    try {
-      // @ts-expect-error - Module Federation 动态导入
-      const { setStoreValue } = await import('mf-shared/store');
-      setStoreValue(key, value);
-      message.success('数据已更新');
-      setTimeout(refreshData, 100); // 延迟刷新以确保数据同步
-    } catch (error) {
-      console.error('Failed to update data:', error);
-      message.error('更新失败');
-    }
-  }, [refreshData]);
+  const updateData = useCallback(
+    async (key: string, value: any) => {
+      try {
+        // @ts-expect-error - Module Federation 动态导入
+        const { setStoreValue } = await import('mf-shared/store');
+        setStoreValue(key, value);
+        message.success('数据已更新');
+        setTimeout(refreshData, 100); // 延迟刷新以确保数据同步
+      } catch (error) {
+        console.error('Failed to update data:', error);
+        message.error('更新失败');
+      }
+    },
+    [refreshData]
+  );
 
   const updateUserName = () => {
     const number = Math.floor(Math.random() * 900) + 100;
@@ -114,23 +107,19 @@ const StoreDemo: React.FC = () => {
               <Descriptions.Item label="用户名">
                 {currentData.userinfo?.name || '-'}
               </Descriptions.Item>
-              <Descriptions.Item label="年龄">
-                {currentData.userinfo?.age || '-'}
-              </Descriptions.Item>
+              <Descriptions.Item label="年龄">{currentData.userinfo?.age || '-'}</Descriptions.Item>
               <Descriptions.Item label="角色">
                 {currentData.userinfo?.role || '-'}
               </Descriptions.Item>
             </Descriptions>
-            
+
             <Divider />
-            
+
             <Space>
               <Button type="primary" onClick={updateUserName}>
                 更新用户名
               </Button>
-              <Button onClick={refreshData}>
-                刷新数据
-              </Button>
+              <Button onClick={refreshData}>刷新数据</Button>
             </Space>
           </Card>
         </Col>
@@ -155,16 +144,12 @@ const StoreDemo: React.FC = () => {
                 {currentData.appConfig?.version || '-'}
               </Descriptions.Item>
             </Descriptions>
-            
+
             <Divider />
-            
+
             <Space>
-              <Button onClick={updateTheme}>
-                切换主题
-              </Button>
-              <Button onClick={refreshData}>
-                刷新数据
-              </Button>
+              <Button onClick={updateTheme}>切换主题</Button>
+              <Button onClick={refreshData}>刷新数据</Button>
             </Space>
           </Card>
         </Col>
@@ -184,9 +169,7 @@ const StoreDemo: React.FC = () => {
                 maxHeight: 300,
               }}
             >
-              <pre style={{ margin: 0 }}>
-                {JSON.stringify(currentData, null, 2)}
-              </pre>
+              <pre style={{ margin: 0 }}>{JSON.stringify(currentData, null, 2)}</pre>
             </div>
           </Card>
         </Col>

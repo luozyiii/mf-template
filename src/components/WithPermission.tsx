@@ -8,22 +8,14 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const WithPermission: React.FC<Props> = ({
-  requirePerm,
-  requireAnyRole,
-  children,
-}) => {
+export const WithPermission: React.FC<Props> = ({ requirePerm, requireAnyRole, children }) => {
   const { hasPermission, hasAnyRole } = useTemplatePermissions();
 
   if (requirePerm && !hasPermission(requirePerm)) {
     return <Alert type="warning" message="无访问权限" showIcon />;
   }
 
-  if (
-    requireAnyRole &&
-    requireAnyRole.length > 0 &&
-    !hasAnyRole(requireAnyRole)
-  ) {
+  if (requireAnyRole && requireAnyRole.length > 0 && !hasAnyRole(requireAnyRole)) {
     return <Alert type="warning" message="角色不满足访问条件" showIcon />;
   }
 

@@ -14,12 +14,9 @@ export const useTemplatePermissions = () => {
       const user = getStoreValue<any>('user');
       setRoles(user?.permissions || (user?.role ? [user.role] : []));
 
-      const unsubPerms = subscribeStore?.(
-        'permissions',
-        (_k: string, newVal: any) => {
-          setPermissions(newVal || {});
-        }
-      );
+      const unsubPerms = subscribeStore?.('permissions', (_k: string, newVal: any) => {
+        setPermissions(newVal || {});
+      });
       const unsubUser = subscribeStore?.('user', (_k: string, newVal: any) => {
         setRoles(newVal?.permissions || (newVal?.role ? [newVal.role] : []));
       });

@@ -14,15 +14,13 @@ const { Title, Paragraph } = Typography;
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
-  
+
   return (
     <div style={{ padding: '24px' }}>
       <Title level={2} style={{ marginTop: 0 }}>
         {t('template.title')}
       </Title>
-      <Paragraph>
-        {t('template.description')}
-      </Paragraph>
+      <Paragraph>{t('template.description')}</Paragraph>
 
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} md={6}>
@@ -77,9 +75,7 @@ const Dashboard: React.FC = () => {
               </Space>
             }
           >
-            <Paragraph>
-              {t('template.architectureDescription')}
-            </Paragraph>
+            <Paragraph>{t('template.architectureDescription')}</Paragraph>
             <ul>
               <li>🚀 {t('template.feature.moduleFederation')}</li>
               <li>🎨 {t('template.feature.antDesign')}</li>
@@ -99,9 +95,7 @@ const Dashboard: React.FC = () => {
               </Space>
             }
           >
-            <Paragraph>
-              {t('template.techStackDescription')}
-            </Paragraph>
+            <Paragraph>{t('template.techStackDescription')}</Paragraph>
             <ul>
               <li>React 19 + TypeScript</li>
               <li>Webpack Module Federation</li>

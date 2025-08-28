@@ -16,8 +16,10 @@ const useLanguageSync = () => {
       try {
         // 简化的微前端环境检测
         const isInMicroFrontend = (): boolean => {
-          return window !== window.parent ||
-                 (window.location.port === '3000' && window.location.pathname.includes('/template'));
+          return (
+            window !== window.parent ||
+            (window.location.port === '3000' && window.location.pathname.includes('/template'))
+          );
         };
 
         // 简化的语言获取逻辑
@@ -28,7 +30,7 @@ const useLanguageSync = () => {
           const storageKey = inMicroFrontend ? 'mf-shell-language' : 'mf-template-language';
           const savedLanguage = localStorage.getItem(storageKey);
 
-          return savedLanguage && supportedLanguages.some(lang => lang.code === savedLanguage)
+          return savedLanguage && supportedLanguages.some((lang) => lang.code === savedLanguage)
             ? savedLanguage
             : null;
         };
@@ -37,7 +39,7 @@ const useLanguageSync = () => {
         const { getStoreValue, subscribeStore } = await import('mf-shared/store');
 
         // 等待一小段时间，确保主应用已经初始化了全局 store
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
         // 获取当前全局语言设置
         const appConfig = getStoreValue('app') || {};
@@ -58,7 +60,7 @@ const useLanguageSync = () => {
 
           // 简化：移除重复检查，依赖订阅机制
         }
-        
+
         // 订阅语言变化
         unsubscribe = subscribeStore('app', (_key: string, newValue: any) => {
           if (newValue?.language && newValue.language !== i18n.language) {
