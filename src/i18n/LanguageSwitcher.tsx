@@ -5,9 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { supportedLanguages } from '.';
 import useSwitchLanguage from './useSwitchLanguage';
 import useIsRemote from '../hooks/useIsRemote';
-import { getLanguageDisplayName, isRTLLanguage } from '../utils/i18nUtils';
-
-const { Option } = Select;
+import { isRTLLanguage } from '../utils/i18nUtils';
 
 interface LanguageSwitcherProps {
   style?: React.CSSProperties;
@@ -32,7 +30,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   const { t, i18n } = useTranslation();
   const { switchLanguage } = useSwitchLanguage();
   const isRemote = useIsRemote();
-  const [forceUpdate, setForceUpdate] = useState(0);
+  const [, setForceUpdate] = useState(0);
 
   // 监听语言变化并强制更新
   useEffect(() => {
@@ -42,12 +40,32 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
 
     i18n.on('languageChanged', handleLanguageChange);
 
-    // 检查初始化状态
+    // 检查初始化状态并同步语言
     if (i18n.isInitialized) {
-      const savedLanguage = localStorage.getItem('mf-template-language') || localStorage.getItem('mf-shell-language');
-      if (savedLanguage && savedLanguage !== i18n.language) {
-        i18n.changeLanguage(savedLanguage);
-      }
+      // 尝试从全局store获取最新语言设置
+      const syncLanguageFromGlobalStore = async () => {
+        try {
+          // @ts-expect-error - Module Federation 动态导入
+          const { getStoreValue } = await import('mf-shared/store');
+          const appConfig = getStoreValue('app') || {};
+          if (appConfig.language && appConfig.language !== i18n.language) {
+            console.log(`🌐 LanguageSwitcher: Syncing to global store language: ${appConfig.language}`);
+            i18n.changeLanguage(appConfig.language);
+            return;
+          }
+        } catch (error) {
+          // Global store not available, use localStorage
+        }
+
+        // 回退到 localStorage
+        const savedLanguage = localStorage.getItem('mf-template-language') || localStorage.getItem('mf-shell-language');
+        if (savedLanguage && savedLanguage !== i18n.language) {
+          console.log(`🌐 LanguageSwitcher: Using localStorage language: ${savedLanguage}`);
+          i18n.changeLanguage(savedLanguage);
+        }
+      };
+
+      syncLanguageFromGlobalStore();
     }
 
     return () => {
@@ -66,7 +84,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
       key: lang.code,
       value: lang.code,
       label: lang.name,
-      style: { direction: isRTLLanguage(lang.code) ? 'rtl' : 'ltr' }
+      style: { direction: isRTLLanguage(lang.code) ? 'rtl' : 'ltr' as const }
     })), []
   );
 
@@ -96,7 +114,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
         suffixIcon={loading ? <Spin size="small" /> : undefined}
         options={languageOptions}
         optionRender={(option) => (
-          <div style={option.data.style}>
+          <div style={option.data.style as React.CSSProperties}>
             {option.data.label}
           </div>
         )}

@@ -21,22 +21,4 @@ declare module '*.module.less' {
   export default classes;
 }
 
-declare module 'mf-shared/store' {
-  export function initGlobalStore(options?: any): void;
-  export function setStoreValue(key: string, value: any, callback?: any): void;
-  export function getStoreValue<T = any>(key: string): T | undefined;
-  export function subscribeStore(
-    key: string,
-    callback: (key: string, newVal: any, oldVal?: any) => void
-  ): () => void;
-  export function unsubscribeStore(key: string, callback: any): void;
-  export function clearStore(): void;
-  export function configureStoreStrategy(
-    keyOrPrefix: string,
-    strategy: any
-  ): void;
-
-  export function clearAppData(appStorageKey: string): void;
-  const _default: any;
-  export default _default;
-}
+// mf-shared/store 类型定义已移至 mf-shared 项目本身
