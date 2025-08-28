@@ -115,7 +115,7 @@ export const ScrollToTop: React.FC<ScrollToTopProps> = ({
 };
 
 /**
- * 手动滚动到顶部的工具函数（微前端版本）
+ * 手动滚动到顶部的工具函数
  */
 export const scrollToTop = (
   options: { smooth?: boolean; delay?: number } = {}
@@ -123,7 +123,7 @@ export const scrollToTop = (
   const { smooth = true, delay = 0 } = options;
 
   const doScroll = () => {
-    // 微前端环境下的滚动目标
+    // 滚动目标
     const targets = [
       document.querySelector('.ant-layout-content'),
       document.querySelector('[data-scroll-container]'),

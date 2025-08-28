@@ -14,40 +14,23 @@ const useLanguageSync = () => {
 
     const initLanguageSync = async () => {
       try {
-        // 检测是否在微前端环境中运行
+        // 简化的微前端环境检测
         const isInMicroFrontend = (): boolean => {
-          try {
-            if (window !== window.parent) return true;
-            if (window.location.pathname.includes('/template')) return true;
-            if (window.location.port === '3000') return true;
-            return false;
-          } catch (error) {
-            return false;
-          }
+          return window !== window.parent ||
+                 (window.location.port === '3000' && window.location.pathname.includes('/template'));
         };
 
-        // 首先尝试从 localStorage 读取保存的语言设置
+        // 简化的语言获取逻辑
         const getSavedLanguage = (): string | null => {
-          try {
-            const inMicroFrontend = isInMicroFrontend();
+          const inMicroFrontend = isInMicroFrontend();
 
-            if (inMicroFrontend) {
-              // 微前端模式：优先从主应用的设置中读取
-              const shellLanguage = localStorage.getItem('mf-shell-language');
-              if (shellLanguage && supportedLanguages.some(lang => lang.code === shellLanguage)) {
-                return shellLanguage;
-              }
-            }
+          // 微前端模式：优先从主应用读取，否则从自己读取
+          const storageKey = inMicroFrontend ? 'mf-shell-language' : 'mf-template-language';
+          const savedLanguage = localStorage.getItem(storageKey);
 
-            // 独立运行模式或微前端模式下主应用没有设置：读取自己的设置
-            const templateLanguage = localStorage.getItem('mf-template-language');
-            if (templateLanguage && supportedLanguages.some(lang => lang.code === templateLanguage)) {
-              return templateLanguage;
-            }
-          } catch (error) {
-            console.warn('Failed to read saved language from localStorage:', error);
-          }
-          return null;
+          return savedLanguage && supportedLanguages.some(lang => lang.code === savedLanguage)
+            ? savedLanguage
+            : null;
         };
 
         // @ts-expect-error - Module Federation 动态导入
@@ -73,19 +56,7 @@ const useLanguageSync = () => {
             i18n.changeLanguage(savedLanguage);
           }
 
-          // 再等待一段时间后重新检查
-          setTimeout(async () => {
-            try {
-              const updatedAppConfig = getStoreValue('app') || {};
-              const updatedGlobalLanguage = updatedAppConfig.language;
-
-              if (updatedGlobalLanguage && updatedGlobalLanguage !== i18n.language) {
-                i18n.changeLanguage(updatedGlobalLanguage);
-              }
-            } catch (error) {
-              // Ignore late sync errors
-            }
-          }, 500);
+          // 简化：移除重复检查，依赖订阅机制
         }
         
         // 订阅语言变化
