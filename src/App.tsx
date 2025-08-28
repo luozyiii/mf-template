@@ -14,7 +14,7 @@ import { AppSkeleton } from './components/AppSkeleton';
 import { AuthGuard } from './components/AuthGuard';
 import { Layout } from './components/Layout';
 import { ScrollToTop } from './components/ScrollToTop';
-import { currentConfig } from './config/deployment';
+
 import TemplateI18nProvider from './i18n/I18nProvider';
 import useLanguageSync from './i18n/useLanguageSync';
 import Dashboard from './pages/dashboard/Dashboard';
@@ -96,8 +96,8 @@ const App: React.FC = () => {
     processToken();
   }, []);
 
-  // 获取 basename 配置 - 独立运行时简化逻辑
-  const basename = currentConfig.basename;
+  // 获取 basename 配置 - 直接使用环境变量
+  const basename = process.env.BASENAME || '';
 
   return (
     <HelmetProvider>

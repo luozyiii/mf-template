@@ -68,19 +68,15 @@ export class StoreUtils {
     console.log('StoreUtils: Processing token from URL:', token);
 
     try {
-      // 首先使用AuthUtils设置token，确保一致性
-      console.log('StoreUtils: Setting token via AuthUtils:', token);
-      AuthUtils.setToken(token);
-
-      // 将 token/user/app/permissions 写入短键（根据模式自动选择 g:sh: 或 t:tp:）
+      // 配置并设置 token 存储策略
       configureStoreStrategy(keyOf('token'), {
         medium: 'local',
         encrypted: false,
       });
-      
-      // 确保与AuthUtils使用相同的token值
-      console.log('StoreUtils: Setting token via setStoreValue:', token);
-      setStoreValue(keyOf('token'), token);
+
+      // 设置 token（AuthUtils 内部会调用 setVal，避免重复设置）
+      console.log('StoreUtils: Setting token via AuthUtils:', token);
+      AuthUtils.setToken(token);
 
       // 根据 token 在本地 mock 中匹配用户（简单规则：按 id=token 后缀）
       const matched = (users as any[]).find((u) => token.includes(`_${u.id}_`));
@@ -117,28 +113,22 @@ export class StoreUtils {
         } catch {}
       }
 
-      // 等待一小段时间确保存储操作完成
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // 验证token是否成功存储
-      const storedToken = AuthUtils.getToken();
-      if (storedToken === token) {
-        console.log('StoreUtils: Token successfully stored and verified');
-      } else {
-        console.warn('StoreUtils: Token storage verification failed');
-      }
-
-      // 清除URL中的所有token参数，避免token暴露在URL中
+      // 清除URL中的token参数，避免token暴露在URL中
       const newUrl = new URL(window.location.href);
-      // 删除所有token参数（可能有多个）
-      while (newUrl.searchParams.has('token')) {
-        newUrl.searchParams.delete('token');
-      }
+      newUrl.searchParams.delete('token');
       window.history.replaceState({}, '', newUrl.toString());
 
-      console.log('StoreUtils: Token processing completed');
+      console.log('StoreUtils: Token processing completed successfully');
     } catch (error) {
-      console.warn('StoreUtils: Failed to configure store strategy for token:', error);
+      console.error('StoreUtils: Failed to process token from URL:', error);
+      // 即使处理失败，也要清除URL中的token参数
+      try {
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.delete('token');
+        window.history.replaceState({}, '', newUrl.toString());
+      } catch (urlError) {
+        console.warn('StoreUtils: Failed to clean token from URL:', urlError);
+      }
     }
   }
 }

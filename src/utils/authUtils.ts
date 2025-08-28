@@ -1,4 +1,4 @@
-import { currentConfig } from '../config/deployment';
+
 import { getVal, setVal } from '../store/keys';
 import { clearAppData } from 'mf-shared/store';
 
@@ -124,7 +124,7 @@ export class AuthUtils {
     console.log('AuthUtils.redirectToLogin: Redirecting with URL:', currentUrl);
 
     // 跳转到主应用登录页面
-    const shellUrl = currentConfig.shellUrl;
+    const shellUrl = process.env.SHELL_URL || 'http://localhost:3000';
     // 确保 shellUrl 以 / 结尾，避免重复的 /
     const baseUrl = shellUrl.endsWith('/') ? shellUrl.slice(0, -1) : shellUrl;
     window.location.href = `${baseUrl}/login?returnUrl=${encodeURIComponent(currentUrl)}`;
