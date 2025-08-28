@@ -123,21 +123,7 @@
   height: 64px;
 }
 
-.backButton {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #666;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: all 0.3s;
-}
 
-.backButton:hover {
-  background-color: #f5f5f5;
-  color: #1890ff;
-}
 
 .pageTitle {
   display: flex;
@@ -271,14 +257,7 @@
   gap: 8px;
 }
 
-/* 加载动画 */
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f0f2f5;
-}
+
 
 /* 页面过渡动画 */
 .pageTransition {

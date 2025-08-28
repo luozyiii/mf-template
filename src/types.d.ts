@@ -1,20 +1,23 @@
+// CSS Modules 类型定义
+type CSSModuleClasses = { readonly [key: string]: string };
+
 declare module '*.module.css' {
-  const classes: { [key: string]: string };
+  const classes: CSSModuleClasses;
   export default classes;
 }
 
 declare module '*.module.scss' {
-  const classes: { [key: string]: string };
+  const classes: CSSModuleClasses;
   export default classes;
 }
 
 declare module '*.module.sass' {
-  const classes: { [key: string]: string };
+  const classes: CSSModuleClasses;
   export default classes;
 }
 
 declare module '*.module.less' {
-  const classes: { [key: string]: string };
+  const classes: CSSModuleClasses;
   export default classes;
 }
 
