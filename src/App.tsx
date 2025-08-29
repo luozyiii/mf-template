@@ -1,4 +1,4 @@
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, App as AntApp } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import type React from 'react';
 import { useEffect, useLayoutEffect, useState } from 'react';
@@ -95,19 +95,21 @@ const App: React.FC = () => {
       <TemplateI18nProvider>
         <LanguageSyncComponent>
           <ConfigProvider locale={zhCN}>
-            <Router basename={basename}>
-              {/* 独立运行：需要认证守卫 + 完整布局 */}
-              {/* 等待token处理完成后再进行认证检查 */}
-              {tokenProcessed ? (
-                <AuthGuard>
-                  <Layout>
-                    <AppRoutes />
-                  </Layout>
-                </AuthGuard>
-              ) : (
-                <AppSkeleton />
-              )}
-            </Router>
+            <AntApp>
+              <Router basename={basename}>
+                {/* 独立运行：需要认证守卫 + 完整布局 */}
+                {/* 等待token处理完成后再进行认证检查 */}
+                {tokenProcessed ? (
+                  <AuthGuard>
+                    <Layout>
+                      <AppRoutes />
+                    </Layout>
+                  </AuthGuard>
+                ) : (
+                  <AppSkeleton />
+                )}
+              </Router>
+            </AntApp>
           </ConfigProvider>
         </LanguageSyncComponent>
       </TemplateI18nProvider>

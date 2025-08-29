@@ -8,7 +8,7 @@ import {
   SettingOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Layout as AntLayout, Avatar, Button, Dropdown, Menu } from 'antd';
+import { Layout as AntLayout, Avatar, Button, Dropdown, Menu, App } from 'antd';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -30,12 +30,36 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { message } = App.useApp();
 
   // 检测是否在微前端环境中（iframe中运行）
   const isInMicroFrontend = window.parent !== window;
 
+  // 用户菜单点击处理
+  const handleUserMenuClick = ({ key }: { key: string }) => {
+    switch (key) {
+      case 'profile':
+        message.info('正在开发中...');
+        break;
+      case 'settings':
+        message.info('正在开发中...');
+        break;
+      case 'logout':
+        // 使用AuthUtils处理退出登录
+        AuthUtils.logout();
+        break;
+      default:
+        break;
+    }
+  };
+
   // 用户菜单项
   const userMenuItems = [
+    {
+      key: 'profile',
+      icon: <UserOutlined />,
+      label: '个人资料',
+    },
     {
       key: 'settings',
       icon: <SettingOutlined />,
@@ -48,10 +72,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       key: 'logout',
       icon: <LogoutOutlined />,
       label: '退出登录',
-      onClick: () => {
-        // 使用AuthUtils处理退出登录
-        AuthUtils.logout();
-      },
     },
   ];
 
@@ -203,7 +223,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 {(process.env.APP_DISPLAY_NAME as string) || '模板系统'} - 微前端子系统
               </div>
 
-              <Dropdown menu={{ items: userMenuItems }} placement="bottomRight" trigger={['click']}>
+              <Dropdown
+                menu={{ items: userMenuItems, onClick: handleUserMenuClick }}
+                placement="bottomRight"
+                trigger={['click']}
+              >
                 <div className={styles.userInfo}>
                   <Avatar size={32} icon={<UserOutlined />} className={styles.userAvatar} />
                   <span className={styles.userName}>{userName}</span>
