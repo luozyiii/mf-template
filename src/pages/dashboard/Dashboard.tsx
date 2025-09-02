@@ -29,7 +29,7 @@ const Dashboard: React.FC = () => {
               title={t('template.features')}
               value={8}
               prefix={<AppstoreOutlined />}
-              suffix="个"
+              suffix={t('common.unit.items')}
             />
           </Card>
         </Col>

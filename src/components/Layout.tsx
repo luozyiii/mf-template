@@ -13,6 +13,7 @@ import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { appRouteConfig } from '../config/routes.config';
 import { AuthUtils } from '../utils/authUtils';
 import LanguageSwitcher from '../i18n/LanguageSwitcher';
@@ -31,6 +32,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { message } = App.useApp();
+  const { t } = useTranslation();
 
   // 检测是否在微前端环境中（iframe中运行）
   const isInMicroFrontend = window.parent !== window;
@@ -39,10 +41,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const handleUserMenuClick = ({ key }: { key: string }) => {
     switch (key) {
       case 'profile':
-        message.info('正在开发中...');
+        message.info(t('messages.developing'));
         break;
       case 'settings':
-        message.info('正在开发中...');
+        message.info(t('messages.developing'));
         break;
       case 'logout':
         // 使用AuthUtils处理退出登录
@@ -58,12 +60,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     {
       key: 'profile',
       icon: <UserOutlined />,
-      label: '个人资料',
+      label: t('layout.userMenu.profile'),
     },
     {
       key: 'settings',
       icon: <SettingOutlined />,
-      label: '设置',
+      label: t('layout.userMenu.settings'),
     },
     {
       type: 'divider' as const,
@@ -71,30 +73,40 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     {
       key: 'logout',
       icon: <LogoutOutlined />,
-      label: '退出登录',
+      label: t('layout.userMenu.logout'),
     },
   ];
 
   // 构建菜单项
   const menuItems = useMemo(() => {
     const moduleName = (process.env.MODULE_NAME as string) || 'template';
-    const routeItems = appRouteConfig.routes.map((route) => ({
-      key: route.path.replace(`/${moduleName}`, ''),
-      icon:
-        route.icon === 'DashboardOutlined' ? (
-          <DashboardOutlined />
-        ) : route.icon === 'SettingOutlined' ? (
-          <SettingOutlined />
-        ) : route.icon === 'ControlOutlined' ? (
-          <ControlOutlined />
-        ) : (
-          <DashboardOutlined />
-        ),
-      label: route.name,
-    }));
+    const routeItems = appRouteConfig.routes.map((route) => {
+      // 根据路径获取对应的翻译键
+      let labelKey = 'routes.dashboard'; // 默认值
+      if (route.path.includes('dashboard')) {
+        labelKey = 'routes.dashboard';
+      } else if (route.path.includes('store-demo')) {
+        labelKey = 'routes.storeDemo';
+      }
+
+      return {
+        key: route.path.replace(`/${moduleName}`, ''),
+        icon:
+          route.icon === 'DashboardOutlined' ? (
+            <DashboardOutlined />
+          ) : route.icon === 'SettingOutlined' ? (
+            <SettingOutlined />
+          ) : route.icon === 'ControlOutlined' ? (
+            <ControlOutlined />
+          ) : (
+            <DashboardOutlined />
+          ),
+        label: t(labelKey),
+      };
+    });
 
     return routeItems;
-  }, []);
+  }, [t]);
 
   const handleMenuClick = ({ key }: { key: string }) => {
     navigate(key);
@@ -109,26 +121,34 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     );
 
     if (route) {
+      // 根据路径获取对应的翻译键
+      let titleKey = 'routes.templateSystem'; // 默认值
+      if (route.path.includes('dashboard')) {
+        titleKey = 'routes.dashboard';
+      } else if (route.path.includes('store-demo')) {
+        titleKey = 'routes.storeDemo';
+      }
+
       return {
-        title: route.name,
+        title: t(titleKey),
         showBack: route.showBack || false,
         backPath: route.backPath?.replace('/template', '') || null,
       };
     }
 
     return {
-      title: '模板系统',
+      title: 'Template System',
       showBack: false,
       backPath: null,
     };
   };
   // 订阅 globalStore 的模板用户信息，动态展示右上角用户名
-  const [userName, setUserName] = useState<string>('模板系统用户');
+  const [userName, setUserName] = useState<string>(t('app.title'));
   useEffect(() => {
     try {
-      const user = getStoreValue<any>('user');
+      const user = getStoreValue('user');
       if (user?.name) setUserName(user.name);
-      const unsub = subscribeStore?.('user', (_k: string, newVal: any) => {
+      const unsub = (subscribeStore as any)?.('user', (_k: string, newVal: any, _oldVal: any) => {
         if (newVal?.name) setUserName(newVal.name);
       });
       return () => {
@@ -155,7 +175,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     <>
       <Helmet>
         <title>
-          {currentPageInfo.title} - {(process.env.APP_DISPLAY_NAME as string) || '模板系统'}
+          {currentPageInfo.title} - {(process.env.APP_DISPLAY_NAME as string) || 'Template System'}
         </title>
       </Helmet>
       <AntLayout className={styles.layout}>
@@ -172,7 +192,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             >
               {collapsed
                 ? ((process.env.MODULE_NAME as string) || 'template').substring(0, 2).toUpperCase()
-                : (process.env.APP_DISPLAY_NAME as string) || '模板系统'}
+                : (process.env.APP_DISPLAY_NAME as string) || 'Template System'}
             </div>
 
             <div className={styles.menuContainer}>
@@ -193,7 +213,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                 onClick={() => setCollapsed(!collapsed)}
                 className={styles.collapseButton}
-                title={collapsed ? '展开菜单' : '折叠菜单'}
+                title={collapsed ? t('layout.menu.expand') : t('layout.menu.collapse')}
               />
             </div>
           </Sider>
@@ -220,7 +240,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <LanguageSwitcher size="middle" />
 
               <div className={styles.welcomeText}>
-                {(process.env.APP_DISPLAY_NAME as string) || '模板系统'} - 微前端子系统
+                {(process.env.APP_DISPLAY_NAME as string) || 'Template System'} -{' '}
+                {t('layout.header.welcome')}
               </div>
 
               <Dropdown

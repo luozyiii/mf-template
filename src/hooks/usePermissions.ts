@@ -9,17 +9,23 @@ export const useTemplatePermissions = () => {
 
   useEffect(() => {
     try {
-      const perms = getStoreValue<Record<string, boolean>>('permissions') || {};
+      const perms = getStoreValue('permissions') || {};
       setPermissions(perms);
-      const user = getStoreValue<any>('user');
+      const user = getStoreValue('user');
       setRoles(user?.permissions || (user?.role ? [user.role] : []));
 
-      const unsubPerms = subscribeStore?.('permissions', (_k: string, newVal: any) => {
-        setPermissions(newVal || {});
-      });
-      const unsubUser = subscribeStore?.('user', (_k: string, newVal: any) => {
-        setRoles(newVal?.permissions || (newVal?.role ? [newVal.role] : []));
-      });
+      const unsubPerms = (subscribeStore as any)?.(
+        'permissions',
+        (_k: string, newVal: any, _oldVal: any) => {
+          setPermissions(newVal || {});
+        }
+      );
+      const unsubUser = (subscribeStore as any)?.(
+        'user',
+        (_k: string, newVal: any, _oldVal: any) => {
+          setRoles(newVal?.permissions || (newVal?.role ? [newVal.role] : []));
+        }
+      );
       return () => {
         try {
           unsubPerms?.();

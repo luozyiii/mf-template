@@ -116,7 +116,7 @@ export class AuthUtils {
       // 如果还有其他有效参数，保留它们
       const cleanParams = urlParams.toString();
       if (cleanParams) {
-        currentUrl += '?' + cleanParams;
+        currentUrl += `?${cleanParams}`;
       }
     }
 
@@ -135,7 +135,7 @@ export class AuthUtils {
   static logout(): void {
     try {
       // 清理应用数据 - 使用固定的存储键名
-      clearAppData('mf-template-store');
+      clearAppData();
 
       // 清理 token
       AuthUtils.removeToken();

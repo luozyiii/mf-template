@@ -1,4 +1,5 @@
-import React, { useCallback, useMemo, useEffect, useState } from 'react';
+import type React from 'react';
+import { useCallback, useMemo, useEffect, useState } from 'react';
 import { Select, Space, Spin } from 'antd';
 import { GlobalOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
@@ -45,7 +46,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
       // 尝试从全局store获取最新语言设置
       const syncLanguageFromGlobalStore = async () => {
         try {
-          // @ts-expect-error - Module Federation 动态导入
+          // @ts-ignore - Module Federation 动态导入
           const { getStoreValue } = await import('mf-shared/store');
           const appConfig = getStoreValue('app') || {};
           if (appConfig.language && appConfig.language !== i18n.language) {
@@ -55,7 +56,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
             i18n.changeLanguage(appConfig.language);
             return;
           }
-        } catch (error) {
+        } catch (_error) {
           // Global store not available, use localStorage
         }
 
@@ -76,11 +77,6 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
     };
   }, [i18n]);
 
-  // 如果是远程模式（嵌入在主应用中），不显示语言切换器
-  if (isRemote) {
-    return null;
-  }
-
   // 缓存语言选项，避免重复渲染
   const languageOptions = useMemo(
     () =>
@@ -98,8 +94,8 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
     async (languageCode: string) => {
       try {
         await switchLanguage(languageCode);
-      } catch (error) {
-        console.error('Failed to switch language:', error);
+      } catch (_error) {
+        console.error('Failed to switch language:', _error);
       }
     },
     [switchLanguage]
@@ -107,6 +103,11 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
 
   // 当前语言的文本方向
   const currentDirection = isRTLLanguage(i18n.language) ? 'rtl' : 'ltr';
+
+  // 如果是远程模式（嵌入在主应用中），不显示语言切换器
+  if (isRemote) {
+    return null;
+  }
 
   return (
     <Space style={{ ...style, direction: currentDirection }}>

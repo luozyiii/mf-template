@@ -14,7 +14,8 @@
   },
   "common": {
     "unit": {
-      "people": "people"
+      "people": "people",
+      "items": "items"
     }
   },
   "template": {
@@ -35,15 +36,81 @@
     }
   },
   "demo": {
+    "activeUsers": "Active Users",
+    "systemPerformance": "System Performance",
+    "dataProcessing": "Data Processing",
     "storeTitle": "Global Store Demo",
     "permissionTitle": "Permission Control Demo",
     "currentUser": "Current User",
-    "userRole": "User Role",
-    "activeUsers": "Active Users",
-    "systemPerformance": "System Performance",
-    "dataProcessing": "Data Processing"
+    "userRole": "User Role"
   },
   "language": {
     "select": "Select Language"
+  },
+  "layout": {
+    "menu": {
+      "expand": "Expand Menu",
+      "collapse": "Collapse Menu"
+    },
+    "header": {
+      "welcome": "Micro Frontend Subsystem",
+      "back": "Back"
+    },
+    "userMenu": {
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Logout"
+    }
+  },
+  "routes": {
+    "dashboard": "Overview",
+    "storeDemo": "Store Demo"
+  },
+  "messages": {
+    "developing": "Under development..."
+  },
+  "i18nDemo": {
+    "title": "Template App Internationalization Demo",
+    "currentLanguage": "Current Language",
+    "basicTranslation": "Basic Translation Demo",
+    "navigationTranslation": "Navigation Translation Demo",
+    "appTitle": "App Title",
+    "welcomeMessage": "Welcome Message",
+    "loadingStatus": "Loading Status",
+    "successStatus": "Success Status",
+    "errorStatus": "Error Status",
+    "templateSpecificTranslation": "Template Specific Translation",
+    "demoFunctionTranslation": "Demo Function Translation",
+    "supportedLanguages": "Supported Languages",
+    "pageDescription": "This page demonstrates the multilingual functionality of the template application in a micro frontend environment. When the main application switches languages, all text here will automatically synchronize and update. It supports real-time switching of 13 languages, showcasing a complete internationalization solution."
+  },
+  "storeDemo": {
+    "title": "Global Store Demo",
+    "description": "This page demonstrates how to access and modify global store data in the template application. Data changes will be synchronized to the main application and other sub-applications.",
+    "connectionStatus": "Connection Status",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "userInfo": "User Information",
+    "appConfig": "App Configuration",
+    "username": "Username",
+    "age": "Age",
+    "role": "Role",
+    "theme": "Theme",
+    "language": "Language",
+    "version": "Version",
+    "updateUsername": "Update Username",
+    "refreshData": "Refresh Data",
+    "toggleTheme": "Toggle Theme",
+    "dataDetails": "Data Details",
+    "dataUpdated": "Data updated",
+    "updateFailed": "Update failed",
+    "notSet": "Not Set",
+    "defaultRole": "guest",
+    "templateUser": "Template User"
+  },
+  "notFound": {
+    "title": "404",
+    "subtitle": "Sorry, the page you visited does not exist.",
+    "backHome": "Back Home"
   }
 }

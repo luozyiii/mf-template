@@ -35,7 +35,7 @@ const useLanguageSync = () => {
             : null;
         };
 
-        // @ts-expect-error - Module Federation 动态导入
+        // @ts-ignore - Module Federation 动态导入
         const { getStoreValue, subscribeStore } = await import('mf-shared/store');
 
         // 等待一小段时间，确保主应用已经初始化了全局 store
@@ -62,12 +62,15 @@ const useLanguageSync = () => {
         }
 
         // 订阅语言变化
-        unsubscribe = subscribeStore('app', (_key: string, newValue: any) => {
-          if (newValue?.language && newValue.language !== i18n.language) {
-            i18n.changeLanguage(newValue.language);
+        unsubscribe = (subscribeStore as any)(
+          'app',
+          (_key: string, newValue: any, _oldValue: any) => {
+            if (newValue?.language && newValue.language !== i18n.language) {
+              i18n.changeLanguage(newValue.language);
+            }
           }
-        });
-      } catch (error) {
+        );
+      } catch (_error) {
         // No global store available, running standalone
       }
     };

@@ -18,7 +18,9 @@
     "jsx": "react-jsx",
     "noImplicitAny": false,
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "noUncheckedIndexedAccess": false,
+    "exactOptionalPropertyTypes": false
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "build"]

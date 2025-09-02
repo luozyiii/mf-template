@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { Card, Space, Typography, Tag, Divider } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { supportedLanguages } from '../../i18n';
@@ -14,27 +14,37 @@ const I18nDemoPage: React.FC = () => {
 
   return (
     <div style={{ padding: '24px' }}>
-      <Card title="模板应用国际化演示" style={{ marginBottom: '16px' }}>
+      <Card title={t('i18nDemo.title')} style={{ marginBottom: '16px' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
           <div>
-            <Text strong>当前语言: </Text>
+            <Text strong>{t('i18nDemo.currentLanguage')}: </Text>
             <Tag color="blue">{i18n.language}</Tag>
           </div>
 
           <Divider />
 
-          <Title level={4}>基础翻译演示</Title>
+          <Title level={4}>{t('i18nDemo.basicTranslation')}</Title>
           <Space direction="vertical">
-            <Text>应用标题: {t('app.title')}</Text>
-            <Text>欢迎信息: {t('app.welcome')}</Text>
-            <Text>加载状态: {t('app.loading')}</Text>
-            <Text>成功状态: {t('app.success')}</Text>
-            <Text>错误状态: {t('app.error')}</Text>
+            <Text>
+              {t('i18nDemo.appTitle')}: {t('app.title')}
+            </Text>
+            <Text>
+              {t('i18nDemo.welcomeMessage')}: {t('app.welcome')}
+            </Text>
+            <Text>
+              {t('i18nDemo.loadingStatus')}: {t('app.loading')}
+            </Text>
+            <Text>
+              {t('i18nDemo.successStatus')}: {t('app.success')}
+            </Text>
+            <Text>
+              {t('i18nDemo.errorStatus')}: {t('app.error')}
+            </Text>
           </Space>
 
           <Divider />
 
-          <Title level={4}>导航翻译演示</Title>
+          <Title level={4}>{t('i18nDemo.navigationTranslation')}</Title>
           <Space wrap>
             <Tag>{t('navigation.dashboard')}</Tag>
             <Tag>{t('navigation.storeDemo')}</Tag>
@@ -44,7 +54,7 @@ const I18nDemoPage: React.FC = () => {
 
           <Divider />
 
-          <Title level={4}>模板特定翻译</Title>
+          <Title level={4}>{t('i18nDemo.templateSpecificTranslation')}</Title>
           <Space direction="vertical">
             <Text>模板标题: {t('template.title')}</Text>
             <Text>模板描述: {t('template.description')}</Text>
@@ -54,7 +64,7 @@ const I18nDemoPage: React.FC = () => {
 
           <Divider />
 
-          <Title level={4}>演示功能翻译</Title>
+          <Title level={4}>{t('i18nDemo.demoFunctionTranslation')}</Title>
           <Space direction="vertical">
             <Text>存储演示: {t('demo.storeTitle')}</Text>
             <Text>权限演示: {t('demo.permissionTitle')}</Text>
@@ -64,7 +74,7 @@ const I18nDemoPage: React.FC = () => {
 
           <Divider />
 
-          <Title level={4}>支持的语言</Title>
+          <Title level={4}>{t('i18nDemo.supportedLanguages')}</Title>
           <Space wrap>
             {supportedLanguages.map((lang) => (
               <Tag key={lang.code} color={i18n.language === lang.code ? 'green' : 'default'}>
@@ -76,9 +86,7 @@ const I18nDemoPage: React.FC = () => {
           <Divider />
 
           <Paragraph type="secondary" style={{ fontSize: '12px' }}>
-            这个页面展示了模板应用在微前端环境中的多语言功能。
-            当主应用切换语言时，这里的所有文本会自动同步更新。
-            支持13种语言的实时切换，展示了完整的国际化解决方案。
+            {t('i18nDemo.pageDescription')}
           </Paragraph>
         </Space>
       </Card>

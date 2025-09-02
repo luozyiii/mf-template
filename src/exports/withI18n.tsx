@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import TemplateI18nProvider from '../i18n/I18nProvider';
 
 /**

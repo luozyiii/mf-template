@@ -28,14 +28,14 @@ export interface RouteItem {
  */
 export const appRouteConfig: AppRouteConfig = {
   appKey: (process.env.MODULE_NAME as string) || 'template',
-  appName: (process.env.APP_DISPLAY_NAME as string) || '模板系统',
+  appName: (process.env.APP_DISPLAY_NAME as string) || 'Template System',
   routePrefix: `/${(process.env.MODULE_NAME as string) || 'template'}`,
   enabled: true,
   permissions: [`${(process.env.MODULE_NAME as string) || 'template'}:read`],
   routes: [
     {
       path: `/${(process.env.MODULE_NAME as string) || 'template'}/dashboard`,
-      name: `${(process.env.APP_DISPLAY_NAME as string) || '模板系统'}概览`,
+      name: 'Dashboard', // 移除硬编码，由 Layout 组件处理国际化
       icon: 'DashboardOutlined',
       component: 'Dashboard',
       showBack: false,
@@ -44,7 +44,7 @@ export const appRouteConfig: AppRouteConfig = {
     },
     {
       path: `/${(process.env.MODULE_NAME as string) || 'template'}/store-demo`,
-      name: 'Store 演示',
+      name: 'Store Demo', // 移除硬编码，由 Layout 组件处理国际化
       icon: 'DatabaseOutlined',
       component: 'StoreDemo',
       showBack: true,

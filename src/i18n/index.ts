@@ -6,7 +6,7 @@ const loadTranslationResource = async (languageCode: string) => {
   try {
     const resource = await import(`./resources/${languageCode}/common.json`);
     return resource.default;
-  } catch (error) {
+  } catch (_error) {
     console.warn(`Translation resource for ${languageCode} not found, using fallback`);
     // 回退到英文或中文
     if (languageCode.startsWith('zh')) {
@@ -59,7 +59,7 @@ const isInMicroFrontend = (): boolean => {
     if ((window as any).__webpack_require__?.cache) return true;
 
     return false;
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 };
@@ -69,7 +69,7 @@ const getSavedLanguage = async (): Promise<string> => {
   try {
     // 总是尝试从全局 store 读取（无论是否在微前端环境中）
     try {
-      // @ts-expect-error - Module Federation 动态导入
+      // @ts-ignore - Module Federation 动态导入
       const { getStoreValue } = await import('mf-shared/store');
       const appConfig = getStoreValue('app') || {};
       if (
@@ -79,7 +79,7 @@ const getSavedLanguage = async (): Promise<string> => {
         console.log(`🌐 Template: Using language from global store: ${appConfig.language}`);
         return appConfig.language;
       }
-    } catch (error) {
+    } catch (_error) {
       // Global store not available, continue with localStorage fallback
       console.log('🌐 Template: Global store not available, using localStorage');
     }
@@ -118,7 +118,7 @@ export const saveLanguage = async (languageCode: string): Promise<void> => {
 
     // 尝试同步到全局store
     try {
-      // @ts-expect-error - Module Federation 动态导入
+      // @ts-ignore - Module Federation 动态导入
       const { getStoreValue, setStoreValue } = await import('mf-shared/store');
 
       // 获取现有的应用配置，保持其他设置不变
@@ -130,7 +130,7 @@ export const saveLanguage = async (languageCode: string): Promise<void> => {
 
       setStoreValue('app', updatedConfig);
       console.log(`🌐 Template: Synced language to global store: ${languageCode}`);
-    } catch (error) {
+    } catch (_error) {
       console.log('🌐 Template: Global store not available for sync');
     }
   } catch (error) {
@@ -211,7 +211,7 @@ if (typeof window !== 'undefined') {
       }
 
       // 订阅语言变化
-      subscribeStore('app', (_key: string, newValue: any) => {
+      (subscribeStore as any)('app', (_key: string, newValue: any, _oldValue: any) => {
         if (newValue?.language && newValue.language !== templateI18nInstance.language) {
           console.log(`🌐 Template: Language changed to ${newValue.language}`);
           templateI18nInstance.changeLanguage(newValue.language);
@@ -219,7 +219,7 @@ if (typeof window !== 'undefined') {
       });
 
       console.log('🌐 Template: Language sync initialized');
-    } catch (error) {
+    } catch (_error) {
       console.log('🌐 Template: Running in standalone mode, no language sync');
     }
   }, 100);

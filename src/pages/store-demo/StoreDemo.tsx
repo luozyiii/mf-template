@@ -2,23 +2,29 @@ import { DatabaseOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Descriptions, Divider, message, Row, Space, Typography } from 'antd';
 import type React from 'react';
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
 
 const StoreDemo: React.FC = () => {
   const [currentData, setCurrentData] = useState<any>({});
   const [isConnected, setIsConnected] = useState(false);
+  const { t } = useTranslation();
 
   const refreshData = useCallback(async () => {
     try {
-      // @ts-expect-error - Module Federation 动态导入
+      // @ts-ignore - Module Federation 动态导入
       const { getStoreValue } = await import('mf-shared/store');
 
       const userinfo = getStoreValue('user');
       const appConfig = getStoreValue('app');
 
       setCurrentData({
-        userinfo: userinfo || { name: '未设置', age: 0, role: 'guest' },
+        userinfo: userinfo || {
+          name: t('storeDemo.notSet'),
+          age: 0,
+          role: t('storeDemo.defaultRole'),
+        },
         appConfig: appConfig || {
           theme: 'light',
           language: 'zh-CN',
@@ -31,11 +37,11 @@ const StoreDemo: React.FC = () => {
       setIsConnected(false);
       // 设置默认数据
       setCurrentData({
-        userinfo: { name: '未设置', age: 0, role: 'guest' },
+        userinfo: { name: t('storeDemo.notSet'), age: 0, role: t('storeDemo.defaultRole') },
         appConfig: { theme: 'light', language: 'zh-CN', version: '1.0.0' },
       });
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     refreshData();
@@ -48,22 +54,22 @@ const StoreDemo: React.FC = () => {
   const updateData = useCallback(
     async (key: string, value: any) => {
       try {
-        // @ts-expect-error - Module Federation 动态导入
+        // @ts-ignore - Module Federation 动态导入
         const { setStoreValue } = await import('mf-shared/store');
         setStoreValue(key, value);
-        message.success('数据已更新');
+        message.success(t('storeDemo.dataUpdated'));
         setTimeout(refreshData, 100); // 延迟刷新以确保数据同步
       } catch (error) {
         console.error('Failed to update data:', error);
-        message.error('更新失败');
+        message.error(t('storeDemo.updateFailed'));
       }
     },
-    [refreshData]
+    [refreshData, t]
   );
 
   const updateUserName = () => {
     const number = Math.floor(Math.random() * 900) + 100;
-    const newName = `模板用户${number}`;
+    const newName = `${t('storeDemo.templateUser')}${number}`;
     const newUser = { ...currentData.userinfo, name: newName };
     updateData('user', newUser);
   };
@@ -76,19 +82,16 @@ const StoreDemo: React.FC = () => {
 
   return (
     <div style={{ padding: '24px' }}>
-      <Title level={3}>全局存储演示</Title>
-      <Text type="secondary">
-        这个页面展示了如何在模板应用中访问和修改全局存储的数据。
-        数据变更会同步到主应用和其他子应用。
-      </Text>
+      <Title level={3}>{t('storeDemo.title')}</Title>
+      <Text type="secondary">{t('storeDemo.description')}</Text>
 
       <Row gutter={[16, 16]} style={{ marginTop: '24px' }}>
         <Col span={24}>
           <Card size="small">
             <Space>
-              <Text strong>连接状态：</Text>
+              <Text strong>{t('storeDemo.connectionStatus')}：</Text>
               <Text type={isConnected ? 'success' : 'danger'}>
-                {isConnected ? '已连接' : '未连接'}
+                {isConnected ? t('storeDemo.connected') : t('storeDemo.disconnected')}
               </Text>
             </Space>
           </Card>
@@ -99,16 +102,18 @@ const StoreDemo: React.FC = () => {
             title={
               <Space>
                 <UserOutlined />
-                用户信息
+                {t('storeDemo.userInfo')}
               </Space>
             }
           >
             <Descriptions column={1} bordered size="small">
-              <Descriptions.Item label="用户名">
+              <Descriptions.Item label={t('storeDemo.username')}>
                 {currentData.userinfo?.name || '-'}
               </Descriptions.Item>
-              <Descriptions.Item label="年龄">{currentData.userinfo?.age || '-'}</Descriptions.Item>
-              <Descriptions.Item label="角色">
+              <Descriptions.Item label={t('storeDemo.age')}>
+                {currentData.userinfo?.age || '-'}
+              </Descriptions.Item>
+              <Descriptions.Item label={t('storeDemo.role')}>
                 {currentData.userinfo?.role || '-'}
               </Descriptions.Item>
             </Descriptions>
@@ -117,9 +122,9 @@ const StoreDemo: React.FC = () => {
 
             <Space>
               <Button type="primary" onClick={updateUserName}>
-                更新用户名
+                {t('storeDemo.updateUsername')}
               </Button>
-              <Button onClick={refreshData}>刷新数据</Button>
+              <Button onClick={refreshData}>{t('storeDemo.refreshData')}</Button>
             </Space>
           </Card>
         </Col>
@@ -129,18 +134,18 @@ const StoreDemo: React.FC = () => {
             title={
               <Space>
                 <DatabaseOutlined />
-                应用配置
+                {t('storeDemo.appConfig')}
               </Space>
             }
           >
             <Descriptions column={1} bordered size="small">
-              <Descriptions.Item label="主题">
+              <Descriptions.Item label={t('storeDemo.theme')}>
                 {currentData.appConfig?.theme || '-'}
               </Descriptions.Item>
-              <Descriptions.Item label="语言">
+              <Descriptions.Item label={t('storeDemo.language')}>
                 {currentData.appConfig?.language || '-'}
               </Descriptions.Item>
-              <Descriptions.Item label="版本">
+              <Descriptions.Item label={t('storeDemo.version')}>
                 {currentData.appConfig?.version || '-'}
               </Descriptions.Item>
             </Descriptions>
@@ -148,14 +153,14 @@ const StoreDemo: React.FC = () => {
             <Divider />
 
             <Space>
-              <Button onClick={updateTheme}>切换主题</Button>
-              <Button onClick={refreshData}>刷新数据</Button>
+              <Button onClick={updateTheme}>{t('storeDemo.toggleTheme')}</Button>
+              <Button onClick={refreshData}>{t('storeDemo.refreshData')}</Button>
             </Space>
           </Card>
         </Col>
 
         <Col span={24}>
-          <Card title="数据详情" size="small">
+          <Card title={t('storeDemo.dataDetails')} size="small">
             <div
               style={{
                 background: '#f7f8fa',

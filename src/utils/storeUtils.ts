@@ -25,7 +25,7 @@ export class StoreUtils {
         const { initGlobalStore, setStoreValue } = await import('mf-shared/store');
 
         console.log('🗄️ Template app: Initializing GlobalStore for standalone mode');
-        initGlobalStore({
+        (initGlobalStore as any)({
           enablePersistence: true,
           enableEncryption: true,
           storageKey: 'mf-template-store',
@@ -69,7 +69,7 @@ export class StoreUtils {
 
     try {
       // 配置并设置 token 存储策略
-      configureStoreStrategy(keyOf('token'), {
+      (configureStoreStrategy as any)(keyOf('token'), {
         medium: 'local',
         encrypted: false,
       });
@@ -82,15 +82,15 @@ export class StoreUtils {
       const matched = (users as any[]).find((u) => token.includes(`_${u.id}_`));
 
       if (matched) {
-        configureStoreStrategy(keyOf('user'), {
+        (configureStoreStrategy as any)(keyOf('user'), {
           medium: 'local',
           encrypted: true,
         });
-        configureStoreStrategy(keyOf('app'), {
+        (configureStoreStrategy as any)(keyOf('app'), {
           medium: 'local',
           encrypted: false,
         });
-        configureStoreStrategy(keyOf('permissions'), {
+        (configureStoreStrategy as any)(keyOf('permissions'), {
           medium: 'local',
           encrypted: false,
         });

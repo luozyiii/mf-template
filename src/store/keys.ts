@@ -15,7 +15,9 @@ export const setVal = (scope: Scope, value: any) => {
 };
 
 export const subscribeVal = (scope: Scope, cb: (key: string, val: any) => void) => {
-  return subscribeStore?.(keyOf(scope), cb);
+  return (subscribeStore as any)?.(keyOf(scope), (key: string, newValue: any, _oldValue: any) =>
+    cb(key, newValue)
+  );
 };
 
 export const clearByShortPrefix = () => {

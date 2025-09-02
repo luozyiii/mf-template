@@ -14,7 +14,8 @@
   },
   "common": {
     "unit": {
-      "people": "人"
+      "people": "人",
+      "items": "个"
     }
   },
   "template": {
@@ -35,15 +36,81 @@
     }
   },
   "demo": {
+    "activeUsers": "活跃用户",
+    "systemPerformance": "系统性能",
+    "dataProcessing": "数据处理",
     "storeTitle": "全局存储演示",
     "permissionTitle": "权限控制演示",
     "currentUser": "当前用户",
-    "userRole": "用户角色",
-    "activeUsers": "活跃用户",
-    "systemPerformance": "系统性能",
-    "dataProcessing": "数据处理"
+    "userRole": "用户角色"
   },
   "language": {
     "select": "选择语言"
+  },
+  "layout": {
+    "menu": {
+      "expand": "展开菜单",
+      "collapse": "折叠菜单"
+    },
+    "header": {
+      "welcome": "微前端子系统",
+      "back": "返回"
+    },
+    "userMenu": {
+      "profile": "个人资料",
+      "settings": "设置",
+      "logout": "退出登录"
+    }
+  },
+  "routes": {
+    "dashboard": "概览",
+    "storeDemo": "Store 演示"
+  },
+  "messages": {
+    "developing": "正在开发中..."
+  },
+  "i18nDemo": {
+    "title": "模板应用国际化演示",
+    "currentLanguage": "当前语言",
+    "basicTranslation": "基础翻译演示",
+    "navigationTranslation": "导航翻译演示",
+    "appTitle": "应用标题",
+    "welcomeMessage": "欢迎信息",
+    "loadingStatus": "加载状态",
+    "successStatus": "成功状态",
+    "errorStatus": "错误状态",
+    "templateSpecificTranslation": "模板特定翻译",
+    "demoFunctionTranslation": "演示功能翻译",
+    "supportedLanguages": "支持的语言",
+    "pageDescription": "这个页面展示了模板应用在微前端环境中的多语言功能。当主应用切换语言时，这里的所有文本会自动同步更新。支持13种语言的实时切换，展示了完整的国际化解决方案。"
+  },
+  "storeDemo": {
+    "title": "全局存储演示",
+    "description": "这个页面展示了如何在模板应用中访问和修改全局存储的数据。数据变更会同步到主应用和其他子应用。",
+    "connectionStatus": "连接状态",
+    "connected": "已连接",
+    "disconnected": "未连接",
+    "userInfo": "用户信息",
+    "appConfig": "应用配置",
+    "username": "用户名",
+    "age": "年龄",
+    "role": "角色",
+    "theme": "主题",
+    "language": "语言",
+    "version": "版本",
+    "updateUsername": "更新用户名",
+    "refreshData": "刷新数据",
+    "toggleTheme": "切换主题",
+    "dataDetails": "数据详情",
+    "dataUpdated": "数据已更新",
+    "updateFailed": "更新失败",
+    "notSet": "未设置",
+    "defaultRole": "访客",
+    "templateUser": "模板用户"
+  },
+  "notFound": {
+    "title": "404",
+    "subtitle": "抱歉，您访问的页面不存在。",
+    "backHome": "返回首页"
   }
 }

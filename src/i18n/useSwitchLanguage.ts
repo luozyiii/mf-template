@@ -6,7 +6,6 @@ import templateI18nInstance, { addLanguageResource, saveLanguage } from '.';
  */
 const syncLanguageToGlobalStore = async (languageCode: string) => {
   try {
-    // @ts-expect-error - Module Federation 动态导入
     const { getStoreValue, setStoreValue } = await import('mf-shared/store');
 
     // 获取现有的应用配置，保持其他设置不变
@@ -18,7 +17,7 @@ const syncLanguageToGlobalStore = async (languageCode: string) => {
 
     setStoreValue('app', updatedConfig);
     console.log(`🌐 Template: Synced language ${languageCode} to global store`);
-  } catch (error) {
+  } catch (_error) {
     console.log('🌐 Template: Global store not available, language saved locally only');
   }
 };

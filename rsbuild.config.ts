@@ -9,11 +9,11 @@ export default defineConfig({
     port: Number(process.env.PORT) || 3001,
   },
   html: {
-    title: process.env.APP_DISPLAY_NAME || '微前端子系统',
+    title: process.env.APP_DISPLAY_NAME || 'Template System',
     template: './public/index.html',
     templateParameters: {
       NODE_ENV: process.env.NODE_ENV || 'development',
-      APP_DISPLAY_NAME: process.env.APP_DISPLAY_NAME || '微前端子系统',
+      APP_DISPLAY_NAME: process.env.APP_DISPLAY_NAME || 'Template System',
     },
   },
   output: {

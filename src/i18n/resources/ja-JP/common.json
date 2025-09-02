@@ -14,7 +14,8 @@
   },
   "common": {
     "unit": {
-      "people": "人"
+      "people": "人",
+      "items": "個"
     }
   },
   "template": {
@@ -35,15 +36,81 @@
     }
   },
   "demo": {
+    "activeUsers": "アクティブユーザー",
+    "systemPerformance": "システムパフォーマンス",
+    "dataProcessing": "データ処理",
     "storeTitle": "グローバルストアデモ",
     "permissionTitle": "権限制御デモ",
     "currentUser": "現在のユーザー",
-    "userRole": "ユーザーロール",
-    "activeUsers": "アクティブユーザー",
-    "systemPerformance": "システムパフォーマンス",
-    "dataProcessing": "データ処理"
+    "userRole": "ユーザーロール"
   },
   "language": {
     "select": "言語を選択"
+  },
+  "layout": {
+    "menu": {
+      "expand": "メニューを展開",
+      "collapse": "メニューを折りたたむ"
+    },
+    "header": {
+      "welcome": "マイクロフロントエンドサブシステム",
+      "back": "戻る"
+    },
+    "userMenu": {
+      "profile": "プロフィール",
+      "settings": "設定",
+      "logout": "ログアウト"
+    }
+  },
+  "routes": {
+    "dashboard": "概要",
+    "storeDemo": "ストアデモ"
+  },
+  "messages": {
+    "developing": "開発中..."
+  },
+  "i18nDemo": {
+    "title": "テンプレートアプリ国際化デモ",
+    "currentLanguage": "現在の言語",
+    "basicTranslation": "基本翻訳デモ",
+    "navigationTranslation": "ナビゲーション翻訳デモ",
+    "appTitle": "アプリタイトル",
+    "welcomeMessage": "ウェルカムメッセージ",
+    "loadingStatus": "読み込み状態",
+    "successStatus": "成功状態",
+    "errorStatus": "エラー状態",
+    "templateSpecificTranslation": "テンプレート固有翻訳",
+    "demoFunctionTranslation": "デモ機能翻訳",
+    "supportedLanguages": "サポートされている言語",
+    "pageDescription": "このページでは、マイクロフロントエンド環境でのテンプレートアプリケーションの多言語機能を実演します。メインアプリケーションが言語を切り替えると、ここのすべてのテキストが自動的に同期して更新されます。13言語のリアルタイム切り替えをサポートし、完全な国際化ソリューションを展示します。"
+  },
+  "storeDemo": {
+    "title": "グローバルストアデモ",
+    "description": "このページでは、テンプレートアプリケーションでグローバルストアデータにアクセスし、変更する方法を示します。データの変更は、メインアプリケーションや他のサブアプリケーションに同期されます。",
+    "connectionStatus": "接続状態",
+    "connected": "接続済み",
+    "disconnected": "未接続",
+    "userInfo": "ユーザー情報",
+    "appConfig": "アプリ設定",
+    "username": "ユーザー名",
+    "age": "年齢",
+    "role": "ロール",
+    "theme": "テーマ",
+    "language": "言語",
+    "version": "バージョン",
+    "updateUsername": "ユーザー名を更新",
+    "refreshData": "データを更新",
+    "toggleTheme": "テーマを切り替え",
+    "dataDetails": "データ詳細",
+    "dataUpdated": "データが更新されました",
+    "updateFailed": "更新に失敗しました",
+    "notSet": "未設定",
+    "defaultRole": "ゲスト",
+    "templateUser": "テンプレートユーザー"
+  },
+  "notFound": {
+    "title": "404",
+    "subtitle": "申し訳ございませんが、お探しのページは存在しません。",
+    "backHome": "ホームに戻る"
   }
 }
