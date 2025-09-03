@@ -148,7 +148,7 @@ const initializeI18n = async () => {
   await templateI18nInstance.use(initReactI18next).init({
     resources,
     lng: initialLanguage, // 使用保存的语言或默认语言
-    fallbackLng: 'en-US', // 回退语言
+    fallbackLng: 'zh-CN', // 回退语言
 
     interpolation: {
       escapeValue: false, // React 已经处理了 XSS
