@@ -50,7 +50,7 @@ jobs:
         run: pnpm run build
         env:
           NODE_ENV: production
-          PUBLIC_URL: https://luozyiii.github.io/mf-template/
+          PUBLIC_URL: https://micro-frontend-app.github.io/mf-template/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
